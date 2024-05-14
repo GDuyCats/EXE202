@@ -6,11 +6,19 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'blue_for_signup': 'rgb(107, 204, 222)',//#6bccde
-        'blue_for_signin_placeholder': 'rgb(23, 127, 159)',//#177f9f
-      }
+        'blue_6bccde': 'rgb(107, 204, 222)',
+        'blue_177f9f': 'rgb(23, 127, 159)',
+        'blue_d5f8ff': 'rgb(213, 248, 255)',
+      },
+      scale: {
+        '110': '1.1',
+        '125': '1.25',
+        '150': '1.5',
+      },
     },
 
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/forms'),
+  ],
 }
