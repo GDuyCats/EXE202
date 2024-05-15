@@ -6,7 +6,6 @@ function SignUpForm() {
   const [captchaisDone, setCapchaisDone] = useState(false)
 
   function onChange(){
-    console.log('changed')
     setCapchaisDone(true)
   }
 
@@ -110,7 +109,7 @@ function SignUpForm() {
               <div className='text-xs -mt-1 ml-1'>Cho phép OHeCa gửi email cho bạn để thông báo về<br /> những sự kiện ưu đãi mới nhất</div>
             </div>
             <div>
-              <button className="bg-blue_6bccde text-white text-center w-full rounded-full py-2 mt-4 hover:scale-110 -ml-24">ĐĂNG KÝ</button>
+              <button className="bg-blue_6bccde text-white text-center w-full rounded-full py-2 mt-4 hover:brightness-110 -ml-24">ĐĂNG KÝ</button>
             </div>
           </div>
         </form>

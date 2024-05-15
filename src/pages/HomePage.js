@@ -1,13 +1,137 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Navigation, Pagination, Scrollbar } from 'swiper/modules'
+import 'swiper/css'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
+import 'swiper/css/scrollbar'
 import { Link } from 'react-router-dom'
+import logoImage from '../assets/Without slogan.png'
+import slideimg1 from '../assets/cong-viec-bung-no-cua-annie-2.jpg'
+import slideimg2 from '../assets/TFT-Chibi-Annie.jpg'
+import slideimg3 from '../assets/310543032_782044779573265_2070644959280334700_n.jpg'
+import { BsChevronCompactLeft, BsChevronCompactRight } from 'react-icons/bs'
+import { RxDotFilled } from 'react-icons/rx'
 
 function HomePage() {
+
+    const slide = [slideimg1, slideimg2, slideimg3]
+    const [currentIndex, setCurrentIndex] = useState(0)
+
+    const prevSlide = () => {
+        const isFirstSlide = currentIndex === 0;
+        const newIndex = isFirstSlide ? slide.length - 1 : currentIndex - 1;
+        setCurrentIndex(newIndex)
+    }
+
+    const nextSlide = () => {
+        const isLastSlide = currentIndex === slide.length - 1;
+        const newIndex = isLastSlide ? 0 : currentIndex + 1;
+        setCurrentIndex(newIndex)
+    }
+
+    const gotoSlide = (slideIndex) => {
+        setCurrentIndex(slideIndex)
+    }
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            nextSlide()
+        }, 3000);
+
+        return () => clearInterval(timer);
+    }, [currentIndex])
+
     return (
         <div>
-            <button><Link to="/login">Login</Link></button>
-            <button><Link to="/signup">Sign Up</Link></button>
+            <nav className="p-4 flex justify-between">
+                <div>
+                    <img src={logoImage} alt="Logo" style={{ position: 'absolute', top: 10, left: 30, width: '100px', height: '100px' }} />
+                </div>
+                <div class="space-x-4 ml-80">
+                    <button class="text-black px-3 py-2 rounded-full text-lg font-medium hover:bg-blue_c0foff "><Link to="/aboutus">VỀ CHÚNG TÔI</Link></button>
+                    <button class="text-black px-3 py-2 rounded-full text-lg font-medium hover:bg-blue_c0foff"><Link to="/shop">MUA HÀNG</Link></button>
+                    <button class="text-black px-3 py-2 rounded-full text-lg font-medium hover:bg-blue_c0foff" ><Link to="/forum">DIỄN ĐÀN</Link></button>
+                    <button class="text-black px-3 py-2 rounded-full text-lg font-medium hover:bg-blue_c0foff"><Link to="/contact">LIÊN HỆ</Link></button>
+                </div>
+                <div className='flex space-x-10 mr-10'>
+                    <div>
+                        <button className="text-black px-8 py-2 text-lg font-medium border-2 border-blue_177f9f rounded-full hover:bg-blue_c0foff"><Link to="/signup">ĐĂNG KÝ</Link></button>
+                    </div>
+                    <div>
+                        <button className="text-black px-8 py-2 text-lg font-medium bg-blue_c0foff rounded-full hover:brightness-110"><Link to="/login">ĐĂNG NHẬP</Link></button>
+                    </div>
+                </div>
+            </nav>
+            {/* <div className='max-w-[1400px] h-[780px] w-full m-auto py-16 px-4 relative group'>
+
+                <div style={{ backgroundImage: `url(${slide[currentIndex]})` }} className='w-full h-full rounded-2xl bg-cover duration-500'></div>
+
+                <div className="hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer">
+                    <BsChevronCompactLeft onClick={prevSlide} size={30} />
+                </div>
+                <div className="hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer">
+                    <BsChevronCompactRight onClick={nextSlide} size={30} />
+                </div>
+                <div className='flex top-4 justify-center py-2'>
+                    {slide.map((slide, slideIndex) => (
+                        <div key={slideIndex} onClick={() => gotoSlide(slideIndex)} className={`text-4xl cursor-pointer ${currentIndex === slideIndex ? 'text-blue_6bccde' : 'text-blue_177f9f'}`}>
+                            <RxDotFilled />
+                        </div>
+                    ))}
+                </div>
+            </div> */}
+
+            <div className='max-w-[1400px] h-[780px] w-full m-auto py-16 px-4 relative group'>
+                <Swiper
+                    effect={'overflow'}
+                    grabCursor={true}
+                    centeredSlides={true}
+                    loop={true}
+                    slidesPerView={'auto'}
+                    coverflowEffect={{
+                        rotate: 0,
+                        stretch: 0,
+                        depth: 100,
+                        modifier: 2.5
+                    }}
+
+                    className='w-full h-full rounded-2xl bg-cover duration-500'
+                >
+                    <SwiperSlide>
+                        <img src={slideimg1} alt='slide_img' />
+                    </SwiperSlide>
+
+                    <SwiperSlide>
+                        <img src={slideimg2} alt='slide_img' />
+                    </SwiperSlide>
+
+                    <SwiperSlide>
+                        <img src={slideimg3} alt='slide_img' />
+                    </SwiperSlide>
+
+                    <div className='slider-controller'>
+                        <div className="hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer">
+                            <BsChevronCompactLeft onClick={prevSlide} size={30} />
+                        </div>
+                        <div className="hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer">
+                            <BsChevronCompactRight onClick={nextSlide} size={30} />
+                        </div>
+                    </div>
+                    <div className='flex top-4 justify-center py-2'>
+                        {slide.map((slide, slideIndex) => (
+                            <div key={slideIndex} onClick={() => gotoSlide(slideIndex)} className={`text-4xl cursor-pointer ${currentIndex === slideIndex ? 'text-blue_6bccde' : 'text-blue_177f9f'}`}>
+                                <RxDotFilled />
+                            </div>
+                        ))}
+                    </div>
+                </Swiper>
+            </div>
+
+            <div>
+                <p>GIẢM GIÁ 30% CHO MỌI MẶT HÀNG TRANG PHỤC NỮ</p>
+            </div>
         </div>
     )
 }
-
 export default HomePage

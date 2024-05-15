@@ -39,13 +39,13 @@ export default function Form() {
           />
         </div>
         <div>
-          <button className="bg-blue_177f9f text-white text-center w-full rounded-full py-2 my-3 hover:scale-110" onClick={isValidate}>ĐĂNG NHẬP</button>
+          <button className="bg-blue_177f9f text-white text-center w-full rounded-full py-2 my-3 hover:brightness-110" onClick={isValidate}>ĐĂNG NHẬP</button>
         </div>
         <div className="text-xl">
             Chưa có tài khoản OHeca? Đăng ký ngay
         </div>
         <div>
-          <button className="bg-blue_6bccde text-white text-center w-full rounded-full py-2 mt-4 hover:scale-110"><Link to="/signup">ĐĂNG KÝ</Link></button>
+          <button className="bg-blue_6bccde text-white text-center w-full rounded-full py-2 mt-4 hover:brightness-110"><Link to="/signup">ĐĂNG KÝ</Link></button>
         </div>
       </form>
     </div>
