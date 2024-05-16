@@ -1,10 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import { Navigation, Pagination, Scrollbar } from 'swiper/modules'
-import 'swiper/css'
-import 'swiper/css/navigation'
-import 'swiper/css/pagination'
-import 'swiper/css/scrollbar'
 import { Link } from 'react-router-dom'
 import logoImage from '../assets/Without slogan.png'
 import slideimg1 from '../assets/cong-viec-bung-no-cua-annie-2.jpg'
@@ -63,14 +57,17 @@ function HomePage() {
                     </div>
                 </div>
             </nav>
-            {/* <div className='max-w-[1400px] h-[780px] w-full m-auto py-16 px-4 relative group'>
+            <div className='max-w-[1400px] h-[780px] w-full m-auto py-16 px-4 relative group '>
+                <div className='overflow-visible w-full h-full flex relative'>
+                    <div style={{ backgroundImage: `url(${slide[currentIndex === 0 ? slide.length - 1 : currentIndex - 1]})` }} className='w-full h-full rounded-3xl bg-cover duration-500 opacity-50 absolute -translate-x-48 scale-90'></div>
+                    <div style={{ backgroundImage: `url(${slide[currentIndex]})` }} className='w-full h-full rounded-3xl bg-cover duration-500 absolute z-10 scale-95'></div>
+                    <div style={{ backgroundImage: `url(${slide[currentIndex === slide.length - 1 ? 0 : currentIndex + 1]})` }} className='w-full h-full rounded-3xl bg-cover duration-500 opacity-50 absolute translate-x-48  scale-90'></div>
+                </div>
 
-                <div style={{ backgroundImage: `url(${slide[currentIndex]})` }} className='w-full h-full rounded-2xl bg-cover duration-500'></div>
-
-                <div className="hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer">
+                <div className="hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer z-20">
                     <BsChevronCompactLeft onClick={prevSlide} size={30} />
                 </div>
-                <div className="hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer">
+                <div className="hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer z-20">
                     <BsChevronCompactRight onClick={nextSlide} size={30} />
                 </div>
                 <div className='flex top-4 justify-center py-2'>
@@ -80,52 +77,6 @@ function HomePage() {
                         </div>
                     ))}
                 </div>
-            </div> */}
-
-            <div className='max-w-[1400px] h-[780px] w-full m-auto py-16 px-4 relative group'>
-                <Swiper
-                    effect={'overflow'}
-                    grabCursor={true}
-                    centeredSlides={true}
-                    loop={true}
-                    slidesPerView={'auto'}
-                    coverflowEffect={{
-                        rotate: 0,
-                        stretch: 0,
-                        depth: 100,
-                        modifier: 2.5
-                    }}
-
-                    className='w-full h-full rounded-2xl bg-cover duration-500'
-                >
-                    <SwiperSlide>
-                        <img src={slideimg1} alt='slide_img' />
-                    </SwiperSlide>
-
-                    <SwiperSlide>
-                        <img src={slideimg2} alt='slide_img' />
-                    </SwiperSlide>
-
-                    <SwiperSlide>
-                        <img src={slideimg3} alt='slide_img' />
-                    </SwiperSlide>
-
-                    <div className='slider-controller'>
-                        <div className="hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer">
-                            <BsChevronCompactLeft onClick={prevSlide} size={30} />
-                        </div>
-                        <div className="hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer">
-                            <BsChevronCompactRight onClick={nextSlide} size={30} />
-                        </div>
-                    </div>
-                    <div className='flex top-4 justify-center py-2'>
-                        {slide.map((slide, slideIndex) => (
-                            <div key={slideIndex} onClick={() => gotoSlide(slideIndex)} className={`text-4xl cursor-pointer ${currentIndex === slideIndex ? 'text-blue_6bccde' : 'text-blue_177f9f'}`}>
-                                <RxDotFilled />
-                            </div>
-                        ))}
-                    </div>
-                </Swiper>
             </div>
 
             <div>
