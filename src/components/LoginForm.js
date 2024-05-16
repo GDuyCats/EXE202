@@ -25,7 +25,7 @@ export default function Form() {
         <div>
           <button className="bg-blue_for_signin_placeholder text-white text-center w-full rounded-full py-2 my-3 hover:animate-bounce">ĐĂNG NHẬP</button>
         </div>
-        <div className="text-xl">
+        <div className="text-xl text-red-500">
             Chưa có tài khoản OHeca? Đăng ký ngay
         </div>
         <div>
