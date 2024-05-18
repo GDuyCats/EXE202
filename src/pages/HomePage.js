@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import logoImage from '../assets/Without slogan.png'
+
 import slideimg1 from '../assets/cong-viec-bung-no-cua-annie-2.jpg'
 import slideimg2 from '../assets/TFT-Chibi-Annie.jpg'
 import slideimg3 from '../assets/310543032_782044779573265_2070644959280334700_n.jpg'
@@ -88,18 +88,6 @@ function HomePage() {
 
     const [startIndex, setStartIndex] = useState(0);
 
-
-    const prevProduct = () => {
-        const isFirstProduct = startIndex === 0;
-        const newIndex = isFirstProduct ? slidesProduct.length - 1 : startIndex - 1;
-        setStartIndex(newIndex);
-    };
-
-    const nextProduct = () => {
-        const isLastSlide = startIndex === slides.length - 1;
-        const newIndex = isLastSlide ? 0 : startIndex + 1;
-        setStartIndex(newIndex)
-    };
     useEffect(() => {
         const timer = setInterval(() => {
             nextSlide()
@@ -109,37 +97,11 @@ function HomePage() {
     }, [currentIndex])
 
     return (
-        <div className='ml-[10%] mr-[10%]'>
-            <nav className="p-4 flex items-center z-50 bg-white fixed top-0 left-0 right-0 justify-between border-b-2 border-blue_177f9f ml-[10%] mr-[10%]">
-                <div className='z-50 cover'><img src={logoImage} alt="Logo" className="w-24 h-24" /></div>
-                <div className=" space-x-4 absolute left-[35%]">
-                    <div className="space-x-4 hidden lg:flex">
-                        <div className='group'>
-                            <Link to="/aboutus" className="text-blue_177f9f px-3 py-2 text-lg font-medium border-b-4 border-b-transparent group-hover:border-b-blue_177f9f">VỀ CHÚNG TÔI</Link>
-                        </div>
-                        <div className='group'>
-                            <Link to="/shop" className="text-blue_177f9f px-3 py-2 text-lg font-medium border-b-4 border-b-transparent group-hover:border-b-blue_177f9f">MUA HÀNG</Link>
-                        </div>
-                        <div className='group'>
-                            <Link to="/forum" className="text-blue_177f9f px-3 py-2 text-lg font-medium border-b-4 border-b-transparent group-hover:border-b-blue_177f9f">DIỄN ĐÀN</Link>
-                        </div>
-                        <div className='group'>
-                            <Link to="/contact" className="text-blue_177f9f px-3 py-2 text-lg font-medium border-b-4 border-b-transparent group-hover:border-b-blue_177f9f">LIÊN HỆ</Link>
-                        </div>
-                    </div>
-                </div>
-                <div className='flex space-x-10 absolute right-0'>
-                    <Link to="/signup" className="text-blue_177f9f px-8 py-2 text-lg font-medium border-2 border-blue_177f9f rounded-full hover:bg-blue_c0foff">ĐĂNG KÝ</Link>
-                    <Link to="/login" className="text-blue_177f9f px-8 py-2 text-lg font-medium bg-blue_c0foff rounded-full hover:brightness-110">ĐĂNG NHẬP</Link>
-                </div>
-                <div className="lg:hidden block">
-                    <button className="text-black px-3 py-2 rounded-full text-lg font-medium hover:bg-blue_c0foff">MENU</button>
-                </div>
-            </nav>
-            <div className='h-[780px] mt-40 px-4 relative group ml-[10%] mr-[10%]'>
+        <>
+            <div className='h-[780px] mt-40 px-4 relative group ml-[6%] mr-[6%]'>
                 <div className='overflow-visible w-full h-full flex relative'>
-                    <div style={{ backgroundImage: `url(${slides[currentIndex === 0 ? slides.length - 1 : currentIndex - 1].image})`,backgroundPositionY: 'center' }} className='w-full h-full rounded-3xl bg-cover duration-500 opacity-90 absolute -translate-x-48 scale-90'></div>
-                    <div style={{ backgroundImage: `url(${slides[currentIndex].image})`,backgroundPositionY: 'center' }} className='w-full h-full rounded-3xl bg-cover duration-1000 absolute z-10 scale-95'>
+                    <div style={{ backgroundImage: `url(${slides[currentIndex === 0 ? slides.length - 1 : currentIndex - 1].image})`, backgroundPositionY: 'center' }} className='w-full h-full rounded-3xl bg-cover duration-500 opacity-90 absolute -translate-x-48 scale-90'></div>
+                    <div style={{ backgroundImage: `url(${slides[currentIndex].image})`, backgroundPositionY: 'center' }} className='w-full h-full rounded-3xl bg-cover duration-1000 absolute z-10 scale-95'>
                         <div className="absolute top-10 right-10 text-white font-thin text-5xl whitespace-pre-line">
                             {slides[currentIndex].text}
                             <div className="mt-4">
@@ -147,7 +109,7 @@ function HomePage() {
                             </div>
                         </div>
                     </div>
-                    <div style={{ backgroundImage: `url(${slides[currentIndex === slides.length - 1 ? 0 : currentIndex + 1].image})`,backgroundPositionY: 'center' }} className='w-full h-full rounded-3xl bg-cover duration-500 opacity-90 absolute translate-x-48 scale-90'></div>
+                    <div style={{ backgroundImage: `url(${slides[currentIndex === slides.length - 1 ? 0 : currentIndex + 1].image})`, backgroundPositionY: 'center' }} className='w-full h-full rounded-3xl bg-cover duration-500 opacity-90 absolute translate-x-48 scale-90'></div>
                 </div>
 
                 <div className="hidden group-hover:block absolute top-[45%] -translate-x-0 translate-y-[50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer z-20">
@@ -165,7 +127,7 @@ function HomePage() {
                 </div>
             </div>
             <div className='bg-gradient-to-br from-white to-blue_6bccde'>
-                <div style={{ backgroundImage: `url(${slideimg3})`, backgroundPositionY: 'center' }} className='flex justify-center items-center bg-cover h-full py-10 my-20 rounded-full'>
+                <div style={{ backgroundImage: `url(${slideimg3})`, backgroundPositionY: 'center' }} className='flex justify-center items-center bg-cover h-full py-10 my-20'>
                     <p className='text-3xl font-medium text-white'>GIẢM GIÁ</p>
                     <p className='text-8xl font-medium text-blue_94eeff font-mono'>30%</p>
                     <p className='text-3xl font-medium text-white'>MỌI MẶT HÀNG TRANG PHỤ NỮ</p>
@@ -257,8 +219,17 @@ function HomePage() {
                     <p>SẢN PHẨM KHUYẾN MÃI</p>
                 </div>
             </div>
+            <div>
+                <Swiper>
+                    {slidesProduct.map((image, index) => (
+                        <SwiperSlide key={index}>
+                            <img src='' />
+                        </SwiperSlide>
+                    ))}
 
-        </div>
+                </Swiper>
+            </div>
+        </>
     )
 }
 export default HomePage

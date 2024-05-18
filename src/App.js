@@ -10,23 +10,27 @@ import AboutUs from './pages/AboutUs';
 import Contact from './pages/Contact';
 import ForumPage from './pages/ForumPage';
 import ShopPage from './pages/ShopPage';
+import MainLayout from './layouts/MainLayout';
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path='/' element={<MainLayout/>}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/aboutus" element={<AboutUs/>}/>
+          <Route path="/shop" element={<ShopPage/>}/>
+        </Route>    
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/policy" element={<PolicyPage />} />
         <Route path="/useragreement" element={<UserAgreementPage />} />
-        <Route path="/aboutus" element={<AboutUs/>}/>
         <Route path="/contact" element={<Contact/>}/>
-        <Route path="/forum" element={<ForumPage/>}/>
-        <Route path="/shop" element={<ShopPage/>}/>
+        <Route path="/forum" element={<ForumPage/>}/>   
         <Route path="*" element={<NoPage />} />
       </Routes>
     </Router>
+    //PRODUCT DETAIL
   );
 }
 
