@@ -10,6 +10,8 @@ import AboutUs from './pages/AboutUs';
 import Contact from './pages/Contact';
 import ForumPage from './pages/ForumPage';
 import ShopPage from './pages/ShopPage';
+import ProductDetail from './pages/ProductDetail';
+import Cart from './pages/Cart';
 
 function App() {
   return (
@@ -25,6 +27,8 @@ function App() {
         <Route path="/forum" element={<ForumPage/>}/>
         <Route path="/shop" element={<ShopPage/>}/>
         <Route path="*" element={<NoPage />} />
+        <Route path="/productdetail" element={<ProductDetail/>}/>
+        <Route path="/cart" element={<Cart/>}/>
       </Routes>
     </Router>
   );
