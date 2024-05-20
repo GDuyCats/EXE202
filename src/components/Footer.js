@@ -66,6 +66,7 @@ function Footer() {
                     <SocialIcon url='https://x.com/gduycat' />
                 </div>
                 <p className='text-blue_6bccde text-2xl mb-8 m-auto'>© 2024-2034 FPT University. All rights reserved.</p>
+                
             </div>
         </div>
 
