@@ -13,6 +13,7 @@ module.exports = {
         'blue_94eeff': 'rgb(148, 238, 255)',
         'blue_00202a': 'rgb(0,32,42)',
         'brightened_blue_00202a': 'rgb(30, 62, 72)',
+        'blue_14b4d7': 'rgb(20,180,215)'
       },
       scale: {
         '110': '1.1',

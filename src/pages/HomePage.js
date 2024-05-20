@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-
 import slideimg1 from '../assets/cong-viec-bung-no-cua-annie-2.jpg'
 import slideimg2 from '../assets/TFT-Chibi-Annie.jpg'
 import slideimg3 from '../assets/310543032_782044779573265_2070644959280334700_n.jpg'
@@ -21,6 +20,17 @@ import { EffectCoverflow, Navigation, Autoplay } from 'swiper/modules'
 
 
 function HomePage() {
+
+    const productSingleSlide = [
+        {
+            image: img5,
+            text: 'ÁO XANH HỌA TIẾT HOA'
+        },
+        {
+            image: img6,
+            text: 'TRANG BỊ \n THIẾT YẾU'
+        },
+    ]
 
     const slidesProduct = [
         {
@@ -68,6 +78,8 @@ function HomePage() {
         },
     ]
 
+    const [Index, setIndex] = useState(0)
+    const [startIndex, setStartIndex] = useState(0);
     const [currentIndex, setCurrentIndex] = useState(0)
 
     const prevSlide = () => {
@@ -85,8 +97,6 @@ function HomePage() {
     const gotoSlide = (slideIndex) => {
         setCurrentIndex(slideIndex)
     }
-
-    const [startIndex, setStartIndex] = useState(0);
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -218,16 +228,51 @@ function HomePage() {
                 <div className='font-medium text-4xl text-blue_177f9f text-center mt-10'>
                     <p>SẢN PHẨM KHUYẾN MÃI</p>
                 </div>
-            </div>
-            <div>
-                <Swiper>
-                    {slidesProduct.map((image, index) => (
-                        <SwiperSlide key={index}>
-                            <img src='' />
+                <div className='flex justify-center my-10 '>
+                    <Swiper
+                        grabCursor={true}
+                        loop={true}
+                        slidesPerView={1}
+                        autoplay={{
+                            delay: 3000,
+                            disableOnInteraction: false,
+                        }}
+                        navigation={{
+                            nextEl: '.swiper-button-next',
+                            prevEl: '.swiper-button-prev',
+                            clickable: true,
+                        }}
+                        modules={[Navigation, Autoplay]}
+                        className='swiper_container group w-[1500px] rounded-3xl z-10'>
+                        <SwiperSlide>
+                            <div className='bg-gradient-to-r from-blue_6bccde to-blue_14b4d7 w-[1243px] h-[625px] rounded-3xl relative ml-[8%]'>
+                                <div style={{ backgroundImage: `url(${productSingleSlide[Index === 0 ? productSingleSlide.length - 1 : Index - 1].image})` }} className='w-[500px] h-[570px] rounded-3xl bg-cover top-7 left-10 m-auto duration-500 absolute'></div>
+                                <div></div>
+                            </div>
                         </SwiperSlide>
-                    ))}
-
-                </Swiper>
+                        <SwiperSlide>
+                            <div className='bg-gradient-to-r from-blue_6bccde to-blue_14b4d7 w-[1243px] h-[625px] rounded-3xl relative ml-[8%]'>
+                                <div style={{ backgroundImage: `url(${productSingleSlide[Index].image})` }} className='w-[500px] h-[570px] rounded-3xl bg-cover top-7 left-10 m-auto duration-500 absolute'></div>
+                                <div className="absolute right-32 top-20 font-medium text-4xl whitespace-pre-line z-50 text-blue_177f9f text-center">
+                                    {productSingleSlide[Index].text}
+                                </div>
+                            </div>
+                        </SwiperSlide>
+                        <SwiperSlide>
+                            <div className='bg-gradient-to-r from-blue_6bccde to-blue_14b4d7 w-[1243px] h-[625px] rounded-3xl relative ml-[8%]'>
+                                <div style={{ backgroundImage: `url(${productSingleSlide[Index === productSingleSlide.length - 1 ? 0 : Index + 1].image})` }} className='w-[500px] h-[570px] rounded-3xl bg-cover top-7 left-10 m-auto duration-500 absolute'></div>
+                            </div>
+                        </SwiperSlide>
+                        <div className='slider-controller overflow-visible'>
+                            <div className="swiper-button-prev hidden group-hover:block absolute top-[45%] -translate-x-[40%] translate-y-[50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer z-50">
+                                <BsChevronCompactLeft size={30} />
+                            </div>
+                            <div className="swiper-button-next hidden group-hover:block absolute top-[45%] translate-x-[40%] translate-y-[50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer z-50">
+                                <BsChevronCompactRight size={30} />
+                            </div>
+                        </div>
+                    </Swiper>
+                </div>
             </div>
         </>
     )
