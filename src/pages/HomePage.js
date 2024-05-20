@@ -1,80 +1,109 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import slideimg1 from '../assets/cong-viec-bung-no-cua-annie-2.jpg'
-import slideimg2 from '../assets/TFT-Chibi-Annie.jpg'
-import slideimg3 from '../assets/310543032_782044779573265_2070644959280334700_n.jpg'
-import slideimg4 from '../assets/maxresdefault.jpg'
-import img4 from '../assets/Chibi_Annie_Base_Tier_1.jpg'
-import img5 from '../assets/Chibi_Annie_Panda_Tier_1.jpg'
-import img6 from '../assets/kaisa-ti-ni.png'
-import img7 from '../assets/tft-chibi-lux-sg-lux-artwork-v0-xw0g3rvb3xz91.jpg'
-import img8 from '../assets/Chibi_Lux_Base_Tier_1.jpg'
-import img9 from '../assets/Chibi_Gwen_Base_Tier_1.jpg'
+import banner from '../assets/Banner.jpg'
+import Ad1 from '../assets/Ad1.jpg'
+import chat from '../assets/Screenshot 2024-05-20 235416.png'
+import Fivestars from '../assets/Group 8.png'
+import reviewerimg1 from "../assets/Reviewed (1).jpg"
+import reviewerimg2 from "../assets/Reviewed (2).jpg"
+import reviewerimg3 from "../assets/Reviewed (3).jpg"
+import bannerimg1 from '../assets/banner (1).jpg'
+import bannerimg2 from '../assets/banner (2).jpg'
+import bannerimg3 from '../assets/banner (3).jpg'
+import productimg1 from '../assets/Product (1).jpg'
+import productimg2 from '../assets/Product (2).jpg'
+import productimg3 from '../assets/Product (3).jpg'
+import productimg4 from '../assets/Product (4).jpg'
 import { BsChevronCompactLeft, BsChevronCompactRight } from 'react-icons/bs'
+import { AiOutlineMail } from 'react-icons/ai';
 import { RxDotFilled } from 'react-icons/rx'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/autoplay';
-import { EffectCoverflow, Navigation, Autoplay } from 'swiper/modules'
+import { Navigation, Autoplay } from 'swiper/modules'
 
 
 function HomePage() {
 
     const productSingleSlide = [
         {
-            image: img5,
-            text: 'ÁO XANH HỌA TIẾT HOA'
+            image: Ad1,
+            text:
+                <div>
+                    <span class="text-brightened_blue_00202a text-5xl font-normal">ÁO XANH HỌA TIẾT HOA</span>
+                    <div className='text-blue_177f9f font-thin space-y-10 mt-10'>
+                        <p>Nhà sản xuất: Thời trang NEIH</p>
+                        <p>Chất liệu: Vải tơ gân</p>
+                        <p>Đánh giá: </p>
+                        <div className='w-[300px] h-[100px] bg-blue_94eeff text-center rounded-full flex flex-col font-medium'>
+                            <div className='text-2xl line-through'>
+                                <p>200.000 VND</p>
+                            </div>
+                            <div className='text-4xl text-red-500 font-medium'>
+                                <p>140.000 VND</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
         },
         {
-            image: img6,
-            text: 'TRANG BỊ \n THIẾT YẾU'
+            image: Ad1,
+            text:
+                <div>
+                    <span class="text-brightened_blue_00202a text-5xl font-normal">ÁO XANH HỌA TIẾT HOA</span>
+                    <div className='text-blue_177f9f font-thin space-y-10 mt-10'>
+                        <p>Nhà sản xuất: Thời trang NEIH</p>
+                        <p>Chất liệu: Vải tơ gân</p>
+                        <p>Đánh giá: </p>
+                        <div className='w-[300px] h-[100px] bg-blue_94eeff text-center rounded-full flex flex-col font-medium'>
+                            <div className='text-2xl line-through'>
+                                <p>250.000 VND</p>
+                            </div>
+                            <div className='text-4xl text-red-500 font-medium'>
+                                <p>160.000 VND</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
         },
     ]
 
     const slidesProduct = [
         {
-            image: img4,
+            image: productimg1,
             text: 'THỰC PHẨM \n BỔ SUNG'
         },
         {
-            image: img5,
+            image: productimg2,
             text: 'TRANG BỊ \n THIẾT YẾU'
         },
         {
-            image: img6,
+            image: productimg3,
             text: 'TRANG PHỤC'
         },
         {
-            image: img7,
+            image: productimg4,
             text: 'PHƯƠNG TIỆN'
-        },
-        {
-            image: img8,
-            text: 'TÃ LÓT'
-        },
-        {
-            image: img9,
-            text: 'JOE MAMA'
         },
     ]
 
     const slides = [
         {
-            image: slideimg1,
-            text: 'VÌ CUỘC SỐNG\n HẠNH PHÚC CHO\n NHỮNG NGƯỜI\n THÂN YÊU\n'
+            image: bannerimg1,
+            text:
+                <div className='mt-80'>
+                    <p className='text-white'>VÌ CUỘC SỐNG <br /> HẠNH PHÚC CHO <br /> NHỮNG NGƯỜI <br /> THÂN YÊU</p>
+                    <div className="mt-4">
+                        <Link to="/learn-more" className="inline-block px-6 py-2 text-lg font-medium bg-blue_c0foff text-white rounded-full hover:brightness-110">TÌM HIỂU NGAY</Link>
+                    </div>
+                </div>
         },
         {
-            image: slideimg2,
-            text: 'Slide 2 Description'
+            image: bannerimg2,
         },
         {
-            image: slideimg3,
-            text: 'Slide 3 Description'
-        },
-        {
-            image: slideimg4,
-            text: 'Slide 4 Description'
+            image: bannerimg3,
         },
     ]
 
@@ -110,16 +139,14 @@ function HomePage() {
         <>
             <div className='h-[780px] mt-40 px-4 relative group ml-[6%] mr-[6%]'>
                 <div className='overflow-visible w-full h-full flex relative'>
-                    <div style={{ backgroundImage: `url(${slides[currentIndex === 0 ? slides.length - 1 : currentIndex - 1].image})`, backgroundPositionY: 'center' }} className='w-full h-full rounded-3xl bg-cover duration-500 opacity-90 absolute -translate-x-48 scale-90'></div>
-                    <div style={{ backgroundImage: `url(${slides[currentIndex].image})`, backgroundPositionY: 'center' }} className='w-full h-full rounded-3xl bg-cover duration-1000 absolute z-10 scale-95'>
+                    <img src={slides[currentIndex === 0 ? slides.length - 1 : currentIndex - 1].image} alt="" className='w-full h-full rounded-3xl object-cover duration-500 opacity-80 absolute -translate-x-48 scale-90' />
+                    <div className='w-full h-full rounded-3xl object-cover duration-1000 absolute z-10 scale-95'>
+                        <img src={slides[currentIndex].image} alt="" className='w-full h-full rounded-3xl object-cover' />
                         <div className="absolute top-10 right-10 text-white font-thin text-5xl whitespace-pre-line">
                             {slides[currentIndex].text}
-                            <div className="mt-4">
-                                <Link to="/learn-more" className="inline-block px-6 py-2 text-lg font-medium bg-blue_c0foff text-white rounded-full hover:brightness-110">TÌM HIỂU NGAY</Link>
-                            </div>
                         </div>
                     </div>
-                    <div style={{ backgroundImage: `url(${slides[currentIndex === slides.length - 1 ? 0 : currentIndex + 1].image})`, backgroundPositionY: 'center' }} className='w-full h-full rounded-3xl bg-cover duration-500 opacity-90 absolute translate-x-48 scale-90'></div>
+                    <img src={slides[currentIndex === slides.length - 1 ? 0 : currentIndex + 1].image} alt="" className='w-full h-full rounded-3xl object-cover duration-500 opacity-80 absolute translate-x-48 scale-90' />
                 </div>
 
                 <div className="hidden group-hover:block absolute top-[45%] -translate-x-0 translate-y-[50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer z-20">
@@ -137,23 +164,17 @@ function HomePage() {
                 </div>
             </div>
             <div className='bg-gradient-to-br from-white to-blue_6bccde'>
-                <div style={{ backgroundImage: `url(${slideimg3})`, backgroundPositionY: 'center' }} className='flex justify-center items-center bg-cover h-full py-10 my-20'>
-                    <p className='text-3xl font-medium text-white'>GIẢM GIÁ</p>
-                    <p className='text-8xl font-medium text-blue_94eeff font-mono'>30%</p>
-                    <p className='text-3xl font-medium text-white'>MỌI MẶT HÀNG TRANG PHỤ NỮ</p>
-                </div>
-
+                <div style={{ backgroundImage: `url(${banner})` }} className='flex bg-cover h-full py-96 justify-center my-20 '></div>
                 <div className='text-blue_177f9f pt-16 font-medium text-4xl text-center'>
                     <p>DANH MỤC SẢN PHẨM</p>
                 </div>
 
-                <div >
+                <div className='ml-28'>
                     <Swiper
-                        effect={'coverflow'}
                         grabCursor={true}
-                        centeredSlides={true}
+                        centeredSlides={false}
                         loop={true}
-                        slidesPerView={5}
+                        slidesPerView={4}
                         slideShadows={false}
                         autoplay={{
                             delay: 3000,
@@ -164,22 +185,17 @@ function HomePage() {
                             prevEl: '.swiper-button-prev',
                             clickable: true,
                         }}
-                        coverflowEffect={
-                            {
-                                rotate: 0,
-                                stretch: 0,
-                                depth: 100,
-                                modifier: 2.5,
-                            }}
-                        modules={[EffectCoverflow, Navigation, Autoplay]}
-                        className="swiper_container my-10 group w-[1000px]"
+
+                        modules={[Navigation, Autoplay]}
+                        className="swiper_container my-10 group w-full"
                     >
                         <SwiperSlide>
                             <div className='bg-white w-[272px] h-[337px] flex flex-col justify-center items-center rounded-3xl relative '>
-                                <div className="absolute top-10  font-thin text-4xl whitespace-pre-line z-50 text-blue_177f9f text-center">
+                                <div className="absolute top-10 font-thin text-4xl whitespace-pre-line z-50 text-blue_177f9f text-center">
                                     {slidesProduct[startIndex === 0 ? slidesProduct.length - 1 : startIndex - 1].text}
                                 </div>
-                                <div style={{ backgroundImage: `url(${slidesProduct[startIndex === 0 ? slidesProduct.length - 1 : startIndex - 1].image})` }} className='w-40 h-40 rounded-3xl bg-cover duration-1000 absolute z-10 bottom-7'></div>
+                                <img src={slidesProduct[startIndex === 0 ? slidesProduct.length - 1 : startIndex - 1].image} alt='' className='w-40 h-40 rounded-3xl bg-cover duration-1000 absolute z-10 bottom-7' />
+
                             </div>
                         </SwiperSlide>
                         <SwiperSlide>
@@ -187,7 +203,7 @@ function HomePage() {
                                 <div className="absolute top-10  font-thin text-4xl whitespace-pre-line z-50 text-blue_177f9f text-center">
                                     {slidesProduct[startIndex].text}
                                 </div>
-                                <div style={{ backgroundImage: `url(${slidesProduct[startIndex].image})` }} className='w-40 h-40 rounded-3xl bg-cover duration-1000 absolute z-10 bottom-7'></div>
+                                <img src={slidesProduct[startIndex].image} alt='SlideProduct' className='w-40 h-40 rounded-3xl bg-cover duration-1000 absolute z-10 bottom-7' />
                             </div>
                         </SwiperSlide>
                         <SwiperSlide>
@@ -195,7 +211,7 @@ function HomePage() {
                                 <div className="absolute top-10 font-thin text-4xl whitespace-pre-line z-50 text-blue_177f9f text-center">
                                     {slidesProduct[startIndex + 1 >= slidesProduct.length ? 0 : startIndex + 1].text}
                                 </div>
-                                <div style={{ backgroundImage: `url(${slidesProduct[startIndex + 1 >= slidesProduct.length ? 0 : startIndex + 1].image})` }} className='w-40 h-40 rounded-3xl bg-cover duration-1000 absolute z-10 bottom-7'></div>
+                                <img src={slidesProduct[startIndex + 1 >= slidesProduct.length ? 0 : startIndex + 1].image} className='w-40 h-40 rounded-3xl bg-cover duration-1000 absolute z-10 bottom-7' />
                             </div>
                         </SwiperSlide>
                         <SwiperSlide>
@@ -203,7 +219,7 @@ function HomePage() {
                                 <div className="absolute top-10  font-thin text-4xl whitespace-pre-line z-50 text-blue_177f9f text-center">
                                     {slidesProduct[startIndex + 2 >= slidesProduct.length ? startIndex + 2 - slidesProduct.length : startIndex + 2].text}
                                 </div>
-                                <div style={{ backgroundImage: `url(${slidesProduct[(startIndex + 2 >= slidesProduct.length ? startIndex + 2 - slidesProduct.length : startIndex + 2)].image})` }} className='w-40 h-40 rounded-3xl bg-cover duration-1000 absolute z-10 bottom-7'></div>
+                                <img src={slidesProduct[(startIndex + 2 >= slidesProduct.length ? startIndex + 2 - slidesProduct.length : startIndex + 2)].image} alt='SlideProduct' className='w-40 h-40 rounded-3xl bg-cover duration-1000 absolute z-10 bottom-7' />
                             </div>
                         </SwiperSlide>
                         <SwiperSlide>
@@ -211,7 +227,7 @@ function HomePage() {
                                 <div className="absolute top-10  font-thin text-4xl whitespace-pre-line z-50 text-blue_177f9f text-center">
                                     {slidesProduct[startIndex + 3 >= slidesProduct.length ? startIndex + 3 - slidesProduct.length : startIndex + 3].text}
                                 </div>
-                                <div style={{ backgroundImage: `url(${slidesProduct[(startIndex + 3 >= slidesProduct.length ? startIndex + 3 - slidesProduct.length : startIndex + 3)].image})` }} className='w-40 h-40 rounded-3xl bg-cover duration-1000 absolute z-10 bottom-7'></div>
+                                <img src={slidesProduct[(startIndex + 3 >= slidesProduct.length ? startIndex + 3 - slidesProduct.length : startIndex + 3)].image} alt='SlideProduct' className='w-40 h-40 rounded-3xl bg-cover duration-1000 absolute z-10 bottom-7' />
                             </div>
                         </SwiperSlide>
                         <div className='slider-controler'>
@@ -228,7 +244,7 @@ function HomePage() {
                 <div className='font-medium text-4xl text-blue_177f9f text-center mt-10'>
                     <p>SẢN PHẨM KHUYẾN MÃI</p>
                 </div>
-                <div className='flex justify-center my-10 '>
+                <div className='flex justify-center mt-10 '>
                     <Swiper
                         grabCursor={true}
                         loop={true}
@@ -245,22 +261,27 @@ function HomePage() {
                         modules={[Navigation, Autoplay]}
                         className='swiper_container group w-[1500px] rounded-3xl z-10'>
                         <SwiperSlide>
-                            <div className='bg-gradient-to-r from-blue_6bccde to-blue_14b4d7 w-[1243px] h-[625px] rounded-3xl relative ml-[8%]'>
-                                <div style={{ backgroundImage: `url(${productSingleSlide[Index === 0 ? productSingleSlide.length - 1 : Index - 1].image})` }} className='w-[500px] h-[570px] rounded-3xl bg-cover top-7 left-10 m-auto duration-500 absolute'></div>
-                                <div></div>
+                            <div className='bg-gradient-to-r from-blue_c0foff to-blue_6bccde  w-[1243px] h-[625px] rounded-3xl relative ml-[8%]'>
+                                <img src={productSingleSlide[Index === 0 ? productSingleSlide.length - 1 : Index - 1].image} alt='' className='w-[500px] h-[570px] rounded-3xl bg-cover top-7 left-10 m-auto duration-500 absolute' />
+                                <div className="absolute right-32 top-20 font-medium text-4xl whitespace-pre-line z-50 text-blue_177f9f text-left">
+                                    {productSingleSlide[Index === 0 ? productSingleSlide.length - 1 : Index - 1].text}
+                                </div>
                             </div>
                         </SwiperSlide>
                         <SwiperSlide>
-                            <div className='bg-gradient-to-r from-blue_6bccde to-blue_14b4d7 w-[1243px] h-[625px] rounded-3xl relative ml-[8%]'>
-                                <div style={{ backgroundImage: `url(${productSingleSlide[Index].image})` }} className='w-[500px] h-[570px] rounded-3xl bg-cover top-7 left-10 m-auto duration-500 absolute'></div>
-                                <div className="absolute right-32 top-20 font-medium text-4xl whitespace-pre-line z-50 text-blue_177f9f text-center">
+                            <div className='bg-gradient-to-r from-blue_c0foff to-blue_6bccde w-[1243px] h-[625px] rounded-3xl relative ml-[8%]'>
+                                <img src={productSingleSlide[Index].image} alt='' className='w-[500px] h-[570px] rounded-3xl bg-cover top-7 left-10 m-auto duration-500 absolute' />
+                                <div className="absolute right-32 top-20 font-medium text-4xl whitespace-pre-line z-50 text-blue_177f9f text-left">
                                     {productSingleSlide[Index].text}
                                 </div>
                             </div>
                         </SwiperSlide>
                         <SwiperSlide>
-                            <div className='bg-gradient-to-r from-blue_6bccde to-blue_14b4d7 w-[1243px] h-[625px] rounded-3xl relative ml-[8%]'>
-                                <div style={{ backgroundImage: `url(${productSingleSlide[Index === productSingleSlide.length - 1 ? 0 : Index + 1].image})` }} className='w-[500px] h-[570px] rounded-3xl bg-cover top-7 left-10 m-auto duration-500 absolute'></div>
+                            <div className='bg-gradient-to-r from-blue_c0foff to-blue_6bccde  w-[1243px] h-[625px] rounded-3xl relative ml-[8%]'>
+                                <img src={productSingleSlide[Index === productSingleSlide.length - 1 ? 0 : Index + 1].image} alt='' className='w-[500px] h-[570px] rounded-3xl bg-cover top-7 left-10 m-auto duration-500 absolute' />
+                                <div className="absolute right-32 top-20 font-medium text-4xl whitespace-pre-line z-50 text-blue_177f9f text-left">
+                                    {productSingleSlide[Index === productSingleSlide.length - 1 ? 0 : Index + 1].text}
+                                </div>
                             </div>
                         </SwiperSlide>
                         <div className='slider-controller overflow-visible'>
@@ -272,6 +293,55 @@ function HomePage() {
                             </div>
                         </div>
                     </Swiper>
+                </div>
+                <div className='mt-10 bg-gradient-to-r from-blue_00202a to-blue_6bccde'>
+                    <div className='pt-10 pb-10 mb-24'><p className='font-medium text-7xl text-center text-white'>KHÁCH HÀNG CỦA CHÚNG TÔI NÓI GÌ</p></div>
+                    <div className='space-x-10 pl-36 pb-10 grid grid-cols-3'>
+                        <div className='bg-white w-[400px] h-[500px] rounded-xl flex flex-col'>
+                            <div className='flex justify-center'>
+                                <div className='w-[75px] h-[75px] bg-blue_94eeff opacity-50 rounded-full -mt-10 overflow-visible translate-x-8 z-10'></div>
+                                <img src={reviewerimg1} alt='reviewer img' className='rounded-full w-[186px] h-[186px] -mt-20 z-20' />
+                                <div className='w-[75px] h-[75px] bg-blue_94eeff opacity-50 rounded-full -mt-10 -translate-x-8 z-10'></div>
+                            </div>
+                            <p className='font-bold text-4xl text-center text-blue_177f9f'>ngoclinh1973</p>
+                            <p className='w-[340px] h-[300px] text-3xl text-center ml-[7%] mt-[5%]'>"Từ ngày có OHeCa,<br /> tôi mua hàng cho <br />mẹ không còn lo<br /> ngại về hàng giả <br />nữa, cả gia đình đều<br /> rất vui mừng"</p>
+                            <img src={Fivestars} alt='Rating' className='w-[292px] h-[53px] ml-[13%] mb-[10%]' />
+                        </div>
+                        <div className='bg-white w-[400px] h-[500px] rounded-xl flex flex-col'>
+                            <div className='flex justify-center'>
+                                <div className='w-[75px] h-[75px] bg-blue_94eeff opacity-50 rounded-full -mt-10 overflow-visible translate-x-8 z-10'></div>
+                                <img src={reviewerimg2} alt='reviewer img' className='rounded-full w-[186px] h-[186px] -mt-20 z-20' />
+                                <div className='w-[75px] h-[75px] bg-blue_94eeff opacity-50 rounded-full -mt-10 -translate-x-8 z-10'></div>
+                            </div>
+                            <p className='font-bold text-4xl text-center text-blue_177f9f'>QTUAN</p>
+                            <p className='w-[340px] h-[300px] text-3xl text-center ml-[7%]  mt-[5%]'>"Mọi người trên<br /> trang web đều rất<br /> thân thiện, từ admin<br /> đến những user<br /> khác"</p>
+                            <img src={Fivestars} alt='Rating' className='w-[292px] h-[53px] ml-[13%] mb-[10%]' />
+                        </div>
+                        <div className='bg-white w-[400px] h-[500px] rounded-xl flex flex-col'>
+                            <div className='flex justify-center'>
+                                <div className='w-[75px] h-[75px] bg-blue_94eeff opacity-50 rounded-full -mt-10 overflow-visible translate-x-8 z-10'></div>
+                                <img src={reviewerimg3} alt='reviewer img' className='rounded-full w-[186px] h-[186px] -mt-20 z-20' />
+                                <div className='w-[75px] h-[75px] bg-blue_94eeff opacity-50 rounded-full -mt-10 -translate-x-8 z-10'></div>
+                            </div>
+                            <p className='font-bold text-4xl text-center text-blue_177f9f'>Allie_My</p>
+                            <p className='w-[340px] h-[300px] text-3xl text-center ml-[7%]  mt-[5%]'>"Giao hàng nhanh,<br /> giá phải chăng và<br /> chất lượng đảm bảo. <br />Chắc chắn sẽ tiếp<br /> tục ủng hộ"</p>
+                            <img src={Fivestars} alt='Rating' className='w-[292px] h-[53px] ml-[13%] mb-[10%] ' />
+                        </div>
+                    </div>
+                </div>
+                <div className='mt-10 text-center '>
+                    <p className='text-7xl font-bold'>CÙNG CHIA SẼ CÂU CHUYỆN CỦA BẠN TẠI DIỄN ĐÀN <br /> DÀNH RIÊNG CHO CỘNG ĐỒNG OHECA</p>
+                    <button className='w-[366px] h-[89px] bg-blue_177f9f text-3xl font-medium rounded-full text-white mt-10'>THAM GIA NGAY</button>
+                </div>
+                <img src={chat} alt='chat from' className='mt-10 ml-[22%] ' />
+                <div className='w-full h-[454px] bg-color_ob4f65'>
+                    <div>
+                        <p className='text-center pt-10 font-medium text-white text-7xl'>ĐỪNG BỎ LỠ NHỮNG ƯU ĐÃI HẤP DÂN - THAM GIA <br /> CỘNG ĐỘNG OHECA NGAY TỪ HÔM NAY</p>
+                    </div>
+                    <div className='flex mt-[5%] ml-[10%] m-auto'>
+                        <AiOutlineMail size={130} className='translate-x-44'/> 
+                        <div className='w-[1258px] h-[134px] rounded-full bg-white'></div>
+                    </div>
                 </div>
             </div>
         </>
