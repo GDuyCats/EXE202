@@ -1,6 +1,6 @@
 import React from 'react'
 import logoImage from '../assets/Without slogan.png'
-import backgroundImage from '../assets/310543032_782044779573265_2070644959280334700_n.jpg';
+import backgroundImage from '../assets/BG.jpg';
 import SignUpForm from '../components/SignUpForm';
 function SignUpPage() {
   return (

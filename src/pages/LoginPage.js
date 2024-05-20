@@ -1,6 +1,6 @@
 import React from 'react'
 import LoginForm from "../components/LoginForm";
-import backgroundImage from '../assets/310543032_782044779573265_2070644959280334700_n.jpg';
+import backgroundImage from '../assets/BG.jpg';
 import logoImage from '../assets/Without slogan.png'
 
 function LoginPage() {
