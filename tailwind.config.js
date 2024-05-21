@@ -20,6 +20,11 @@ module.exports = {
         'blue_tl': 'rgba(184,244,250,255)',
         'blue_br': 'rgba(162,203,255,255)',
         'blue_classi': 'rgba(181,229,238,255)',
+        'blue_94eeff': 'rgb(148, 238, 255)',
+        'blue_00202a': 'rgb(0,32,42)',
+        'brightened_blue_00202a': 'rgb(30, 62, 72)',
+        'blue_14b4d7': 'rgb(20,180,215)',
+        'color_ob4f65': 'rgb(11,79,101)'
       },
       scale: {
         '110': '1.1',

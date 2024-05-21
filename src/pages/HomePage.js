@@ -1,31 +1,124 @@
 import React, { useState, useEffect } from 'react'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import { Navigation, Pagination, Scrollbar } from 'swiper/modules'
-import 'swiper/css'
-import 'swiper/css/navigation'
-import 'swiper/css/pagination'
-import 'swiper/css/scrollbar'
 import { Link } from 'react-router-dom'
-import logoImage from '../assets/Without slogan.png'
-import slideimg1 from '../assets/cong-viec-bung-no-cua-annie-2.jpg'
-import slideimg2 from '../assets/TFT-Chibi-Annie.jpg'
-import slideimg3 from '../assets/310543032_782044779573265_2070644959280334700_n.jpg'
+import banner from '../assets/Banner.jpg'
+import Ad1 from '../assets/Ad1.jpg'
+import chat from '../assets/Screenshot 2024-05-20 235416.png'
+import Fivestars from '../assets/Group 8.png'
+import reviewerimg1 from "../assets/Reviewed (1).jpg"
+import reviewerimg2 from "../assets/Reviewed (2).jpg"
+import reviewerimg3 from "../assets/Reviewed (3).jpg"
+import bannerimg1 from '../assets/banner (1).jpg'
+import bannerimg2 from '../assets/banner (2).jpg'
+import bannerimg3 from '../assets/banner (3).jpg'
+import productimg1 from '../assets/Product (1).jpg'
+import productimg2 from '../assets/Product (2).jpg'
+import productimg3 from '../assets/Product (3).jpg'
+import productimg4 from '../assets/Product (4).jpg'
 import { BsChevronCompactLeft, BsChevronCompactRight } from 'react-icons/bs'
+import { AiOutlineMail } from 'react-icons/ai';
 import { RxDotFilled } from 'react-icons/rx'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import 'swiper/css';
+import 'swiper/css/effect-coverflow';
+import 'swiper/css/autoplay';
+import { Navigation, Autoplay } from 'swiper/modules'
+
 
 function HomePage() {
 
-    const slide = [slideimg1, slideimg2, slideimg3]
+    const productSingleSlide = [
+        {
+            image: Ad1,
+            text:
+                <div>
+                    <span class="text-brightened_blue_00202a text-5xl font-normal">ÁO XANH HỌA TIẾT HOA</span>
+                    <div className='text-blue_177f9f font-thin space-y-10 mt-10'>
+                        <p>Nhà sản xuất: Thời trang NEIH</p>
+                        <p>Chất liệu: Vải tơ gân</p>
+                        <p>Đánh giá: </p>
+                        <div className='w-[300px] h-[100px] bg-blue_94eeff text-center rounded-full flex flex-col font-medium'>
+                            <div className='text-2xl line-through'>
+                                <p>200.000 VND</p>
+                            </div>
+                            <div className='text-4xl text-red-500 font-medium'>
+                                <p>140.000 VND</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        },
+        {
+            image: Ad1,
+            text:
+                <div>
+                    <span class="text-brightened_blue_00202a text-5xl font-normal">ÁO XANH HỌA TIẾT HOA</span>
+                    <div className='text-blue_177f9f font-thin space-y-10 mt-10'>
+                        <p>Nhà sản xuất: Thời trang NEIH</p>
+                        <p>Chất liệu: Vải tơ gân</p>
+                        <p>Đánh giá: </p>
+                        <div className='w-[300px] h-[100px] bg-blue_94eeff text-center rounded-full flex flex-col font-medium'>
+                            <div className='text-2xl line-through'>
+                                <p>250.000 VND</p>
+                            </div>
+                            <div className='text-4xl text-red-500 font-medium'>
+                                <p>160.000 VND</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        },
+    ]
+
+    const slidesProduct = [
+        {
+            image: productimg1,
+            text: 'THỰC PHẨM \n BỔ SUNG'
+        },
+        {
+            image: productimg2,
+            text: 'TRANG BỊ \n THIẾT YẾU'
+        },
+        {
+            image: productimg3,
+            text: 'TRANG PHỤC'
+        },
+        {
+            image: productimg4,
+            text: 'PHƯƠNG TIỆN'
+        },
+    ]
+
+    const slides = [
+        {
+            image: bannerimg1,
+            text:
+                <div className='mt-80'>
+                    <p className='text-white'>VÌ CUỘC SỐNG <br /> HẠNH PHÚC CHO <br /> NHỮNG NGƯỜI <br /> THÂN YÊU</p>
+                    <div className="mt-4">
+                        <Link to="/learn-more" className="inline-block px-6 py-2 text-lg font-medium bg-blue_c0foff text-white rounded-full hover:brightness-110">TÌM HIỂU NGAY</Link>
+                    </div>
+                </div>
+        },
+        {
+            image: bannerimg2,
+        },
+        {
+            image: bannerimg3,
+        },
+    ]
+
+    const [Index, setIndex] = useState(0)
+    const [startIndex, setStartIndex] = useState(0);
     const [currentIndex, setCurrentIndex] = useState(0)
 
     const prevSlide = () => {
         const isFirstSlide = currentIndex === 0;
-        const newIndex = isFirstSlide ? slide.length - 1 : currentIndex - 1;
+        const newIndex = isFirstSlide ? slides.length - 1 : currentIndex - 1;
         setCurrentIndex(newIndex)
     }
 
     const nextSlide = () => {
-        const isLastSlide = currentIndex === slide.length - 1;
+        const isLastSlide = currentIndex === slides.length - 1;
         const newIndex = isLastSlide ? 0 : currentIndex + 1;
         setCurrentIndex(newIndex)
     }
@@ -43,95 +136,215 @@ function HomePage() {
     }, [currentIndex])
 
     return (
-        <div>
-            <nav className="p-4 flex justify-between">
-                <div>
-                    <img src={logoImage} alt="Logo" style={{ position: 'absolute', top: 10, left: 30, width: '100px', height: '100px' }} />
-                </div>
-                <div class="space-x-4 ml-80">
-                    <button class="text-black px-3 py-2 rounded-full text-lg font-medium hover:bg-blue_c0foff "><Link to="/aboutus">VỀ CHÚNG TÔI</Link></button>
-                    <button class="text-black px-3 py-2 rounded-full text-lg font-medium hover:bg-blue_c0foff"><Link to="/shop">MUA HÀNG</Link></button>
-                    <button class="text-black px-3 py-2 rounded-full text-lg font-medium hover:bg-blue_c0foff" ><Link to="/forum">DIỄN ĐÀN</Link></button>
-                    <button class="text-black px-3 py-2 rounded-full text-lg font-medium hover:bg-blue_c0foff"><Link to="/contact">LIÊN HỆ</Link></button>
-                </div>
-                <div className='flex space-x-10 mr-10'>
-                    <div>
-                        <button className="text-black px-8 py-2 text-lg font-medium border-2 border-blue_177f9f rounded-full hover:bg-blue_c0foff"><Link to="/signup">ĐĂNG KÝ</Link></button>
+        <>
+            <div className='h-[780px] mt-40 px-4 relative group ml-[6%] mr-[6%]'>
+                <div className='overflow-visible w-full h-full flex relative'>
+                    <img src={slides[currentIndex === 0 ? slides.length - 1 : currentIndex - 1].image} alt="" className='w-full h-full rounded-3xl object-cover duration-500 opacity-80 absolute -translate-x-48 scale-90' />
+                    <div className='w-full h-full rounded-3xl object-cover duration-1000 absolute z-10 scale-95'>
+                        <img src={slides[currentIndex].image} alt="" className='w-full h-full rounded-3xl object-cover' />
+                        <div className="absolute top-10 right-10 text-white font-thin text-5xl whitespace-pre-line">
+                            {slides[currentIndex].text}
+                        </div>
                     </div>
-                    <div>
-                        <button className="text-black px-8 py-2 text-lg font-medium bg-blue_c0foff rounded-full hover:brightness-110"><Link to="/login">ĐĂNG NHẬP</Link></button>
-                    </div>
+                    <img src={slides[currentIndex === slides.length - 1 ? 0 : currentIndex + 1].image} alt="" className='w-full h-full rounded-3xl object-cover duration-500 opacity-80 absolute translate-x-48 scale-90' />
                 </div>
-            </nav>
-            {/* <div className='max-w-[1400px] h-[780px] w-full m-auto py-16 px-4 relative group'>
 
-                <div style={{ backgroundImage: `url(${slide[currentIndex]})` }} className='w-full h-full rounded-2xl bg-cover duration-500'></div>
-
-                <div className="hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer">
+                <div className="hidden group-hover:block absolute top-[45%] -translate-x-0 translate-y-[50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer z-20">
                     <BsChevronCompactLeft onClick={prevSlide} size={30} />
                 </div>
-                <div className="hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer">
+                <div className="hidden group-hover:block absolute top-[45%] -translate-x-0 translate-y-[50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer z-20">
                     <BsChevronCompactRight onClick={nextSlide} size={30} />
                 </div>
                 <div className='flex top-4 justify-center py-2'>
-                    {slide.map((slide, slideIndex) => (
+                    {slides.map((slide, slideIndex) => (
                         <div key={slideIndex} onClick={() => gotoSlide(slideIndex)} className={`text-4xl cursor-pointer ${currentIndex === slideIndex ? 'text-blue_6bccde' : 'text-blue_177f9f'}`}>
                             <RxDotFilled />
                         </div>
                     ))}
                 </div>
-            </div> */}
+            </div>
+            <div className='bg-gradient-to-br from-white to-blue_6bccde'>
+                <div style={{ backgroundImage: `url(${banner})` }} className='flex bg-cover h-full py-96 justify-center my-20 '></div>
+                <div className='text-blue_177f9f pt-16 font-medium text-4xl text-center'>
+                    <p>DANH MỤC SẢN PHẨM</p>
+                </div>
 
-            <div className='max-w-[1400px] h-[780px] w-full m-auto py-16 px-4 relative group'>
-                <Swiper
-                    effect={'overflow'}
-                    grabCursor={true}
-                    centeredSlides={true}
-                    loop={true}
-                    slidesPerView={'auto'}
-                    coverflowEffect={{
-                        rotate: 0,
-                        stretch: 0,
-                        depth: 100,
-                        modifier: 2.5
-                    }}
+                <div className='ml-28'>
+                    <Swiper
+                        grabCursor={true}
+                        centeredSlides={false}
+                        loop={true}
+                        slidesPerView={4}
+                        slideShadows={false}
+                        autoplay={{
+                            delay: 3000,
+                            disableOnInteraction: false,
+                        }}
+                        navigation={{
+                            nextEl: '.swiper-button-next',
+                            prevEl: '.swiper-button-prev',
+                            clickable: true,
+                        }}
 
-                    className='w-full h-full rounded-2xl bg-cover duration-500'
-                >
-                    <SwiperSlide>
-                        <img src={slideimg1} alt='slide_img' />
-                    </SwiperSlide>
+                        modules={[Navigation, Autoplay]}
+                        className="swiper_container my-10 group w-full"
+                    >
+                        <SwiperSlide>
+                            <div className='bg-white w-[272px] h-[337px] flex flex-col justify-center items-center rounded-3xl relative '>
+                                <div className="absolute top-10 font-thin text-4xl whitespace-pre-line z-50 text-blue_177f9f text-center">
+                                    {slidesProduct[startIndex === 0 ? slidesProduct.length - 1 : startIndex - 1].text}
+                                </div>
+                                <img src={slidesProduct[startIndex === 0 ? slidesProduct.length - 1 : startIndex - 1].image} alt='' className='w-40 h-40 rounded-3xl bg-cover duration-1000 absolute z-10 bottom-7' />
 
-                    <SwiperSlide>
-                        <img src={slideimg2} alt='slide_img' />
-                    </SwiperSlide>
-
-                    <SwiperSlide>
-                        <img src={slideimg3} alt='slide_img' />
-                    </SwiperSlide>
-
-                    <div className='slider-controller'>
-                        <div className="hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer">
-                            <BsChevronCompactLeft onClick={prevSlide} size={30} />
-                        </div>
-                        <div className="hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer">
-                            <BsChevronCompactRight onClick={nextSlide} size={30} />
-                        </div>
-                    </div>
-                    <div className='flex top-4 justify-center py-2'>
-                        {slide.map((slide, slideIndex) => (
-                            <div key={slideIndex} onClick={() => gotoSlide(slideIndex)} className={`text-4xl cursor-pointer ${currentIndex === slideIndex ? 'text-blue_6bccde' : 'text-blue_177f9f'}`}>
-                                <RxDotFilled />
                             </div>
-                        ))}
+                        </SwiperSlide>
+                        <SwiperSlide>
+                            <div className='bg-white w-[272px] h-[337px] flex flex-col justify-between items-center rounded-3xl relative'>
+                                <div className="absolute top-10  font-thin text-4xl whitespace-pre-line z-50 text-blue_177f9f text-center">
+                                    {slidesProduct[startIndex].text}
+                                </div>
+                                <img src={slidesProduct[startIndex].image} alt='SlideProduct' className='w-40 h-40 rounded-3xl bg-cover duration-1000 absolute z-10 bottom-7' />
+                            </div>
+                        </SwiperSlide>
+                        <SwiperSlide>
+                            <div className='bg-white w-[272px] h-[337px] flex flex-col justify-between items-center rounded-3xl relative'>
+                                <div className="absolute top-10 font-thin text-4xl whitespace-pre-line z-50 text-blue_177f9f text-center">
+                                    {slidesProduct[startIndex + 1 >= slidesProduct.length ? 0 : startIndex + 1].text}
+                                </div>
+                                <img src={slidesProduct[startIndex + 1 >= slidesProduct.length ? 0 : startIndex + 1].image} className='w-40 h-40 rounded-3xl bg-cover duration-1000 absolute z-10 bottom-7' />
+                            </div>
+                        </SwiperSlide>
+                        <SwiperSlide>
+                            <div className='bg-white w-[272px] h-[337px] flex flex-col justify-between items-center rounded-3xl relative'>
+                                <div className="absolute top-10  font-thin text-4xl whitespace-pre-line z-50 text-blue_177f9f text-center">
+                                    {slidesProduct[startIndex + 2 >= slidesProduct.length ? startIndex + 2 - slidesProduct.length : startIndex + 2].text}
+                                </div>
+                                <img src={slidesProduct[(startIndex + 2 >= slidesProduct.length ? startIndex + 2 - slidesProduct.length : startIndex + 2)].image} alt='SlideProduct' className='w-40 h-40 rounded-3xl bg-cover duration-1000 absolute z-10 bottom-7' />
+                            </div>
+                        </SwiperSlide>
+                        <SwiperSlide>
+                            <div className='bg-white w-[272px] h-[337px] flex flex-col justify-between items-center rounded-3xl relative'>
+                                <div className="absolute top-10  font-thin text-4xl whitespace-pre-line z-50 text-blue_177f9f text-center">
+                                    {slidesProduct[startIndex + 3 >= slidesProduct.length ? startIndex + 3 - slidesProduct.length : startIndex + 3].text}
+                                </div>
+                                <img src={slidesProduct[(startIndex + 3 >= slidesProduct.length ? startIndex + 3 - slidesProduct.length : startIndex + 3)].image} alt='SlideProduct' className='w-40 h-40 rounded-3xl bg-cover duration-1000 absolute z-10 bottom-7' />
+                            </div>
+                        </SwiperSlide>
+                        <div className='slider-controler'>
+                            <div className="swiper-button-prev absolute hidden group-hover:block top-[45%] -translate-x-0 translate-y-[50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer z-20 duration-500">
+                                <BsChevronCompactLeft size={30} />
+                            </div>
+                            <div className="swiper-button-next absolute hidden group-hover:block top-[45%] -translate-x-0 translate-y-[50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer z-20 duration-500">
+                                <BsChevronCompactRight size={30} />
+                            </div>
+                        </div>
+                    </Swiper>
+                    <div className='border-b-2 border-blue_177f9f ml-[10%] mr-[10%]'></div>
+                </div>
+                <div className='font-medium text-4xl text-blue_177f9f text-center mt-10'>
+                    <p>SẢN PHẨM KHUYẾN MÃI</p>
+                </div>
+                <div className='flex justify-center mt-10 '>
+                    <Swiper
+                        grabCursor={true}
+                        loop={true}
+                        slidesPerView={1}
+                        autoplay={{
+                            delay: 3000,
+                            disableOnInteraction: false,
+                        }}
+                        navigation={{
+                            nextEl: '.swiper-button-next',
+                            prevEl: '.swiper-button-prev',
+                            clickable: true,
+                        }}
+                        modules={[Navigation, Autoplay]}
+                        className='swiper_container group w-[1500px] rounded-3xl z-10'>
+                        <SwiperSlide>
+                            <div className='bg-gradient-to-r from-blue_c0foff to-blue_6bccde  w-[1243px] h-[625px] rounded-3xl relative ml-[8%]'>
+                                <img src={productSingleSlide[Index === 0 ? productSingleSlide.length - 1 : Index - 1].image} alt='' className='w-[500px] h-[570px] rounded-3xl bg-cover top-7 left-10 m-auto duration-500 absolute' />
+                                <div className="absolute right-32 top-20 font-medium text-4xl whitespace-pre-line z-50 text-blue_177f9f text-left">
+                                    {productSingleSlide[Index === 0 ? productSingleSlide.length - 1 : Index - 1].text}
+                                </div>
+                            </div>
+                        </SwiperSlide>
+                        <SwiperSlide>
+                            <div className='bg-gradient-to-r from-blue_c0foff to-blue_6bccde w-[1243px] h-[625px] rounded-3xl relative ml-[8%]'>
+                                <img src={productSingleSlide[Index].image} alt='' className='w-[500px] h-[570px] rounded-3xl bg-cover top-7 left-10 m-auto duration-500 absolute' />
+                                <div className="absolute right-32 top-20 font-medium text-4xl whitespace-pre-line z-50 text-blue_177f9f text-left">
+                                    {productSingleSlide[Index].text}
+                                </div>
+                            </div>
+                        </SwiperSlide>
+                        <SwiperSlide>
+                            <div className='bg-gradient-to-r from-blue_c0foff to-blue_6bccde  w-[1243px] h-[625px] rounded-3xl relative ml-[8%]'>
+                                <img src={productSingleSlide[Index === productSingleSlide.length - 1 ? 0 : Index + 1].image} alt='' className='w-[500px] h-[570px] rounded-3xl bg-cover top-7 left-10 m-auto duration-500 absolute' />
+                                <div className="absolute right-32 top-20 font-medium text-4xl whitespace-pre-line z-50 text-blue_177f9f text-left">
+                                    {productSingleSlide[Index === productSingleSlide.length - 1 ? 0 : Index + 1].text}
+                                </div>
+                            </div>
+                        </SwiperSlide>
+                        <div className='slider-controller overflow-visible'>
+                            <div className="swiper-button-prev hidden group-hover:block absolute top-[45%] -translate-x-[40%] translate-y-[50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer z-50">
+                                <BsChevronCompactLeft size={30} />
+                            </div>
+                            <div className="swiper-button-next hidden group-hover:block absolute top-[45%] translate-x-[40%] translate-y-[50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer z-50">
+                                <BsChevronCompactRight size={30} />
+                            </div>
+                        </div>
+                    </Swiper>
+                </div>
+                <div className='mt-10 bg-gradient-to-r from-blue_00202a to-blue_6bccde'>
+                    <div className='pt-10 pb-10 mb-24'><p className='font-medium text-7xl text-center text-white'>KHÁCH HÀNG CỦA CHÚNG TÔI NÓI GÌ</p></div>
+                    <div className='space-x-10 pl-36 pb-10 grid grid-cols-3'>
+                        <div className='bg-white w-[400px] h-[500px] rounded-xl flex flex-col'>
+                            <div className='flex justify-center'>
+                                <div className='w-[75px] h-[75px] bg-blue_94eeff opacity-50 rounded-full -mt-10 overflow-visible translate-x-8 z-10'></div>
+                                <img src={reviewerimg1} alt='reviewer img' className='rounded-full w-[186px] h-[186px] -mt-20 z-20' />
+                                <div className='w-[75px] h-[75px] bg-blue_94eeff opacity-50 rounded-full -mt-10 -translate-x-8 z-10'></div>
+                            </div>
+                            <p className='font-bold text-4xl text-center text-blue_177f9f'>ngoclinh1973</p>
+                            <p className='w-[340px] h-[300px] text-3xl text-center ml-[7%] mt-[5%]'>"Từ ngày có OHeCa,<br /> tôi mua hàng cho <br />mẹ không còn lo<br /> ngại về hàng giả <br />nữa, cả gia đình đều<br /> rất vui mừng"</p>
+                            <img src={Fivestars} alt='Rating' className='w-[292px] h-[53px] ml-[13%] mb-[10%]' />
+                        </div>
+                        <div className='bg-white w-[400px] h-[500px] rounded-xl flex flex-col'>
+                            <div className='flex justify-center'>
+                                <div className='w-[75px] h-[75px] bg-blue_94eeff opacity-50 rounded-full -mt-10 overflow-visible translate-x-8 z-10'></div>
+                                <img src={reviewerimg2} alt='reviewer img' className='rounded-full w-[186px] h-[186px] -mt-20 z-20' />
+                                <div className='w-[75px] h-[75px] bg-blue_94eeff opacity-50 rounded-full -mt-10 -translate-x-8 z-10'></div>
+                            </div>
+                            <p className='font-bold text-4xl text-center text-blue_177f9f'>QTUAN</p>
+                            <p className='w-[340px] h-[300px] text-3xl text-center ml-[7%]  mt-[5%]'>"Mọi người trên<br /> trang web đều rất<br /> thân thiện, từ admin<br /> đến những user<br /> khác"</p>
+                            <img src={Fivestars} alt='Rating' className='w-[292px] h-[53px] ml-[13%] mb-[10%]' />
+                        </div>
+                        <div className='bg-white w-[400px] h-[500px] rounded-xl flex flex-col'>
+                            <div className='flex justify-center'>
+                                <div className='w-[75px] h-[75px] bg-blue_94eeff opacity-50 rounded-full -mt-10 overflow-visible translate-x-8 z-10'></div>
+                                <img src={reviewerimg3} alt='reviewer img' className='rounded-full w-[186px] h-[186px] -mt-20 z-20' />
+                                <div className='w-[75px] h-[75px] bg-blue_94eeff opacity-50 rounded-full -mt-10 -translate-x-8 z-10'></div>
+                            </div>
+                            <p className='font-bold text-4xl text-center text-blue_177f9f'>Allie_My</p>
+                            <p className='w-[340px] h-[300px] text-3xl text-center ml-[7%]  mt-[5%]'>"Giao hàng nhanh,<br /> giá phải chăng và<br /> chất lượng đảm bảo. <br />Chắc chắn sẽ tiếp<br /> tục ủng hộ"</p>
+                            <img src={Fivestars} alt='Rating' className='w-[292px] h-[53px] ml-[13%] mb-[10%] ' />
+                        </div>
                     </div>
-                </Swiper>
+                </div>
+                <div className='mt-10 text-center '>
+                    <p className='text-7xl font-bold'>CÙNG CHIA SẼ CÂU CHUYỆN CỦA BẠN TẠI DIỄN ĐÀN <br /> DÀNH RIÊNG CHO CỘNG ĐỒNG OHECA</p>
+                    <button className='w-[366px] h-[89px] bg-blue_177f9f text-3xl font-medium rounded-full text-white mt-10'>THAM GIA NGAY</button>
+                </div>
+                <img src={chat} alt='chat from' className='mt-10 ml-[22%] ' />
+                <div className='w-full h-[454px] bg-color_ob4f65'>
+                    <div>
+                        <p className='text-center pt-10 font-medium text-white text-7xl'>ĐỪNG BỎ LỠ NHỮNG ƯU ĐÃI HẤP DÂN - THAM GIA <br /> CỘNG ĐỘNG OHECA NGAY TỪ HÔM NAY</p>
+                    </div>
+                    <div className='flex mt-[5%] ml-[10%] m-auto'>
+                        <AiOutlineMail size={130} className='translate-x-44'/> 
+                        <div className='w-[1258px] h-[134px] rounded-full bg-white'></div>
+                    </div>
+                </div>
             </div>
-
-            <div>
-                <p>GIẢM GIÁ 30% CHO MỌI MẶT HÀNG TRANG PHỤC NỮ</p>
-            </div>
-        </div>
+        </>
     )
 }
 export default HomePage
