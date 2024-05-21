@@ -16,18 +16,20 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path='/' element={<MainLayout/>}>
+        <Route path='/' element={<MainLayout />}>
           <Route path="/" element={<HomePage />} />
-          <Route path="/aboutus" element={<AboutUs/>}/>
-          <Route path="/shop" element={<ShopPage/>}/>
-        </Route>    
+          <Route path="/aboutus" element={<AboutUs />} />
+          <Route path="/productdetail" element={<ProductDetail />} />
+          <Route path="/shop" element={<ShopPage />} />
+        </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/policy" element={<PolicyPage />} />
         <Route path="/useragreement" element={<UserAgreementPage />} />
-        <Route path="/contact" element={<Contact/>}/>
-        <Route path="/forum" element={<ForumPage/>}/>   
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/forum" element={<ForumPage />} />
         <Route path="*" element={<NoPage />} />
+        <Route path="/cart" element={<Cart />} />
       </Routes>
     </Router>
     //PRODUCT DETAIL
