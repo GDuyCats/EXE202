@@ -142,7 +142,7 @@ function HomePage() {
                     <img src={slides[currentIndex === 0 ? slides.length - 1 : currentIndex - 1].image} alt="" className='w-full h-full rounded-3xl object-cover duration-500 opacity-80 absolute -translate-x-[70px] scale-[85%]' />
                     <div className='w-full h-full rounded-3xl object-cover duration-1000 absolute z-10 scale-95'>
                         <img src={slides[currentIndex].image} alt="" className='w-[1300px] h-full rounded-3xl object-cover mx-auto' />
-                        <div className="absolute top-10 right-10 text-white font-thin text-5xl whitespace-pre-line">
+                        <div className="absolute top-5 right-24 text-white font-thin text-5xl whitespace-pre-line">
                             {slides[currentIndex].text}
                         </div>
                     </div>
