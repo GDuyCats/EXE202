@@ -11,6 +11,9 @@ import Contact from './pages/Contact';
 import ForumPage from './pages/ForumPage';
 import ShopPage from './pages/ShopPage';
 import MainLayout from './layouts/MainLayout';
+import Transaction from './pages/TransactionPage';
+import ProductDetail from './pages/ProductDetail';
+import Cart from './pages/Cart';
 
 function App() {
   return (
@@ -21,6 +24,8 @@ function App() {
           <Route path="/aboutus" element={<AboutUs />} />
           <Route path="/productdetail" element={<ProductDetail />} />
           <Route path="/shop" element={<ShopPage />} />
+          <Route path="/transaction" element={<Transaction />} />
+        <Route path="/cart" element={<Cart />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUpPage />} />
@@ -29,10 +34,9 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/forum" element={<ForumPage />} />
         <Route path="*" element={<NoPage />} />
-        <Route path="/cart" element={<Cart />} />
       </Routes>
     </Router>
-    //PRODUCT DETAIL
+
   );
 }
 

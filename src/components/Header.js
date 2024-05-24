@@ -4,7 +4,7 @@ import logoImage from '../assets/Without slogan.png'
 function Header() {
     return (
         <>
-            <nav className="p-4 grid grid-cols-4 items-center z-50 bg-white fixed top-0 left-0 right-0 justify-between border-b-2 border-blue_177f9f">
+            <nav className="p-4 grid grid-cols-4 items-center z-50 bg-white sticky top-0 left-0 right-0 justify-between border-b-2 border-blue_177f9f">
                 <div className='z-50 ml-2 mr-auto'><img src={logoImage} alt="Logo" className="w-24 h-24" /></div>
                 <div className=" space-x-4 col-span-2 mx-auto">
                     <div className="space-x-4 hidden lg:flex ">

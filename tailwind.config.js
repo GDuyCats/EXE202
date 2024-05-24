@@ -24,7 +24,9 @@ module.exports = {
         'blue_00202a': 'rgb(0,32,42)',
         'brightened_blue_00202a': 'rgb(30, 62, 72)',
         'blue_14b4d7': 'rgb(20,180,215)',
-        'color_ob4f65': 'rgb(11,79,101)'
+        'color_ob4f65': 'rgb(11,79,101)',
+        'blue_0e4759': 'rgb(14, 71, 89)',
+        'red_ff0000': 'rgb(255, 0, 0)', 
       },
       scale: {
         '110': '1.1',
