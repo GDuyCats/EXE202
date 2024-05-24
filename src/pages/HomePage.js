@@ -20,7 +20,6 @@ import { RxDotFilled } from 'react-icons/rx'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css';
 import 'swiper/css/autoplay';
-import  'sw'
 
 import { Navigation, Autoplay } from 'swiper/modules'
 
@@ -138,16 +137,16 @@ function HomePage() {
 
     return (
         <>
-            <div className='h-[780px] mt-40 px-4 relative group'>
-                <div className='overflow-visible w-full h-full flex relative'>
-                    <img src={slides[currentIndex === 0 ? slides.length - 1 : currentIndex - 1].image} alt="" className='w-full h-full rounded-3xl object-cover duration-500 opacity-80 absolute -translate-x-48 scale-90' />
+            <div className='h-[780px] mt-40 px-4 relative group mx-auto'>
+                <div className='overflow-visible w-full h-full flex relative '>
+                    <img src={slides[currentIndex === 0 ? slides.length - 1 : currentIndex - 1].image} alt="" className='w-full h-full rounded-3xl object-cover duration-500 opacity-80 absolute -translate-x-[70px] scale-[85%]' />
                     <div className='w-full h-full rounded-3xl object-cover duration-1000 absolute z-10 scale-95'>
-                        <img src={slides[currentIndex].image} alt="" className='w-full h-full rounded-3xl object-cover' />
+                        <img src={slides[currentIndex].image} alt="" className='w-[1300px] h-full rounded-3xl object-cover mx-auto' />
                         <div className="absolute top-10 right-10 text-white font-thin text-5xl whitespace-pre-line">
                             {slides[currentIndex].text}
                         </div>
                     </div>
-                    <img src={slides[currentIndex === slides.length - 1 ? 0 : currentIndex + 1].image} alt="" className='w-full h-full rounded-3xl object-cover duration-500 opacity-80 absolute translate-x-48 scale-90' />
+                    <img src={slides[currentIndex === slides.length - 1 ? 0 : currentIndex + 1].image} alt="" className='w-full h-full rounded-3xl object-cover duration-500 opacity-80 absolute translate-x-[70px] scale-[85%]' />
                 </div>
 
                 <div className="hidden group-hover:block absolute top-[45%] -translate-x-0 translate-y-[50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer z-20">
@@ -170,7 +169,7 @@ function HomePage() {
                     <p>DANH MỤC SẢN PHẨM</p>
                 </div>
 
-                <div className='ml-28 w-full'>
+                <div className='w-[1200px] mx-auto'>
                     <Swiper
                         grabCursor={true}
                         centeredSlides={false}
@@ -188,7 +187,7 @@ function HomePage() {
                         }}
 
                         modules={[Navigation, Autoplay]}
-                        className="swiper_container my-10 group w-full grid grid-4"
+                        className="swiper_container my-10 group "
                     >
                         <SwiperSlide>
                             <div className='bg-white w-[272px] h-[337px] flex flex-col justify-center items-center rounded-3xl relative '>
@@ -232,10 +231,10 @@ function HomePage() {
                             </div>
                         </SwiperSlide>
                         <div className='slider-controler'>
-                            <div className="swiper-button-prev absolute hidden group-hover:block top-[45%] -translate-x-0 translate-y-[50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer z-20 duration-500">
+                            <div className=" absolute hidden group-hover:block top-[45%] -translate-x-0 translate-y-[50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer z-20 duration-500">
                                 <BsChevronCompactLeft size={30} />
                             </div>
-                            <div className="swiper-button-next absolute hidden group-hover:block top-[45%] -translate-x-0 translate-y-[50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer z-20 duration-500">
+                            <div className=" absolute hidden group-hover:block top-[45%] -translate-x-0 translate-y-[50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer z-20 duration-500">
                                 <BsChevronCompactRight size={30} />
                             </div>
                         </div>
@@ -285,19 +284,19 @@ function HomePage() {
                                 </div>
                             </div>
                         </SwiperSlide>
-                        {/* <div className='slider-controller overflow-visible'>
-                            <div className="swiper-button-prev hidden group-hover:block absolute top-[45%] -translate-x-[40%] translate-y-[50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer z-50">
+                        <div className='slider-controller overflow-visible'>
+                            <div className="hidden group-hover:block absolute top-[45%] -translate-x-[30%] translate-y-[50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer z-50">
                                 <BsChevronCompactLeft size={30} />
                             </div>
-                            <div className="swiper-button-next hidden group-hover:block absolute top-[45%] translate-x-[40%] translate-y-[50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer z-50">
+                            <div className="hidden group-hover:block absolute top-[45%] translate-x-[30%] translate-y-[50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer z-50">
                                 <BsChevronCompactRight size={30} />
                             </div>
-                        </div> */}
+                        </div>
                     </Swiper>
                 </div>
-                <div className='mt-10 bg-gradient-to-r from-blue_00202a to-blue_6bccde'>
+                <div className='mt-10 bg-gradient-to-r from-blue_00202a to-blue_6bccde w-full'>
                     <div className='pt-10 pb-10 mb-24'><p className='font-medium text-7xl text-center text-white'>KHÁCH HÀNG CỦA CHÚNG TÔI NÓI GÌ</p></div>
-                    <div className='space-x-10 pl-36 pb-10 grid grid-cols-3'>
+                    <div className='pb-10 grid grid-cols-3'>
                         <div className='w-full'>
                             <div className='bg-white w-[400px] h-[500px] rounded-xl flex flex-col mx-auto'>
                                 <div className='flex justify-center '>
@@ -341,7 +340,10 @@ function HomePage() {
                     <p className='text-5xl font-bold'>CÙNG CHIA SẼ CÂU CHUYỆN CỦA BẠN TẠI DIỄN ĐÀN <br /> DÀNH RIÊNG CHO CỘNG ĐỒNG OHECA</p>
                     <button className='w-[366px] h-[89px] bg-blue_177f9f text-3xl font-medium rounded-full text-white mt-10'>THAM GIA NGAY</button>
                 </div>
-                <img src={chat} alt='chat from' className='mt-10 ml-[22%] ' />
+                <div>
+                    <img src={chat} alt='chat from' className='mt-10 mx-auto' />
+                </div>
+
                 <div className='w-full h-full bg-color_ob4f65'>
                     <div>
                         <p className='text-center pt-10 font-medium text-white text-5xl'>ĐỪNG BỎ LỠ NHỮNG ƯU ĐÃI HẤP DÂN - THAM GIA <br /> CỘNG ĐỘNG OHECA NGAY TỪ HÔM NAY</p>
