@@ -3,9 +3,18 @@ import WithSlogan from '../assets/With slogan.png'
 import infor from '../assets/Screenshot 2024-05-24 205833.png'
 import Pic1 from '../assets/Pic (1).jpg'
 import Pic2 from '../assets/Pic (2).jpg'
+import Pic3 from '../assets/Pic (3).jpg'
 import vector1 from '../assets/Vector 1.png'
 import vector2 from '../assets/Vector 2.png'
 import Subtract from '../assets/Subtract.png'
+import Rectangle from '../assets/Rectangle.png'
+import Danh from '../assets/Screenshot 2024-05-25 200721.png'
+import Manh from '../assets/Screenshot 2024-05-25 200743.png'
+import Chau from '../assets/Screenshot 2024-05-25 200753.png'
+import Hien from '../assets/Screenshot 2024-05-25 200806.png'
+import Luan from '../assets/Screenshot 2024-05-25 200827.png'
+import Hieu from '../assets/Screenshot 2024-05-25 200850.png'
+
 function AboutUs() {
   return (
     <>
@@ -71,11 +80,57 @@ function AboutUs() {
             </div>
           </div>
         </div>
-
         <img src={vector1} className='absolute left-5 top-20' />
         <img src={vector2} className='absolute left-16 top-10' />
         <img src={vector1} className='absolute right-20 bottom-8 -scale-x-100 -scale-y-100' />
         <img src={vector2} className='absolute right-1 bottom-24 rotate-90 -scale-x-100' />
+      </div>
+      <div className='w-full h-full'>
+        <img src={Pic3} className='w-full h-full' />
+      </div>
+      <div className='w-full h-full'>
+        <div className='relative'>
+          <img src={Rectangle} className='w-full h-full' />
+          <div className='w-[1300px] h-[130px] text-blue_073d4d absolute top-5 left-1/2 -translate-x-[50%]'>
+             <p className='text-5xl text-center mt-10'>NHÓM PHÁT TRIỂN OHECA</p>
+             <div className='grid grid-cols-3 gap-32 pt-36'>
+              <div>
+                <img src={Danh} className='rounded-full'/>
+                <div>
+                  <p className='text-center text-blue_073d4d text-4xl font-medium mt-10'>ĐẶNG CÔNG DANH<br/><span className='font-thin'>CEO</span></p>
+                </div>
+              </div>
+              <div>
+                <img src={Manh} className='rounded-full'/>
+                <div>
+                  <p className='text-center text-blue_073d4d text-4xl font-medium mt-10'>NGUYỄN ĐỨC MẠNH<br/><span className='font-thin'>CFO</span></p>
+                </div>
+              </div>
+              <div>
+                <img src={Chau} className='rounded-full'/>
+                <div>
+                  <p className='text-center text-blue_073d4d text-4xl font-medium mt-10'>HUỲNH MÌNH CHÂU<br/><span className='font-thin'>CTO</span></p>
+                </div>
+              </div>
+              <div>
+                <img src={Hien} className='rounded-full'/>
+                <div>
+                  <p className='text-center text-blue_073d4d text-4xl font-medium mt-10'>DƯƠNG THI HIỀN<br/><span className='font-thin'>CTO</span></p>
+                </div>
+              </div>
+              {/* <div>
+                <img src={Luan} className='rounded-full'/>
+              </div> */}
+              <div>
+                <img src={Hieu} className='rounded-full'/>
+                <div>
+                  <p className='text-center text-blue_073d4d text-4xl font-medium mt-10'>VŨ TRẦN TRUNG HIẾU<br/><span className='font-thin'>CMO</span></p>
+                </div>
+              </div>
+          </div>
+          </div>
+          
+        </div>
       </div>
     </>
 

@@ -133,15 +133,15 @@ function HomePage() {
     return (
         <>
             <div className='h-[780px] mt-40 px-4 relative group mx-auto'>
-                <div className='overflow-visible w-[1800px] h-full flex relative mx-auto'>
-                    <img src={slides[currentIndex === 0 ? slides.length - 1 : currentIndex - 1].image} alt="" className='w-[1000px] h-full rounded-3xl object-cover duration-500 opacity-80 left-20 absolute -translate-x-[70px] scale-[85%]' />
+                <div className='overflow-visible w-[1500px] h-full flex relative mx-auto'>
+                    <img src={slides[currentIndex === 0 ? slides.length - 1 : currentIndex - 1].image} alt="" className='w-[1000px] h-full rounded-3xl object-cover duration-500 opacity-80 left-0 absolute -translate-x-[70px] scale-[85%]' />
                     <div className='w-[1300px] h-full rounded-3xl object-cover duration-1000 z-10 scale-95 mx-auto'>
                         <img src={slides[currentIndex].image} alt="" className='w-full h-full rounded-3xl object-cover mx-auto' />
                         <div className="absolute top-5 right-5 text-white font-thin text-5xl whitespace-pre-line">
                             {slides[currentIndex].text}
                         </div>
                     </div>
-                    <img src={slides[currentIndex === slides.length - 1 ? 0 : currentIndex + 1].image} alt="" className='w-[1000px] h-full rounded-3xl object-cover duration-500 opacity-80 right-20 scale-[85%] absolute' />
+                    <img src={slides[currentIndex === slides.length - 1 ? 0 : currentIndex + 1].image} alt="" className='w-[1000px] h-full rounded-3xl object-cover duration-500 opacity-80 -right-[60px] scale-[85%] absolute' />
                 </div>
 
                 <div className="hidden group-hover:block absolute top-[45%] -translate-x-0 translate-y-[50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer z-20">
