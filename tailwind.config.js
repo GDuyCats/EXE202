@@ -41,5 +41,6 @@ module.exports = {
   },
   plugins: [
     require('@tailwindcss/forms'),
+    require('@butterfail/tailwindcss-inverted-radius'),
   ],
 }
