@@ -9,39 +9,16 @@ import productImage from '../assets/ensure-gold.jpg'
 
 function Cart() {
     return (
-        <div>
-            <nav className="p-4 flex justify-between">
-                <div>
-                    <img src={logoImage} alt="Logo" style={{ position: 'absolute', top: 10, left: 30, width: '100px', height: '100px' }} />
-                </div>
-                <div class="space-x-4 ml-80">
-                    <button class="text-black px-3 py-2 rounded-full text-lg font-medium hover:bg-blue_c0foff "><Link to="/aboutus">VỀ CHÚNG TÔI</Link></button>
-                    <button class="text-black px-3 py-2 rounded-full text-lg font-medium hover:bg-blue_c0foff"><Link to="/shop">MUA HÀNG</Link></button>
-                    <button class="text-black px-3 py-2 rounded-full text-lg font-medium hover:bg-blue_c0foff" ><Link to="/forum">DIỄN ĐÀN</Link></button>
-                    <button class="text-black px-3 py-2 rounded-full text-lg font-medium hover:bg-blue_c0foff"><Link to="/contact">LIÊN HỆ</Link></button>
-                </div>
-                <div className='flex space-x-10 mr-10'>
-                    <div>
-                        <button className="text-black px-8 py-2 text-lg font-medium border-2 border-blue_177f9f rounded-full hover:bg-blue_c0foff"><Link to="/signup">ĐĂNG KÝ</Link></button>
-                    </div>
-                    <div>
-                        <button className="text-black px-8 py-2 text-lg font-medium bg-blue_c0foff rounded-full hover:brightness-110"><Link to="/login">ĐĂNG NHẬP</Link></button>
-                    </div>
-                </div>
-            </nav>
-            <div className="mt-10 w-full" style={{
+        <>
+            <div className="w-full" style={{
                 height: 100,
                 background: 'linear-gradient(to right, #24b7cf, #18335c)'
             }}>
                 <div className="pt-6 ml-2">
-                    <button className="text-white bg-blue_073d4d px-6 py-1 text-lg font-medium rounded-full hover:underline flex items-center w-fit"><svg className="text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
-                    </svg>
-                        <Link to="/homepage">QUAY VỀ</Link></button>
                 </div>
             </div>
             {/* ---------------------------------------------------------------------------------------- */}
-            <div className="min-h-screen absolute w-full bg-gradient-to-br from-blue_tl to-blue_br">
+            <div className="min-h-screen w-full bg-gradient-to-br from-blue_tl to-blue_br py-1">
                 <div className="bg-blue_bg_pd justify-center flex items-center mx-8 my-8">
                     <div className="w-full">
                         <div className="w-full bg-blue_177f9f" style={{
@@ -60,7 +37,7 @@ function Cart() {
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     )
 }
 
