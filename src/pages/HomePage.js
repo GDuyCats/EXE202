@@ -144,10 +144,10 @@ function HomePage() {
                     <img src={slides[currentIndex === slides.length - 1 ? 0 : currentIndex + 1].image} alt="" className='w-[1000px] h-full rounded-3xl object-cover duration-500 opacity-80 -right-[60px] scale-[85%] absolute' />
                 </div>
 
-                <div className="hidden group-hover:block absolute top-[45%] -translate-x-0 translate-y-[50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer z-20">
+                <div className="hidden group-hover:block absolute hover:bg-gray-600 top-[45%] -translate-x-0 translate-y-[50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer z-20">
                     <BsChevronCompactLeft onClick={prevSlide} size={30} />
                 </div>
-                <div className="hidden group-hover:block absolute top-[45%] -translate-x-0 translate-y-[50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer z-20">
+                <div className="hidden group-hover:block hover:bg-gray-600 absolute top-[45%] -translate-x-0 translate-y-[50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer z-20">
                     <BsChevronCompactRight onClick={nextSlide} size={30} />
                 </div>
                 <div className='flex top-4 justify-center py-2'>
@@ -164,7 +164,7 @@ function HomePage() {
                     <p>DANH MỤC SẢN PHẨM</p>
                 </div>
 
-                <div className='w-[1500px] mx-auto'>
+                <div className='w-[1400px] relative mx-auto group'>
                     <Swiper
                         grabCursor={true}
                         centeredSlides={false}
@@ -183,64 +183,62 @@ function HomePage() {
                         }}
 
                         modules={[Navigation, Autoplay]}
-                        className='swiper_container my-10 group w-[1200px] mx-auto'
+                        className='mt-10'
                     >
-                      
-                            <SwiperSlide>
-                                <div className='bg-white w-[272px] h-[337px] flex flex-col justify-center items-center rounded-3xl relative '>
-                                    <div className="absolute top-10 font-thin text-4xl whitespace-pre-line z-50 text-blue_177f9f text-center">
-                                        {slidesProduct[startIndex === 0 ? slidesProduct.length - 1 : startIndex - 1].text}
-                                    </div>
-                                    <img src={slidesProduct[startIndex === 0 ? slidesProduct.length - 1 : startIndex - 1].image} alt='' className='w-40 h-40 rounded-3xl bg-cover duration-1000 absolute z-10 bottom-7' />
+                        <SwiperSlide>
+                            <div className='bg-white w-[272px] h-[337px] flex flex-col justify-center items-center rounded-3xl relative left-10'>
+                                <div className="absolute top-10 font-thin text-4xl whitespace-pre-line z-50 text-blue_177f9f text-center ">
+                                    {slidesProduct[startIndex === 0 ? slidesProduct.length - 1 : startIndex - 1].text}
+                                </div>
+                                <img src={slidesProduct[startIndex === 0 ? slidesProduct.length - 1 : startIndex - 1].image} alt='' className='w-40 h-40 rounded-3xl bg-cover duration-1000 absolute z-10 bottom-7' />
 
-                                </div>
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <div className='bg-white w-[272px] h-[337px] flex flex-col justify-between items-center rounded-3xl relative'>
-                                    <div className="absolute top-10  font-thin text-4xl whitespace-pre-line z-50 text-blue_177f9f text-center">
-                                        {slidesProduct[startIndex].text}
-                                    </div>
-                                    <img src={slidesProduct[startIndex].image} alt='SlideProduct' className='w-40 h-40 rounded-3xl bg-cover duration-1000 absolute z-10 bottom-7' />
-                                </div>
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <div className='bg-white w-[272px] h-[337px] flex flex-col justify-between items-center rounded-3xl relative'>
-                                    <div className="absolute top-10 font-thin text-4xl whitespace-pre-line z-50 text-blue_177f9f text-center">
-                                        {slidesProduct[startIndex + 1 >= slidesProduct.length ? 0 : startIndex + 1].text}
-                                    </div>
-                                    <img src={slidesProduct[startIndex + 1 >= slidesProduct.length ? 0 : startIndex + 1].image} className='w-40 h-40 rounded-3xl bg-cover duration-1000 absolute z-10 bottom-7' />
-                                </div>
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <div className='bg-white w-[272px] h-[337px] flex flex-col justify-between items-center rounded-3xl relative'>
-                                    <div className="absolute top-10  font-thin text-4xl whitespace-pre-line z-50 text-blue_177f9f text-center">
-                                        {slidesProduct[startIndex + 2 >= slidesProduct.length ? startIndex + 2 - slidesProduct.length : startIndex + 2].text}
-                                    </div>
-                                    <img src={slidesProduct[(startIndex + 2 >= slidesProduct.length ? startIndex + 2 - slidesProduct.length : startIndex + 2)].image} alt='SlideProduct' className='w-40 h-40 rounded-3xl bg-cover duration-1000 absolute z-10 bottom-7' />
-                                </div>
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <div className='bg-white w-[272px] h-[337px] flex flex-col justify-between items-center rounded-3xl relative'>
-                                    <div className="absolute top-10  font-thin text-4xl whitespace-pre-line z-50 text-blue_177f9f text-center">
-                                        {slidesProduct[startIndex + 3 >= slidesProduct.length ? startIndex + 3 - slidesProduct.length : startIndex + 3].text}
-                                    </div>
-                                    <img src={slidesProduct[(startIndex + 3 >= slidesProduct.length ? startIndex + 3 - slidesProduct.length : startIndex + 3)].image} alt='SlideProduct' className='w-40 h-40 rounded-3xl bg-cover duration-1000 absolute z-10 bottom-7' />
-                                </div>
-                            </SwiperSlide>
-                        <div className='slider-controler'>
-                            <div className="button-prev hidden group-hover:block absolute top-[45%] -translate-x-[30%] translate-y-[50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer z-50">
-                                <BsChevronCompactLeft size={30} />
                             </div>
-                            <div className="button-next hidden group-hover:block absolute top-[45%] translate-x-[30%] translate-y-[50%] right-12 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer z-50">
-                                <BsChevronCompactRight size={30} />
+                        </SwiperSlide>
+                        <SwiperSlide>
+                            <div className='bg-white w-[272px] h-[337px] flex flex-col justify-between items-center rounded-3xl relative left-10'>
+                                <div className="absolute top-10  font-thin text-4xl whitespace-pre-line z-50 text-blue_177f9f text-center">
+                                    {slidesProduct[startIndex].text}
+                                </div>
+                                <img src={slidesProduct[startIndex].image} alt='SlideProduct' className='w-40 h-40 rounded-3xl bg-cover duration-1000 absolute z-10 bottom-7' />
                             </div>
-                        </div>
+                        </SwiperSlide>
+                        <SwiperSlide>
+                            <div className='bg-white w-[272px] h-[337px] flex flex-col justify-between items-center rounded-3xl relative left-10'>
+                                <div className="absolute top-10 font-thin text-4xl whitespace-pre-line z-50 text-blue_177f9f text-center">
+                                    {slidesProduct[startIndex + 1 >= slidesProduct.length ? 0 : startIndex + 1].text}
+                                </div>
+                                <img src={slidesProduct[startIndex + 1 >= slidesProduct.length ? 0 : startIndex + 1].image} className='w-40 h-40 rounded-3xl bg-cover duration-1000 absolute z-10 bottom-7' />
+                            </div>
+                        </SwiperSlide>
+                        <SwiperSlide>
+                            <div className='bg-white w-[272px] h-[337px] flex flex-col justify-between items-center rounded-3xl relative left-10'>
+                                <div className="absolute top-10  font-thin text-4xl whitespace-pre-line z-50 text-blue_177f9f text-center">
+                                    {slidesProduct[startIndex + 2 >= slidesProduct.length ? startIndex + 2 - slidesProduct.length : startIndex + 2].text}
+                                </div>
+                                <img src={slidesProduct[(startIndex + 2 >= slidesProduct.length ? startIndex + 2 - slidesProduct.length : startIndex + 2)].image} alt='SlideProduct' className='w-40 h-40 rounded-3xl bg-cover duration-1000 absolute z-10 bottom-7' />
+                            </div>
+                        </SwiperSlide>
+                        <SwiperSlide>
+                            <div className='bg-white w-[272px] h-[337px] flex flex-col justify-between items-center rounded-3xl relative left-10'>
+                                <div className="absolute top-10  font-thin text-4xl whitespace-pre-line z-50 text-blue_177f9f text-center">
+                                    {slidesProduct[startIndex + 3 >= slidesProduct.length ? startIndex + 3 - slidesProduct.length : startIndex + 3].text}
+                                </div>
+                                <img src={slidesProduct[(startIndex + 3 >= slidesProduct.length ? startIndex + 3 - slidesProduct.length : startIndex + 3)].image} alt='SlideProduct' className='w-40 h-40 rounded-3xl bg-cover duration-1000 absolute z-10 bottom-7' />
+                            </div>
+                        </SwiperSlide>
+                        <div className='border-b-2 border-blue_177f9f mx-[10%] mt-10'></div>
                     </Swiper>
-                    <div className='border-b-2 border-blue_177f9f ml-[10%] mr-[10%]'></div>
+                    <div className="button-prev hidden group-hover:block hover:bg-gray-600 absolute -left-[0.8%] top-36 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer z-50">
+                        <BsChevronCompactLeft size={30} />
+                    </div>
+                    <div className="button-next hidden group-hover:block hover:bg-gray-600 absolute -right-[1%] top-36 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer z-50">
+                        <BsChevronCompactRight size={30} />
+                    </div>             
                 </div>
                 <div className='font-medium text-4xl text-blue_177f9f text-center mt-10'>
                     <p>SẢN PHẨM KHUYẾN MÃI</p>
                 </div>
+
                 <div className='flex justify-center mt-10 w-[1500px] mx-auto'>
                     <Swiper
                         grabCursor={true}
@@ -283,10 +281,10 @@ function HomePage() {
                             </div>
                         </SwiperSlide>
                         <div className='slider-controller'>
-                            <div className="button-prev hidden group-hover:block absolute top-[45%] -translate-x-[30%] translate-y-[50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer z-50">
+                            <div className="button-prev hidden group-hover:block hover:bg-gray-600 absolute top-[45%] -translate-x-[30%] translate-y-[50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer z-50">
                                 <BsChevronCompactLeft size={30} />
                             </div>
-                            <div className="button-next hidden group-hover:block absolute top-[45%] translate-x-[30%] translate-y-[50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer z-50">
+                            <div className="button-next hidden group-hover:block hover:bg-gray-600 absolute top-[45%] translate-x-[30%] translate-y-[50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer z-50">
                                 <BsChevronCompactRight size={30} />
                             </div>
                         </div>
