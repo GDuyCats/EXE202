@@ -25,14 +25,14 @@ function App() {
           <Route path="/productdetail" element={<ProductDetail />} />
           <Route path="/shop" element={<ShopPage />} />
           <Route path="/transaction" element={<Transaction />} />
-        <Route path="/cart" element={<Cart />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/forum" element={<ForumPage />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/policy" element={<PolicyPage />} />
         <Route path="/useragreement" element={<UserAgreementPage />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/forum" element={<ForumPage />} />
         <Route path="*" element={<NoPage />} />
       </Routes>
     </Router>
