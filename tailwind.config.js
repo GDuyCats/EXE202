@@ -35,6 +35,7 @@ module.exports = {
       },
       fontFamily: {
         sans: ['Bai Jamjuree', 'sans-serif'],
+        allura: ['Allura', 'san-serif']
       },
     },
 
