@@ -90,8 +90,11 @@ function AboutUs() {
       </div>
       <div className='w-full h-full'>
         <div className='relative'>
-          <img src={Rectangle} className='w-full h-full' />
-          <div className='w-[1300px] h-[130px] text-blue_073d4d absolute top-5 left-1/2 -translate-x-[50%]'>
+        <div className="w-full" style={{
+                height: 1500,
+                background: 'linear-gradient(to bottom, #38cdfe, #20bdff, #a5fecb)'
+            }}>
+              <div className='w-[1300px] h-[130px] text-blue_073d4d absolute top-5 left-1/2 -translate-x-[50%]'>
              <p className='text-5xl text-center mt-10'>NHÓM PHÁT TRIỂN OHECA</p>
              <div className='grid grid-cols-3 gap-32 pt-36'>
               <div>
@@ -129,6 +132,8 @@ function AboutUs() {
               </div>
           </div>
           </div>
+            </div>
+          
           
         </div>
       </div>
