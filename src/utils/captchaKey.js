@@ -1,0 +1,2 @@
+export const googleCaptchaSiteKey = "6LcsAtwpAAAAAJ_Uc5ANLLQ2I8UxuUMiLCH9s7qz"
+export const googleCaptchaSecretKey = "6LcsAtwpAAAAAPnSO8yHA7g0Pk7dScOV_R0RFLlj"
