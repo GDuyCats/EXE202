@@ -14,6 +14,8 @@ import MainLayout from './layouts/MainLayout';
 import Transaction from './pages/TransactionPage';
 import ProductDetail from './pages/ProductDetail';
 import Cart from './pages/Cart';
+import Discount from './pages/Discount';
+
 
 function App() {
   return (
@@ -27,6 +29,7 @@ function App() {
           <Route path="/transaction" element={<Transaction />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/forum" element={<ForumPage />} />
+          <Route path="/discount" element={<Discount />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUpPage />} />
