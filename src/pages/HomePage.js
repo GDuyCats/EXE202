@@ -159,7 +159,7 @@ function HomePage() {
                 </div>
             </div>
             <div className='bg-gradient-to-br from-white to-blue_6bccde'>
-                <div style={{ backgroundImage: `url(${banner})` }} className='flex bg-cover h-full py-96 justify-center my-20 '></div>
+                <Link to="/discount" ><div style={{ backgroundImage: `url(${banner})` }} className='flex bg-cover h-full py-96 justify-center my-20 '></div></Link>
                 <div className='text-blue_177f9f pt-16 font-medium text-4xl text-center'>
                     <p>DANH MỤC SẢN PHẨM</p>
                 </div>

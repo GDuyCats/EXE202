@@ -8,9 +8,7 @@ function Header() {
         setUrl(location.pathname);
       }, [location]);
     return (
-
         <>
-
             <nav className="p-4 grid grid-cols-4 items-center z-50 bg-white sticky top-0 left-0 right-0 justify-between border-b-2 border-blue_177f9f">
                 <div className='z-50 ml-2 mr-auto'><Link to="/"><img src={logoImage} alt="Logo" className="w-24 h-24" /></Link></div>
                 <div className=" space-x-4 col-span-2 mx-auto">
