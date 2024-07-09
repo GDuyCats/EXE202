@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import banner from '../assets/Banner.jpg'
-import Ad1 from '../assets/Ad1.jpg'
 import chat from '../assets/Screenshot 2024-05-20 235416.png'
 import Fivestars from '../assets/Group 8.png'
 import reviewerimg1 from "../assets/Reviewed (1).jpg"
@@ -14,55 +13,60 @@ import productimg1 from '../assets/Product (1).jpg'
 import productimg2 from '../assets/Product (2).jpg'
 import productimg3 from '../assets/Product (3).jpg'
 import productimg4 from '../assets/Product (4).jpg'
+import axios from 'axios'
 import { BsChevronCompactLeft, BsChevronCompactRight } from 'react-icons/bs'
 import { AiOutlineMail } from 'react-icons/ai';
 import { RxDotFilled } from 'react-icons/rx'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Autoplay } from 'swiper/modules'
+import { data } from 'autoprefixer'
 function HomePage() {
-
-    const productSingleSlide = [
-        {
-            image: Ad1,
-            text:
-                <div>
-                    <span class="text-brightened_blue_00202a text-5xl font-normal">ÁO XANH HỌA TIẾT HOA</span>
-                    <div className='text-blue_177f9f font-thin space-y-10 mt-10'>
-                        <p>Nhà sản xuất: Thời trang NEIH</p>
-                        <p>Chất liệu: Vải tơ gân</p>
-                        <p>Đánh giá: </p>
-                        <div className='w-[300px] h-[100px] bg-blue_94eeff text-center rounded-full flex flex-col font-medium'>
-                            <div className='text-2xl line-through'>
-                                <p>200.000 VND</p>
-                            </div>
-                            <div className='text-4xl text-red-500 font-medium'>
-                                <p>140.000 VND</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-        },
-        {
-            image: Ad1,
-            text:
-                <div>
-                    <span class="text-brightened_blue_00202a text-5xl font-normal">ÁO XANH HỌA TIẾT HOA</span>
-                    <div className='text-blue_177f9f font-thin space-y-10 mt-10'>
-                        <p>Nhà sản xuất: Thời trang NEIH</p>
-                        <p>Chất liệu: Vải tơ gân</p>
-                        <p>Đánh giá: </p>
-                        <div className='w-[300px] h-[100px] bg-blue_94eeff text-center rounded-full flex flex-col font-medium'>
-                            <div className='text-2xl line-through'>
-                                <p>250.000 VND</p>
-                            </div>
-                            <div className='text-4xl text-red-500 font-medium'>
-                                <p>160.000 VND</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-        },
-    ]
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [productSingleSlide, setproductSingleSlide] = useState([])
+    // const productSingleSlide = [
+    //     {
+    //         image: Ad1,
+    //         text:
+    //             <div>
+    //                 <span class="text-brightened_blue_00202a text-5xl font-normal">ÁO XANH HỌA TIẾT HOA</span>
+    //                 <div className='text-blue_177f9f font-thin space-y-10 mt-10'>
+    //                     <p>Nhà sản xuất: Thời trang NEIH</p>
+    //                     <p>Chất liệu: Vải tơ gân</p>
+    //                     <p>Đánh giá: </p>
+    //                     <div className='w-[300px] h-[100px] bg-blue_94eeff text-center rounded-full flex flex-col font-medium'>
+    //                         <div className='text-2xl line-through'>
+    //                             <p>200.000 VND</p>
+    //                         </div>
+    //                         <div className='text-4xl text-red-500 font-medium'>
+    //                             <p>140.000 VND</p>
+    //                         </div>
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //     },
+    //     {
+    //         image: Ad1,
+    //         text:
+    //             <div>
+    //                 <span class="text-brightened_blue_00202a text-5xl font-normal">ÁO XANH HỌA TIẾT HOA</span>
+    //                 <div className='text-blue_177f9f font-thin space-y-10 mt-10'>
+    //                     <p>Nhà sản xuất: Thời trang NEIH</p>
+    //                     <p>Chất liệu: Vải tơ gân</p>
+    //                     <p>Đánh giá: </p>
+    //                     <div className='w-[300px] h-[100px] bg-blue_94eeff text-center rounded-full flex flex-col font-medium'>
+    //                         <div className='text-2xl line-through'>
+    //                             <p>250.000 VND</p>
+    //                         </div>
+    //                         <div className='text-4xl text-red-500 font-medium'>
+    //                             <p>160.000 VND</p>
+    //                         </div>
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //     },
+    // ]
 
     const slidesProduct = [
         {
@@ -126,9 +130,49 @@ function HomePage() {
         const timer = setInterval(() => {
             nextSlide()
         }, 3000);
-
         return () => clearInterval(timer);
     }, [currentIndex])
+
+    useEffect(() => {
+        axios.get('https://localhost:5001/api/Products/ViewProductByDiscount?pageIndex=1&pageSize=4')
+            .then(response => {
+                const { data } = response.data; // Extract the data property from response.data
+                if (Array.isArray(data)) {
+                    setProducts(data);
+                } else {
+                    console.error('Expected an array but got:', data);
+                    setProducts([]);  
+                }
+                setproductSingleSlide(products.map((product, index) => (
+                    {
+                        image: product?.imageLink,
+                        text:(
+                            <div>
+                                <span class="text-brightened_blue_00202a text-5xl font-normal">{product?.name}</span>
+                                <div className='text-blue_177f9f font-thin space-y-10 mt-10'>
+                                    <p>Nhà sản xuất: {product?.brandName}</p>
+                                    <p>Chất liệu: Vải tơ gân</p>
+                                    <p>Đánh giá: </p>
+                                    <div className='w-[300px] h-[100px] bg-blue_94eeff text-center rounded-full flex flex-col font-medium'>
+                                        <div className='text-2xl line-through'>
+                                            <p>{product?.unitPrice} VND</p>
+                                        </div>
+                                        <div className='text-4xl text-red-500 font-medium'>
+                                            <p>{product?.priceSold} VND</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>)
+                    }
+                )));
+                setLoading(false);
+            })
+            .catch(error => {
+                setError(error);
+                setLoading(false);
+            });
+    }, []);
+
 
     return (
         <>
@@ -233,13 +277,14 @@ function HomePage() {
                     </div>
                     <div className="button-next hidden group-hover:block hover:bg-gray-600 absolute -right-[1%] top-36 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer z-50">
                         <BsChevronCompactRight size={30} />
-                    </div>             
+                    </div>
                 </div>
                 <div className='font-medium text-4xl text-blue_177f9f text-center mt-10'>
                     <p>SẢN PHẨM KHUYẾN MÃI</p>
                 </div>
 
                 <div className='flex justify-center mt-10 w-[1500px] mx-auto'>
+                    {productSingleSlide.length > 0 ? 
                     <Swiper
                         grabCursor={true}
                         loop={true}
@@ -288,7 +333,8 @@ function HomePage() {
                                 <BsChevronCompactRight size={30} />
                             </div>
                         </div>
-                    </Swiper>
+                    </Swiper> : <></>
+                    }
                 </div>
                 <div className='mt-10 bg-gradient-to-r from-blue_00202a to-blue_6bccde w-full'>
                     <div className='pt-10 pb-10 mb-24'><p className='font-medium text-7xl text-center text-white'>KHÁCH HÀNG CỦA CHÚNG TÔI NÓI GÌ</p></div>

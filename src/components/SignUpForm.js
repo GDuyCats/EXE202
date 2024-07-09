@@ -36,9 +36,10 @@ function SignUpForm() {
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/api/Authentication/Register', {
+      const response = await axios.post('https://localhost:5001/api/Authentication/Register', {
         firstname,
         lastname,
+        // avatar,
         email,
         password,
         phone,
@@ -152,8 +153,8 @@ function SignUpForm() {
                   value={gender} onChange={(e) => setGender(e.target.value)}
                 >
                   <option value="">Chọn giới tính</option>
-                  <option value="Nam">Nam</option>
-                  <option value="Nữ">Nữ</option>
+                  <option value="Male">Nam</option>
+                  <option value="Female">Nữ</option>
                   <option value="Khác">Khác</option>
                 </select>
               </div>
