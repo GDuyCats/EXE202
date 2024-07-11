@@ -134,7 +134,7 @@ function HomePage() {
     }, [currentIndex])
 
     useEffect(() => {
-        axios.get('https://localhost:5001/api/Products/ViewProductByDiscount?pageIndex=1&pageSize=4')
+        axios.get('https://localhost:5001/api/Products/ViewProductByDiscount?pageIndex=1&pageSize=10')
             .then(response => {
                 const { data } = response.data; // Extract the data property from response.data
                 if (Array.isArray(data)) {
