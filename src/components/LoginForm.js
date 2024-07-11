@@ -1,20 +1,42 @@
-import React, { useState } from "react"
-import { Link } from 'react-router-dom'
+import React, { useState } from "react";
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
 export default function Form() {
-  const [email, setEmail] = useState('')
-  const handleSubmit = (e) => {
+  const [Email, setEmail] = useState('');
+  const [Password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Đăng nhập');
-  }
-  const isValidate = (email) => {
+    if (!isValidate(Email)) {
+      return;
+    }
+
+    try {
+      const formDataToSend = new FormData();
+      formDataToSend.append("Email", Email); // Append email value
+      formDataToSend.append("Password", Password); // Append password value
+      // Make the POST request
+      const response = await axios.post('https://localhost:5001/api/Authentication/Login', formDataToSend);
+      console.log(response.data);
+      navigate('/');
+    } catch (err) {
+      setError('Đăng nhập thất bại. Vui lòng thử lại.');
+    }
+  };
+
+  const isValidate = (Email) => {
     const checkEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (checkEmail.test(String(email).toLowerCase())){
-      alert("Valid Email !")
+    if (checkEmail.test(String(Email).toLowerCase())) {
+      return true;
+    } else {
+      alert("Invalid Email !");
+      return false;
     }
-    else{
-      alert("Invalid Email !")
-    }
-  }
+  };
+
   return (
     <div>
       <div>
@@ -26,7 +48,7 @@ export default function Form() {
           <input
             className="bg-blue_d5f8ff placeholder-blue_177f9f w-full rounded-sm pl-5 py-2"
             placeholder="Email"
-            value={email}
+            value={Email}
             onChange={(e) => setEmail(e.target.value)}
             type="text"
           />
@@ -35,19 +57,89 @@ export default function Form() {
           <input
             className="bg-blue_d5f8ff placeholder-blue_177f9f w-full rounded-sm pl-5 py-2 mb-5"
             placeholder="Password"
-            type="password"
+            value={Password}
+            onChange={(e) => setPassword(e.target.value)}
+            type="Password"
           />
         </div>
         <div>
-          <button className="bg-blue_177f9f text-white text-center w-full rounded-full py-2 my-3 hover:brightness-110" onClick={isValidate}>ĐĂNG NHẬP</button>
+          <button
+            className="bg-blue_177f9f text-white text-center w-full rounded-full py-2 my-3 hover:brightness-110"
+            type="submit"
+          >
+            ĐĂNG NHẬP
+          </button>
         </div>
+        {error && <div className="text-red-500">{error}</div>}
         <div className="text-xl">
             Chưa có tài khoản OHeca? Đăng ký ngay
         </div>
         <div>
-          <button className="bg-blue_6bccde text-white text-center w-full rounded-full py-2 mt-4 hover:brightness-110"><Link to="/signup">ĐĂNG KÝ</Link></button>
+          <button className="bg-blue_6bccde text-white text-center w-full rounded-full py-2 mt-4 hover:brightness-110">
+            <Link to="/signup">ĐĂNG KÝ</Link>
+          </button>
         </div>
       </form>
+
     </div>
-  )
+  );
 }
+
+// import React, { useState } from 'react';
+// import axios from 'axios';
+
+// const Login = () => {
+//   const [Email, setEmail] = useState('');
+//   const [Password, setPassword] = useState('');
+//   const [error, setError] = useState('');
+
+//   const handleLogin = async (e) => {
+//     e.preventDefault();
+//     try {
+//       const response = await axios.post('https://localhost:5001/api/Authentication/Login', {
+//         Email: Email,
+//         Password: Password,
+//       });
+//       console.log(response.data);
+//       if (response.data.success) {
+//         // Handle successful login, e.g., redirect to another page
+//       } else {
+//         setError(response.data.message);
+//       }
+//     } catch (err) {
+//       setError('An error occurred. Please try again.');
+//     }
+//   };
+
+//   return (
+//     <div className="login-container">
+//       <h2>Login</h2>
+//       <form onSubmit={handleLogin}>
+//         <div>
+//           <label>Email:</label>
+//           <input
+//             type="Email"
+//             value={Email}
+//             onChange={(e) => setEmail(e.target.value)}
+//             required
+//           />
+//         </div>
+//         <div>
+//           <label>Password:</label>
+//           <input
+//             type="Password"
+//             value={Password}
+//             onChange={(e) => setPassword(e.target.value)}
+//             required
+//           />
+//         </div>
+//         {error && <p className="error">{error}</p>}
+//         <button type="submit">Login</button>
+//       </form>
+//       {console.log({Email, Password})}
+//     </div>
+//   );
+// };
+
+// export default Login;
+
