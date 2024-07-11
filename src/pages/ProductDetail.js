@@ -84,7 +84,7 @@ function ProductDetail() {
                 <p className="text-lg mb-4">Xuất xứ: {data?.country}</p>
                 <p className="text-lg mb-4">Thành phần xem thành phần của sản phẩm này tại đây</p>
                 <p className="text-lg">Phân loại hàng:</p> */}
-                <div className="flex mb-4 w-full flex-wrap">
+                {/* <div className="flex mb-4 w-full flex-wrap">
                   <div className="flex items-center bg-blue_classi p-2 rounded-2xl border-2 border-blue_cart mr-6 mt-3">
                     <img
                       src={productImage}
@@ -125,7 +125,7 @@ function ProductDetail() {
                     />
                     <h6 className="text-sm text-blue_073d4d font-sans font-semibold mx-4">Lúa mạch</h6>
                   </div>
-                </div>
+                </div> */}
                 <div className="flex flex-row">
                   <p className="text-lg mb-4">Số lượng: </p>
                   <div className=" pl-7 flex">
