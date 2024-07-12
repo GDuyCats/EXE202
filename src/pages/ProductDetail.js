@@ -6,7 +6,19 @@ import 'swiper/css/scrollbar'
 import { Link } from 'react-router-dom'
 import productImage from '../assets/ensure-gold.jpg'
 import logoImage from '../assets/Without slogan.png'
+import { useGetProductById } from '../hooks/useGetProductById'
+import { useItemStore } from '../utils/cart'
 function ProductDetail() {
+  const {data} = useGetProductById(1)
+  console.log(data)
+
+  const cartStore = useItemStore()
+  // cartStore.addItem({id: 1, count: 10})
+  // console.log(cartStore.items)
+  const [count, setCount] = useState(1)
+
+
+  
   return (
     <>
       <div className="w-full " style={{
@@ -61,15 +73,18 @@ function ProductDetail() {
                 </div>
               </div>
               <div className="w-full md:w-1/2 xl:w-2/3 p-4 justify-end">
-                <div className="bg-blue_bg_d0f8ff rounded-full px-6 py-1 w-max">
-                  <h2 className="text-2xl mb-4 pt-3 text-blue_073d4d font-sans font-semibold">SỮA BỘT ENSURE GOLD 850G</h2>
+                <div className="bg-blue_bg_d0f8ff rounded-full px-6 py-1 w-fit">
+                  <h2 className="text-2xl mb-4 pt-3 text-blue_073d4d font-sans font-semibold">{data?.name}</h2>
                 </div>
-                <p className="text-lg mb-4">Danh mục: Thực phẩm bổ sung - Sữa dinh dưỡng.</p>
-                <p className="text-lg mb-4">Thương Hiệu: ABBOTT</p>
-                <p className="text-lg mb-4">Xuất xứ: Châu Âu</p>
+                {data?.productMaterials?.map((materialItem)=>
+                
+                <p className="text-lg mb-4">{materialItem?.material?.name}: {materialItem?.detail}</p>
+                )}
+                {/* <p className="text-lg mb-4">Thương Hiệu: {data?.brandName}</p>
+                <p className="text-lg mb-4">Xuất xứ: {data?.country}</p>
                 <p className="text-lg mb-4">Thành phần xem thành phần của sản phẩm này tại đây</p>
-                <p className="text-lg">Phân loại hàng:</p>
-                <div className="flex mb-4 w-full flex-wrap">
+                <p className="text-lg">Phân loại hàng:</p> */}
+                {/* <div className="flex mb-4 w-full flex-wrap">
                   <div className="flex items-center bg-blue_classi p-2 rounded-2xl border-2 border-blue_cart mr-6 mt-3">
                     <img
                       src={productImage}
@@ -110,18 +125,18 @@ function ProductDetail() {
                     />
                     <h6 className="text-sm text-blue_073d4d font-sans font-semibold mx-4">Lúa mạch</h6>
                   </div>
-                </div>
+                </div> */}
                 <div className="flex flex-row">
                   <p className="text-lg mb-4">Số lượng: </p>
                   <div className=" pl-7 flex">
-                    <button className="bg-blue_btn_qlt text-white text-2xl font-bold justify-center items-center flex" style={{ width: 30, height: 30 }}>-</button>
-                    <spam className="bg-blue_c0foff font-bold px-8 justify-center items-center flex" style={{ width: 30, height: 30 }}>1</spam>
-                    <button className="bg-blue_btn_qlt text-white text-2xl font-bold justify-center items-center flex" style={{ width: 30, height: 30 }}>+</button>
+                    <button onClick={() => {setCount(count-1)}} className="bg-blue_btn_qlt text-white text-2xl font-bold justify-center items-center flex" style={{ width: 30, height: 30 }}>-</button>
+                    <spam className="bg-blue_c0foff font-bold px-8 justify-center items-center flex" style={{ width: 30, height: 30 }}>{count}</spam>
+                    <button onClick={() => {setCount(count+1)}} className="bg-blue_btn_qlt text-white text-2xl font-bold justify-center items-center flex" style={{ width: 30, height: 30 }}>+</button>
                   </div>
                 </div>
                 <div className="flex"><p className="text-lg mb-4">Giá:</p> <h1 className="text-2xl font-semibold text-sky-800 ml-10 justify-center pl-7">750.000 VND</h1></div>
                 <div className="flex">
-                  <button className="bg-blue_cart hover:bg-sky-700 text-white py-2 px-4 rounded-full mr-2" style={{ width: 280, height: 62 }}>
+                  <button onClick={() => {cartStore.addItem({id: data.id, count})}} className="bg-blue_cart hover:bg-sky-700 text-white py-2 px-4 rounded-full mr-2" style={{ width: 280, height: 62 }}>
                     THÊM VÀO GIỎ HÀNG
                   </button>
                   <button className="bg-blue_buy hover:bg-cyan-700 text-white py-2 px-4 rounded-full mx-2" style={{ width: 280, height: 62 }}>

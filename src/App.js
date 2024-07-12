@@ -16,6 +16,7 @@ import ProductDetail from './pages/ProductDetail';
 import Cart from './pages/Cart';
 import Discount from './pages/Discount';
 
+
 function App() {
   return (
     <Router>

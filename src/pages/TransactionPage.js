@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
 import productImage from '../assets/ensure-gold.jpg'
 import voucherImage from '../assets/voucher.jpg'
+import { useGetAddressToShipById } from '../hooks/useGetAddressToShipById'
 
 function Transaction() {
+    const {data} = useGetAddressToShipById(1)
+    console.log(data)
     const [selectedMethod, setSelectedMethod] = useState(null);
 
     const handleMethodSelect = (method) => {
@@ -30,12 +33,18 @@ function Transaction() {
                         </div>
                         <div className="flex items-center justify-center">
                             <div className="bg-white container mx-10 my-7 p-10">
-                                <h1 className='text-4xl text-blue_177f9f'>NGUYỄN MAI RIÊNG</h1>
+                                <h1 className='text-4xl text-blue_177f9f'>{data?.customerName}</h1>
                                 <div className="flex items-start">
-                                    <p className="text-4xl mt-5 inline-flex">Tòa nhà A, số 123b, đường C, phường D, quận E, thành phố Hồ Chí Minh.</p>
-                                    <div className="flex justify-center w-fit h-fit bg-white text-blue_6bccde text-2xl font-extralight items-center border-2 border-blue_6bccde mt-4 ml-3">
+                                    <p className="text-4xl mt-5 inline-flex">ĐỊA CHỈ NHẬN HÀNG: {data?.detailAddress +","+ data?.ward +","+ data?.district +","+ data?.province}</p>
+                                    {/* <div className="flex justify-center w-fit h-fit bg-white text-blue_6bccde text-2xl font-extralight items-center border-2 border-blue_6bccde mt-4 ml-3">
                                         MẶC ĐỊNH
-                                    </div>
+                                    </div> */}
+                                </div>
+                                <div className="flex items-start">
+                                    <p className="text-4xl mt-5 inline-flex">SỐ ĐIỆN THOẠI: {data?.phone}</p>
+                                    {/* <div className="flex justify-center w-fit h-fit bg-white text-blue_6bccde text-2xl font-extralight items-center border-2 border-blue_6bccde mt-4 ml-3">
+                                        MẶC ĐỊNH
+                                    </div> */}
                                 </div>
                                 <button className="bg-blue_6bccde text-white flex items-center justify-center px-2 py-2 text-2xl font-normal mt-5">THAY ĐỔI</button>
                             </div>
