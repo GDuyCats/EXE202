@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import banner from '../assets/Banner.jpg'
-import chat from '../assets/Screenshot 2024-05-20 235416.png'
-import Fivestars from '../assets/Group 8.png'
-import reviewerimg1 from "../assets/Reviewed (1).jpg"
-import reviewerimg2 from "../assets/Reviewed (2).jpg"
-import reviewerimg3 from "../assets/Reviewed (3).jpg"
-import bannerimg1 from '../assets/banner (1).jpg'
-import bannerimg2 from '../assets/banner (2).jpg'
-import bannerimg3 from '../assets/banner (3).jpg'
-import productimg1 from '../assets/Product (1).jpg'
-import productimg2 from '../assets/Product (2).jpg'
-import productimg3 from '../assets/Product (3).jpg'
-import productimg4 from '../assets/Product (4).jpg'
+import banner from '../../assets/Banner.jpg'
+import chat from '../../assets/Screenshot 2024-05-20 235416.png'
+import Fivestars from '../../assets/Group 8.png'
+import reviewerimg1 from "../../assets/Reviewed (1).jpg"
+import reviewerimg2 from "../../assets/Reviewed (2).jpg"
+import reviewerimg3 from "../../assets/Reviewed (3).jpg"
+import bannerimg1 from '../../assets/banner (1).jpg'
+import bannerimg2 from '../../assets/banner (2).jpg'
+import bannerimg3 from '../../assets/banner (3).jpg'
+import productimg1 from '../../assets/Product (1).jpg'
+import productimg2 from '../../assets/Product (2).jpg'
+import productimg3 from '../../assets/Product (3).jpg'
+import productimg4 from '../../assets/Product (4).jpg'
 import axios from 'axios'
 import { BsChevronCompactLeft, BsChevronCompactRight } from 'react-icons/bs'
 import { AiOutlineMail } from 'react-icons/ai';
@@ -207,7 +207,6 @@ function HomePage() {
                 <div className='text-blue_177f9f pt-16 font-medium text-4xl text-center'>
                     <p>DANH MỤC SẢN PHẨM</p>
                 </div>
-
                 <div className='w-[1400px] relative mx-auto group'>
                     <Swiper
                         grabCursor={true}

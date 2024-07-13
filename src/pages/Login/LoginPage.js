@@ -1,7 +1,7 @@
 import React from 'react'
-import LoginForm from "../components/LoginForm";
-import backgroundImage from '../assets/BG.jpg';
-import logoImage from '../assets/Without slogan.png'
+import LoginForm from "../../components/LoginForm/LoginForm";
+import backgroundImage from '../../assets/BG.jpg';
+import logoImage from '../../assets/Without slogan.png'
 
 function LoginPage() {
     return (

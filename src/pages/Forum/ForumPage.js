@@ -1,9 +1,9 @@
 import React from 'react'
-import forumbanner from '../assets/forum.jpg'
-import vector65 from '../assets/Vector 65.png'
-import vector66 from '../assets/Vector 66.png'
-import vector67 from '../assets/Vector 67.png'
-import vector68 from '../assets/Vector 68.png'
+import forumbanner from '../../assets/forum.jpg'
+import vector65 from '../../assets/Vector 65.png'
+import vector66 from '../../assets/Vector 66.png'
+import vector67 from '../../assets/Vector 67.png'
+import vector68 from '../../assets/Vector 68.png'
 function ForumPage() {
   return (
     <>

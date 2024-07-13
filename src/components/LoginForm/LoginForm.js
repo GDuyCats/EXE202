@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from "../../context/AuthContext";
 import axios from 'axios';
 
 export default function Form() {
@@ -7,21 +8,28 @@ export default function Form() {
   const [Password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
-
+  const { saveToken } = useContext(AuthContext);
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isValidate(Email)) {
       return;
     }
-
     try {
       const formDataToSend = new FormData();
-      formDataToSend.append("Email", Email); // Append email value
-      formDataToSend.append("Password", Password); // Append password value
-      // Make the POST request
+      formDataToSend.append("Email", Email);
+      formDataToSend.append("Password", Password);
       const response = await axios.post('https://localhost:5001/api/Authentication/Login', formDataToSend);
-      console.log(response.data);
-      navigate('/');
+      
+      if (response.data.success) {
+        const userInfo = {
+          email: Email,
+        };
+        saveToken(response.data.token, userInfo);
+        navigate('/');
+      } else {
+        setError('Đăng nhập thất bại. Vui lòng thử lại.');
+      }
+
     } catch (err) {
       setError('Đăng nhập thất bại. Vui lòng thử lại.');
     }
@@ -72,7 +80,7 @@ export default function Form() {
         </div>
         {error && <div className="text-red-500">{error}</div>}
         <div className="text-xl">
-            Chưa có tài khoản OHeca? Đăng ký ngay
+          Chưa có tài khoản OHeca? Đăng ký ngay
         </div>
         <div>
           <button className="bg-blue_6bccde text-white text-center w-full rounded-full py-2 mt-4 hover:brightness-110">

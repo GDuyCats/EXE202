@@ -1,7 +1,7 @@
 import React from 'react'
-import logoImage from '../assets/Without slogan.png'
-import backgroundImage from '../assets/BG.jpg';
-import SignUpForm from '../components/SignUpForm';
+import logoImage from '../../assets/Without slogan.png'
+import backgroundImage from '../../assets/BG.jpg';
+import SignUpForm from '../../components/SignUpForm/SignUpForm';
 function SignUpPage() {
   return (
     <div className="flex w-full h-screen " style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover' }}>
