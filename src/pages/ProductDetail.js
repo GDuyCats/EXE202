@@ -1,24 +1,44 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import 'swiper/css/scrollbar'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import productImage from '../assets/ensure-gold.jpg'
 import logoImage from '../assets/Without slogan.png'
 import { useGetProductById } from '../hooks/useGetProductById'
 import { useItemStore } from '../utils/cart'
+import { useGetChildCategoryById } from '../hooks/useGetChildCategoryById'
+import axios from 'axios'
+import ImageGallery from "react-image-gallery";
 function ProductDetail() {
-  const {data} = useGetProductById(1)
+  const {id} = useParams()
+
+
+  const { data } = useGetProductById(id)
   console.log(data)
+  // const thumbnailImage = data?.images?.find((image) => image.thumbnail);
+  // const productImages = data?.images?.filter((image) => !image.thumbnail);
+
+  const { data: childCategories } = useGetChildCategoryById(data?.productMaterials?.[0]?.material?.childCategoryId)
 
   const cartStore = useItemStore()
   // cartStore.addItem({id: 1, count: 10})
   // console.log(cartStore.items)
   const [count, setCount] = useState(1)
 
+  const images = useMemo(() => {
+    if (!data){
+      return [];
+    }
+    return data?.images?.map(image => {
+      return {
+        original: image?.imageLink,
+        thumbnail: image?.imageLink
+      }
+    })
+  }, [data])
 
-  
   return (
     <>
       <div className="w-full " style={{
@@ -38,48 +58,78 @@ function ProductDetail() {
           <div className="bg-white container mx-10 my-7">
             <div className="flex">
               <div className="w-full md:w-2/3 bg-blue_bg_pd">
-                <div className="flex justify-center">
+                {/* <div className="flex justify-center">
                   <img
-                    src={productImage}
+                    src={thumbnailImage.imageLink}
                     alt="Product Image"
                     className="w-fit h-96 object-cover justify-center border-2 border-blue_cart"
                   />
                 </div>
                 <div className="flex my-6 justify-center">
+                {productImages.map((image, index) => (
+                    <img
+                      key={index}
+                      src={image.imageLink}
+                      alt="Product Image"
+                      className={`w-fit h-20 object-cover justify-center mx-2 ${index === 0 ? 'border-2 border-blue_cart' : ''
+                        }`}
+                    />
+                  ))}
+                </div> */}
+                {/* <div className="flex justify-center">
                   <img
-                    src={productImage}
+                    src={data?.images[0]?.imageLink}
+                    alt="Product Image"
+                    className="w-fit h-96 object-cover justify-center border-2 border-blue_cart"
+                  />
+                </div> */}
+                <ImageGallery items={images} />
+                {/* <div className="flex my-6 justify-center">
+                  {data?.images?.map(item => ( 
+                    <img
+                    src={item?.imageLink}
+                    alt="Product Image"
+                    className="w-fit h-20 object-cover justify-center mx-2 border-2 border-blue_cart"
+                  />
+                  ))}
+
+                  <img
+                    src={data?.images[1]?.imageLink}
                     alt="Product Image"
                     className="w-fit h-20 object-cover justify-center mx-2 border-2 border-blue_cart"
 
                   />
                   <img
-                    src={productImage}
+                    src={data?.images[2]?.imageLink}
                     alt="Product Image"
                     className="w-fit h-20 object-cover justify-center mx-2"
 
                   />
                   <img
-                    src={productImage}
+                    src={data?.images[3]?.imageLink}
                     alt="Product Image"
                     className="w-fit h-20 object-cover justify-center mx-2"
 
                   />
                   <img
-                    src={productImage}
+                    src={data?.images[4]?.imageLink}
                     alt="Product Image"
                     className="w-fit h-20 object-cover justify-center mx-2"
 
                   />
-                </div>
+                </div> */}
               </div>
               <div className="w-full md:w-1/2 xl:w-2/3 p-4 justify-end">
                 <div className="bg-blue_bg_d0f8ff rounded-full px-6 py-1 w-fit">
                   <h2 className="text-2xl mb-4 pt-3 text-blue_073d4d font-sans font-semibold">{data?.name}</h2>
                 </div>
-                {data?.productMaterials?.map((materialItem)=>
-                
-                <p className="text-lg mb-4">{materialItem?.material?.name}: {materialItem?.detail}</p>
+                <p className="text-lg mb-4">Thương Hiệu: {data?.brandName}</p>
+                <p className="text-lg mb-4">Xuất xứ: {data?.country}</p>
+                {data?.productMaterials?.map((materialItem) =>
+                  
+                  <p className="text-lg mb-4">{materialItem?.material?.name}: {materialItem?.detail}</p>
                 )}
+                
                 {/* <p className="text-lg mb-4">Thương Hiệu: {data?.brandName}</p>
                 <p className="text-lg mb-4">Xuất xứ: {data?.country}</p>
                 <p className="text-lg mb-4">Thành phần xem thành phần của sản phẩm này tại đây</p>
@@ -129,14 +179,14 @@ function ProductDetail() {
                 <div className="flex flex-row">
                   <p className="text-lg mb-4">Số lượng: </p>
                   <div className=" pl-7 flex">
-                    <button onClick={() => {setCount(count-1)}} className="bg-blue_btn_qlt text-white text-2xl font-bold justify-center items-center flex" style={{ width: 30, height: 30 }}>-</button>
+                    <button onClick={() => { setCount(count - 1) }} className="bg-blue_btn_qlt text-white text-2xl font-bold justify-center items-center flex" style={{ width: 30, height: 30 }}>-</button>
                     <spam className="bg-blue_c0foff font-bold px-8 justify-center items-center flex" style={{ width: 30, height: 30 }}>{count}</spam>
-                    <button onClick={() => {setCount(count+1)}} className="bg-blue_btn_qlt text-white text-2xl font-bold justify-center items-center flex" style={{ width: 30, height: 30 }}>+</button>
+                    <button onClick={() => { setCount(count + 1) }} className="bg-blue_btn_qlt text-white text-2xl font-bold justify-center items-center flex" style={{ width: 30, height: 30 }}>+</button>
                   </div>
                 </div>
-                <div className="flex"><p className="text-lg mb-4">Giá:</p> <h1 className="text-2xl font-semibold text-sky-800 ml-10 justify-center pl-7">750.000 VND</h1></div>
+                <div className="flex"><p className="text-lg mb-4">Giá:</p> <h1 className="text-2xl font-semibold text-sky-800 ml-10 justify-center pl-7">{data?.priceSold}.000 VND</h1></div>
                 <div className="flex">
-                  <button onClick={() => {cartStore.addItem({id: data.id, count})}} className="bg-blue_cart hover:bg-sky-700 text-white py-2 px-4 rounded-full mr-2" style={{ width: 280, height: 62 }}>
+                  <button onClick={() => { cartStore.addItem({ id: data?.id, count }) }} className="bg-blue_cart hover:bg-sky-700 text-white py-2 px-4 rounded-full mr-2" style={{ width: 280, height: 62 }}>
                     THÊM VÀO GIỎ HÀNG
                   </button>
                   <button className="bg-blue_buy hover:bg-cyan-700 text-white py-2 px-4 rounded-full mx-2" style={{ width: 280, height: 62 }}>
@@ -183,37 +233,35 @@ function ProductDetail() {
                 </div>
               </div>
               <div className="flex">
-                <div className="w-5/12 border-black border-2 m-4 flex" style={{ height: 200 }}>
-                  <div className="h-2/3 w-1/4 m-3 justify-center flex">
-                    <img
-                      src={productImage}
-                      alt="Product Image"
-                      className=" object-contain justify-center"
-                    />
-                  </div>
-                  <div className="w-4/6 p-4 justify-end">
-                    <h2 className="text-xl mb-4 pt-3 text-blue_username font-sans font-semibold">NGUYỄN MAI CHUNG</h2>
-                    <div className="flex">
-                      <svg className="w-6 text-blue_cart" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-                        <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clip-rule="evenodd" />
-                      </svg>
-                      <svg className="w-6 text-blue_cart" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-                        <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clip-rule="evenodd" />
-                      </svg>
-                      <svg className="w-6 text-blue_cart" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-                        <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clip-rule="evenodd" />
-                      </svg>
-                      <svg className="w-6 text-blue_cart" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-                        <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clip-rule="evenodd" />
-                      </svg>
-                      <svg className="w-6 text-blue_cart" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-                        <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clip-rule="evenodd" />
-                      </svg>
+                {data?.feeback?.length > 0 ? (
+                  data?.feeback?.map((feedback) => (
+                    <div className="w-5/12 border-black border-2 m-4 flex" style={{ height: 200 }}>
+                      <div className="h-2/3 w-1/4 m-3 justify-center flex">
+                        <img
+                          src={productImage}
+                          alt="Product Image"
+                          className=" object-contain justify-center"
+                        />
+                      </div>
+                      <div className="w-4/6 p-4 justify-end">
+                        <h2 className="text-xl mb-4 pt-3 text-blue_username font-sans font-semibold">NGUYỄN MAI CHUNG</h2>
+                        <div className="flex">
+                          {Array(feedback.rate).fill(0).map((_, index) => (
+                            <svg key={index} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                              <path className="text-blue_cart"  fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clip-rule="evenodd" />
+                            </svg>
+                          ))}
+                        </div>
+                        <p>{feedback?.content}</p>
+                      </div>
                     </div>
-                    <p>Hơi đau ví nhưng không hối tiếc nha, uống rất ok</p>
+                  ))
+                ) : (
+                  <div className="w-full justify-center items-center m-4 flex" style={{ height: 200 }}>
+                    <p className="text-2xl text-blue_073d4d font-semibold">Sản phẩm này chưa có đánh giá nào</p>
                   </div>
-                </div>
-                <div className="w-5/12 border-black border-2 m-4 flex" style={{ height: 200 }}>
+                )}
+                {/* <div className="w-5/12 border-black border-2 m-4 flex" style={{ height: 200 }}>
                   <div className="h-2/3 w-1/4 m-3 justify-center flex">
                     <img
                       src={productImage}
@@ -242,10 +290,10 @@ function ProductDetail() {
                     </div>
                     <p>Giao hàng nhanh, sữa chất lượng tốt</p>
                   </div>
-                </div>
-                <div className="w-2/12 m-4 -ml-1 flex items-center justify-center">
+                </div> */}
+                {/* <div className="w-2/12 m-4 -ml-1 flex items-center justify-center">
                   <button className="bg-blue_6bccde text-white flex items-center justify-center px-10 py-2 text-2xl font-sans font-semibold">XEM THÊM</button>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
@@ -258,7 +306,46 @@ function ProductDetail() {
           <h1 className="text-white font-semibold text-4xl ml-4 font-sans">SẢN PHẨM TƯƠNG TỰ</h1>
         </div>
         <div className="flex items-center justify-center mx-8">
-          <div className="bg-blue_bg_pd mx-2 my-2 w-1/4">
+
+          {childCategories?.map((category) =>
+            <div className="bg-blue_bg_pd mx-2 my-2 w-1/4">
+              <div className="m-2 justify-center flex">
+                <img
+                  src={category?.imageLink}
+                  alt="Product Image"
+                  className="w-96 h-60 object-contain justify-center"
+                />
+              </div>
+              <div className="bg-blue_bg_d0f8ff rounded-3xl mx-6 my-2 flex justify-between items-center w-fit">
+                <Link to={`/productdetail/${category.id}`}>
+                  <h6 className="text-base mx-6 text-blue_073d4d font-sans font-semibold">{category?.name}</h6>
+                </Link>
+              </div>
+              <div className="flex mx-6 items-center">
+                <svg className="w-1 text-blue_cart" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                  <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clip-rule="evenodd" />
+                </svg>
+                <svg className="w-1 text-blue_cart" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                  <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clip-rule="evenodd" />
+                </svg>
+                <svg className="w-1 text-blue_cart" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                  <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clip-rule="evenodd" />
+                </svg>
+                <svg className="w-1 text-blue_cart" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                  <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clip-rule="evenodd" />
+                </svg>
+                <svg className="w-1 text-blue_cart" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                  <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clip-rule="evenodd" />
+                </svg>
+                <p className="text-blue_073d4d font-sans font-semibold text-xs ml-3">
+                  ĐÃ BÁN {category?.quantitySold}
+                </p>
+              </div>
+              <h6 className="text-blue_073d4d font-sans font-semibold mx-6 text-sm">{category?.country}</h6>
+              <h1 className="text-2xl font-semibold text-blue_177f9f mx-6 font-sans">{category?.priceSold}.000 VND</h1>
+            </div>
+          )}
+          {/* <div className="bg-blue_bg_pd mx-2 my-2 w-1/4">
             <div className="m-2 justify-center flex">
               <img
                 src={productImage}
@@ -291,8 +378,8 @@ function ProductDetail() {
             </div>
             <h6 className="text-blue_073d4d font-sans font-semibold mx-6 text-sm">THÀNH PHỐ HỒ CHÍ MINH </h6>
             <h1 className="text-2xl font-semibold text-blue_177f9f mx-6 font-sans">350.000 VND</h1>
-          </div>
-          <div className="bg-blue_bg_pd mx-2 my-2 w-1/4">
+          </div> */}
+          {/* <div className="bg-blue_bg_pd mx-2 my-2 w-1/4">
             <div className="m-2 justify-center flex">
               <img
                 src={productImage}
@@ -325,8 +412,8 @@ function ProductDetail() {
             </div>
             <h6 className="text-blue_073d4d font-sans font-semibold mx-6 text-sm">THÀNH PHỐ HỒ CHÍ MINH </h6>
             <h1 className="text-2xl font-semibold text-blue_177f9f mx-6 font-sans">350.000 VND</h1>
-          </div>
-          <div className="bg-blue_bg_pd mx-2 my-2 w-1/4">
+          </div> */}
+          {/* <div className="bg-blue_bg_pd mx-2 my-2 w-1/4">
             <div className="m-2 justify-center flex">
               <img
                 src={productImage}
@@ -359,41 +446,7 @@ function ProductDetail() {
             </div>
             <h6 className="text-blue_073d4d font-sans font-semibold mx-6 text-sm">THÀNH PHỐ HỒ CHÍ MINH </h6>
             <h1 className="text-2xl font-semibold text-blue_177f9f mx-6 font-sans">350.000 VND</h1>
-          </div>
-          <div className="bg-blue_bg_pd mx-2 my-2 w-1/4">
-            <div className="m-2 justify-center flex">
-              <img
-                src={productImage}
-                alt="Product Image"
-                className="w-96 h-60 object-contain justify-center"
-              />
-            </div>
-            <div className="bg-blue_bg_d0f8ff rounded-3xl mx-6 my-2 flex justify-between items-center w-fit">
-              <h6 className="text-base mx-6 text-blue_073d4d font-sans font-semibold">SỮA XANXI GERDOLAX GOLD CANXI NANO HƯƠNG VANILLA 900G</h6>
-            </div>
-            <div className="flex mx-6 items-center">
-              <svg className="w-1 text-blue_cart" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-                <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clip-rule="evenodd" />
-              </svg>
-              <svg className="w-1 text-blue_cart" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-                <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clip-rule="evenodd" />
-              </svg>
-              <svg className="w-1 text-blue_cart" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-                <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clip-rule="evenodd" />
-              </svg>
-              <svg className="w-1 text-blue_cart" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-                <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clip-rule="evenodd" />
-              </svg>
-              <svg className="w-1 text-blue_cart" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-                <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clip-rule="evenodd" />
-              </svg>
-              <p className="text-blue_073d4d font-sans font-semibold text-xs ml-3">
-                ĐÃ BÁN 12K
-              </p>
-            </div>
-            <h6 className="text-blue_073d4d font-sans font-semibold mx-6 text-sm">THÀNH PHỐ HỒ CHÍ MINH </h6>
-            <h1 className="text-2xl font-semibold text-blue_177f9f mx-6 font-sans">350.000 VND</h1>
-          </div>
+          </div> */}
         </div>
       </div>
     </>

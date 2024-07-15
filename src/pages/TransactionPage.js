@@ -2,12 +2,14 @@ import React, { useState } from 'react'
 import productImage from '../assets/ensure-gold.jpg'
 import voucherImage from '../assets/voucher.jpg'
 import { useGetAddressToShipById } from '../hooks/useGetAddressToShipById'
+import CartItem from '../components/CartItem'
+import { useItemStore } from '../utils/cart'
 
 function Transaction() {
     const {data} = useGetAddressToShipById(1)
     console.log(data)
     const [selectedMethod, setSelectedMethod] = useState(null);
-
+    const cartStore = useItemStore()
     const handleMethodSelect = (method) => {
         setSelectedMethod(method);
     };
@@ -35,7 +37,7 @@ function Transaction() {
                             <div className="bg-white container mx-10 my-7 p-10">
                                 <h1 className='text-4xl text-blue_177f9f'>{data?.customerName}</h1>
                                 <div className="flex items-start">
-                                    <p className="text-4xl mt-5 inline-flex">ĐỊA CHỈ NHẬN HÀNG: {data?.detailAddress +","+ data?.ward +","+ data?.district +","+ data?.province}</p>
+                                    <p className="text-4xl mt-5 inline-flex">ĐỊA CHỈ NHẬN HÀNG: {data?.detailAddress +", "+ data?.ward +", "+ data?.district +", "+ data?.province}</p>
                                     {/* <div className="flex justify-center w-fit h-fit bg-white text-blue_6bccde text-2xl font-extralight items-center border-2 border-blue_6bccde mt-4 ml-3">
                                         MẶC ĐỊNH
                                     </div> */}
@@ -46,7 +48,7 @@ function Transaction() {
                                         MẶC ĐỊNH
                                     </div> */}
                                 </div>
-                                <button className="bg-blue_6bccde text-white flex items-center justify-center px-2 py-2 text-2xl font-normal mt-5">THAY ĐỔI</button>
+                                {/* <button className="bg-blue_6bccde text-white flex items-center justify-center px-2 py-2 text-2xl font-normal mt-5">THAY ĐỔI</button> */}
                             </div>
 
                         </div>
@@ -99,6 +101,7 @@ function Transaction() {
                                             <h1 className="text-4xl font-semibold text-sky-800 ml-10 justify-center pl-7">750.000 VND</h1>
                                         </div>
                                     </div>
+                                    {/* {cartStore?.items?.map(item => <CartItem item={item}/>)} */}
                                 </div>
                             </div>
                             <p className="text-lg mx-10">Lời nhắn cho người bán:</p>

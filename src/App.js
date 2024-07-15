@@ -16,6 +16,7 @@ import ProductDetail from './pages/ProductDetail';
 import Cart from './pages/Cart';
 import Discount from './pages/Discount/Discount';
 import AuthProvider from './context/AuthContext';
+import "react-image-gallery/styles/css/image-gallery.css";
 
 
 function App() {
@@ -26,7 +27,7 @@ function App() {
           <Route path='/' element={<MainLayout />}>
             <Route path="/" element={<HomePage />} />
             <Route path="/aboutus" element={<AboutUs />} />
-            <Route path="/productdetail" element={<ProductDetail />} />
+            <Route path="/productdetail/:id" element={<ProductDetail />} />
             <Route path="/shop" element={<ShopPage />} />
             <Route path="/transaction" element={<Transaction />} />
             <Route path="/cart" element={<Cart />} />
