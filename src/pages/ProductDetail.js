@@ -13,20 +13,11 @@ import axios from 'axios'
 import ImageGallery from "react-image-gallery";
 function ProductDetail() {
   const {id} = useParams()
-
-
   const { data } = useGetProductById(id)
   console.log(data)
-  // const thumbnailImage = data?.images?.find((image) => image.thumbnail);
-  // const productImages = data?.images?.filter((image) => !image.thumbnail);
-
   const { data: childCategories } = useGetChildCategoryById(data?.productMaterials?.[0]?.material?.childCategoryId)
-
   const cartStore = useItemStore()
-  // cartStore.addItem({id: 1, count: 10})
-  // console.log(cartStore.items)
   const [count, setCount] = useState(1)
-
   const images = useMemo(() => {
     if (!data){
       return [];
@@ -186,7 +177,7 @@ function ProductDetail() {
                 </div>
                 <div className="flex"><p className="text-lg mb-4">Giá:</p> <h1 className="text-2xl font-semibold text-sky-800 ml-10 justify-center pl-7">{data?.priceSold}.000 VND</h1></div>
                 <div className="flex">
-                  <button onClick={() => { cartStore.addItem({ id: data?.id, count }) }} className="bg-blue_cart hover:bg-sky-700 text-white py-2 px-4 rounded-full mr-2" style={{ width: 280, height: 62 }}>
+                  <button onClick={() => { cartStore.addItem({ id: data?.id, count, priceSold: data?.priceSold }) }} className="bg-blue_cart hover:bg-sky-700 text-white py-2 px-4 rounded-full mr-2" style={{ width: 280, height: 62 }}>
                     THÊM VÀO GIỎ HÀNG
                   </button>
                   <button className="bg-blue_buy hover:bg-cyan-700 text-white py-2 px-4 rounded-full mx-2" style={{ width: 280, height: 62 }}>
