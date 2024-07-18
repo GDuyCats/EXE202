@@ -5,23 +5,32 @@ export const useItemStore = create(
   persist(
     (set, get) => ({
       items: [],
+      selectedItems: [],
+      total: 0,
       addItem: (n) => {
         const updatedItems = get().items;
         const index = updatedItems.findIndex(item => item.id === n.id);
-        console.log(n);
         if (index === -1) {
             updatedItems.push(n);
         }
         else {
             updatedItems[index].count += n.count;
         }
-        set({ items: updatedItems })
-        
-    },
+        console.log(get().total ? get().total + n.count*n.priceSold : n.count*n.priceSold);
+        set({ items: updatedItems, total: get().total ? get().total + n.count*n.priceSold : n.count*n.priceSold })
+      },
+      removeItem: (id, count, priceSold) => {
+        const updatedItems = get().items.filter(item => item.id !== id);
+        set({ items: updatedItems, total: get().total ? get().total - count*priceSold : 0 });
+      },
+      setSelectedItems: (selectedItems) => {
+        set({ selectedItems });
+      }
     }),
     {
-      name: 'food-storage', // name of the item in the storage (must be unique)
+      name: 'oheca-storage', // name of the item in the storage (must be unique)
       storage: createJSONStorage(() => localStorage), // (optional) by default, 'localStorage' is used
     },
   ),
 )
+// _____________________________________________________________________________________________________________________________________________
