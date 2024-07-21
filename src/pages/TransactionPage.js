@@ -5,7 +5,6 @@ import { useGetAddressToShipById } from '../hooks/useGetAddressToShipById'
 
 function Transaction() {
     const {data} = useGetAddressToShipById(1)
-    console.log(data)
     const [selectedMethod, setSelectedMethod] = useState(null);
 
     const handleMethodSelect = (method) => {

@@ -10,11 +10,9 @@ import { useGetProductById } from '../hooks/useGetProductById'
 import { useItemStore } from '../utils/cart'
 function ProductDetail() {
   const {data} = useGetProductById(1)
-  console.log(data)
 
   const cartStore = useItemStore()
   // cartStore.addItem({id: 1, count: 10})
-  // console.log(cartStore.items)
   const [count, setCount] = useState(1)
 
 
