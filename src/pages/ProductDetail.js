@@ -12,6 +12,9 @@ import { useGetChildCategoryById } from '../hooks/useGetChildCategoryById'
 import axios from 'axios'
 import ImageGallery from "react-image-gallery";
 function ProductDetail() {
+  const {data} = useGetProductById(1)
+  const cartStore = useItemStore()
+  // cartStore.addItem({id: 1, count: 10})
   const {id} = useParams()
   const { data } = useGetProductById(id)
   console.log(data)

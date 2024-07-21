@@ -8,6 +8,7 @@ import PayOutItemProduct from '../components/PayOutItemProduct'
 import { useLocation } from 'react-router-dom'
 
 function Transaction() {
+    const {data} = useGetAddressToShipById(1)
     const { data } = useGetAddressToShipById(1)
     console.log(data)
     const [selectedMethod, setSelectedMethod] = useState(null);
