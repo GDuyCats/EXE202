@@ -19,22 +19,19 @@ export default function Form() {
       formDataToSend.append("Email", Email);
       formDataToSend.append("Password", Password);
       const response = await axios.post('https://localhost:5001/api/Authentication/Login', formDataToSend);
-      
       if (response.data.success) {
-        const userInfo = {
-          email: Email,
-        };
-        saveToken(response.data.token, userInfo);
+        saveToken(response.data.token)
         navigate('/');
       } else {
         setError('Đăng nhập thất bại. Vui lòng thử lại.');
       }
 
     } catch (err) {
-      setError('Đăng nhập thất bại. Vui lòng thử lại.');
+      setError(err);
     }
   };
 
+ 
   const isValidate = (Email) => {
     const checkEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (checkEmail.test(String(Email).toLowerCase())) {
@@ -108,7 +105,6 @@ export default function Form() {
 //         Email: Email,
 //         Password: Password,
 //       });
-//       console.log(response.data);
 //       if (response.data.success) {
 //         // Handle successful login, e.g., redirect to another page
 //       } else {
@@ -144,7 +140,6 @@ export default function Form() {
 //         {error && <p className="error">{error}</p>}
 //         <button type="submit">Login</button>
 //       </form>
-//       {console.log({Email, Password})}
 //     </div>
 //   );
 // };

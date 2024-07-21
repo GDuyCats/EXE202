@@ -25,49 +25,6 @@ function HomePage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [productSingleSlide, setproductSingleSlide] = useState([])
-    // const productSingleSlide = [
-    //     {
-    //         image: Ad1,
-    //         text:
-    //             <div>
-    //                 <span class="text-brightened_blue_00202a text-5xl font-normal">ÁO XANH HỌA TIẾT HOA</span>
-    //                 <div className='text-blue_177f9f font-thin space-y-10 mt-10'>
-    //                     <p>Nhà sản xuất: Thời trang NEIH</p>
-    //                     <p>Chất liệu: Vải tơ gân</p>
-    //                     <p>Đánh giá: </p>
-    //                     <div className='w-[300px] h-[100px] bg-blue_94eeff text-center rounded-full flex flex-col font-medium'>
-    //                         <div className='text-2xl line-through'>
-    //                             <p>200.000 VND</p>
-    //                         </div>
-    //                         <div className='text-4xl text-red-500 font-medium'>
-    //                             <p>140.000 VND</p>
-    //                         </div>
-    //                     </div>
-    //                 </div>
-    //             </div>
-    //     },
-    //     {
-    //         image: Ad1,
-    //         text:
-    //             <div>
-    //                 <span class="text-brightened_blue_00202a text-5xl font-normal">ÁO XANH HỌA TIẾT HOA</span>
-    //                 <div className='text-blue_177f9f font-thin space-y-10 mt-10'>
-    //                     <p>Nhà sản xuất: Thời trang NEIH</p>
-    //                     <p>Chất liệu: Vải tơ gân</p>
-    //                     <p>Đánh giá: </p>
-    //                     <div className='w-[300px] h-[100px] bg-blue_94eeff text-center rounded-full flex flex-col font-medium'>
-    //                         <div className='text-2xl line-through'>
-    //                             <p>250.000 VND</p>
-    //                         </div>
-    //                         <div className='text-4xl text-red-500 font-medium'>
-    //                             <p>160.000 VND</p>
-    //                         </div>
-    //                     </div>
-    //                 </div>
-    //             </div>
-    //     },
-    // ]
-
     const slidesProduct = [
         {
             image: productimg1,
@@ -109,7 +66,6 @@ function HomePage() {
     const [Index, setIndex] = useState(0)
     const [startIndex, setStartIndex] = useState(0);
     const [currentIndex, setCurrentIndex] = useState(0)
-
     const prevSlide = () => {
         const isFirstSlide = currentIndex === 0;
         const newIndex = isFirstSlide ? slides.length - 1 : currentIndex - 1;
@@ -134,22 +90,21 @@ function HomePage() {
     }, [currentIndex])
 
     useEffect(() => {
-        axios.get('https://localhost:5001/api/Products/ViewProductByDiscount?pageIndex=1&pageSize=10')
+        axios.get('https://localhost:5001/api/Products/ViewProductByDiscount?pageIndex=1&pageSize=4')
             .then(response => {
                 const { data } = response.data; // Extract the data property from response.data
                 if (Array.isArray(data)) {
-                    setProducts(data);
                 } else {
                     console.error('Expected an array but got:', data);
                     setProducts([]);  
                 }
-                setproductSingleSlide(products.map((product, index) => (
+                setproductSingleSlide(data.map((product, index) => (
                     {
                         image: product?.imageLink,
                         text:(
                             <div>
-                                <span class="text-brightened_blue_00202a text-5xl font-normal">{product?.name}</span>
-                                <div className='text-blue_177f9f font-thin space-y-10 mt-10'>
+                                <span class="text-brightened_blue_00202a text-4xl font-normal">{product?.name}</span>
+                                <div className='text-blue_177f9f font-thin space-y-10 mt-10 w-[400px]'>
                                     <p>Nhà sản xuất: {product?.brandName}</p>
                                     <p>Chất liệu: Vải tơ gân</p>
                                     <p>Đánh giá: </p>
@@ -173,7 +128,7 @@ function HomePage() {
             });
     }, []);
 
-
+ 
     return (
         <>
             <div className='h-[780px] mt-40 px-4 relative group mx-auto'>
@@ -302,7 +257,7 @@ function HomePage() {
                         className='swiper_container group rounded-3xl z-10'>
                         <SwiperSlide>
                             <div className='bg-gradient-to-r from-blue_c0foff to-blue_6bccde  w-[1243px] h-[625px] rounded-3xl relative ml-[8%]'>
-                                <img src={productSingleSlide[Index === 0 ? productSingleSlide.length - 1 : Index - 1].image} alt='' className='w-[500px] h-[570px] rounded-3xl bg-cover top-7 left-10 m-auto duration-500 absolute' />
+                                <img src={productSingleSlide[Index === 0 ? productSingleSlide.length - 1 : Index - 1].image} alt='' className='w-[500px] h-[500px] rounded-3xl bg-cover top-7 left-10 m-auto duration-500 absolute' />
                                 <div className="absolute right-32 top-20 font-medium text-4xl whitespace-pre-line z-50 text-blue_177f9f text-left">
                                     {productSingleSlide[Index === 0 ? productSingleSlide.length - 1 : Index - 1].text}
                                 </div>
@@ -310,7 +265,7 @@ function HomePage() {
                         </SwiperSlide>
                         <SwiperSlide>
                             <div className='bg-gradient-to-r from-blue_c0foff to-blue_6bccde w-[1243px] h-[625px] rounded-3xl relative ml-[8%]'>
-                                <img src={productSingleSlide[Index].image} alt='' className='w-[500px] h-[570px] rounded-3xl bg-cover top-7 left-10 m-auto duration-500 absolute' />
+                                <img src={productSingleSlide[Index].image} alt='' className='w-[500px] h-[500px] rounded-3xl bg-cover top-7 left-10 m-auto duration-500 absolute' />
                                 <div className="absolute right-32 top-20 font-medium text-4xl whitespace-pre-line z-50 text-blue_177f9f text-left">
                                     {productSingleSlide[Index].text}
                                 </div>
@@ -318,7 +273,7 @@ function HomePage() {
                         </SwiperSlide>
                         <SwiperSlide>
                             <div className='bg-gradient-to-r from-blue_c0foff to-blue_6bccde  w-[1243px] h-[625px] rounded-3xl relative ml-[8%]'>
-                                <img src={productSingleSlide[Index === productSingleSlide.length - 1 ? 0 : Index + 1].image} alt='' className='w-[500px] h-[570px] rounded-3xl bg-cover top-7 left-10 m-auto duration-500 absolute' />
+                                <img src={productSingleSlide[Index === productSingleSlide.length - 1 ? 0 : Index + 1].image} alt='' className='w-[500px] h-[500px] rounded-3xl bg-cover top-7 left-10 m-auto duration-500 absolute' />
                                 <div className="absolute right-32 top-20 font-medium text-4xl whitespace-pre-line z-50 text-blue_177f9f text-left">
                                     {productSingleSlide[Index === productSingleSlide.length - 1 ? 0 : Index + 1].text}
                                 </div>

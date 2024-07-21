@@ -10,7 +10,7 @@ import AboutUs from './pages/AboutUs/AboutUs';
 import Contact from './pages/Contact/Contact';
 import ForumPage from './pages/Forum/ForumPage';
 import ShopPage from './pages/Shop/ShopPage';
-import MainLayout from './layouts/MainLayout';
+import MainLayout from './MainLayout/MainLayout';
 import Transaction from './pages/TransactionPage';
 import ProductDetail from './pages/ProductDetail';
 import Cart from './pages/Cart';
@@ -20,9 +20,10 @@ import DiscountOption from './pages/DiscountOption';
 import ShippingOption from './pages/ShippingOption';
 import PaymentSuccess from './pages/PaymentSuccessPage'; 
 import PaymentFailed from './pages/PaymentFailPage';
+import DashBoard from './pages/Admin/DashBoard';
+import UserProfile from './components/UserProfile/UserProfile';
+import Shipcompany from './pages/ShipCompany/Shipcompany';
 import "react-image-gallery/styles/css/image-gallery.css";
-
-
 function App() {
   return (
     <AuthProvider>
@@ -41,7 +42,12 @@ function App() {
             <Route path='/shippingoption' element={<ShippingOption />} />
             <Route path='/paymentsuccess' element={<PaymentSuccess />} />
             <Route path='/paymentfailed' element={<PaymentFailed />} />
+            <Route path="/forum" element={<ForumPage />}/>
+            <Route path='/discount' element={<Discount />}/>
+            <Route path='/profile' element={<UserProfile/>}/>
           </Route>
+          <Route path='/dashboard/Shipcompany' element={<Shipcompany/>}/>
+          <Route path='/dashboard' element={<DashBoard/>}/>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/policy" element={<PolicyPage />} />

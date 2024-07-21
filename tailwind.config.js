@@ -6,10 +6,14 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        'gray_b0b3b8': 'rgb(176,179,184)',
+        'gray_A9ACB1': 'rgb(169,172,177)',
+        'black_242526': 'rgb(36,37,38)',
         'blue_dbf9ff': 'rgb(219, 249, 255)',
         'blue_6bccde': 'rgb(107, 204, 222)',
         'blue_a2dde8':'rgb(162, 221, 232)',
         'blue_baf4ff': 'rgb(186, 244, 255)',
+        'gray_2F3031': 'rgb(47,48,49)',
         'blue_eefcff': 'rgb(238, 252, 255)',
         'blue_6bccde': 'rgb(107, 204, 222)',
         'blue_177f9f': 'rgb(23, 127, 159)',

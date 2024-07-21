@@ -58,10 +58,9 @@ function SignUpForm() {
           'Content-Type': 'multipart/form-data',
         },
       });
-      setMessage('Registration successful');
       navigate('/login');
     } catch (error) {
-      setMessage('Registration failed');
+      setMessage('Đăng kí thất bại');
       setIsSubmitting(false);
     }
   };
@@ -239,6 +238,14 @@ function SignUpForm() {
                 disabled={isSubmitting}
               >
                 ĐĂNG KÝ
+              </button>
+            </div>
+            <div>
+              <button
+                className="bg-blue_6bccde text-white text-center w-full rounded-full py-2 mt-4 hover:brightness-110 -ml-24"
+                disabled={isSubmitting}
+              >
+                <Link to="/login">QUAY VỀ ĐĂNG NHẬP</Link>     
               </button>
             </div>
           </div>
