@@ -6,9 +6,6 @@ function CartItem({ item, isReadOnly = false }) {
     const { data } = useGetProductById(item.id)
     const cartStore = useItemStore()
 
-
-
-
     const handleCheckboxChange = (e) => {
         const selectedItems = cartStore.selectedItems.includes(item.id)
             ? cartStore.selectedItems.filter(id => id !== item.id)

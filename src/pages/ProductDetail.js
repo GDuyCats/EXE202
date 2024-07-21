@@ -75,40 +75,6 @@ function ProductDetail() {
                   />
                 </div> */}
                 <ImageGallery items={images} />
-                {/* <div className="flex my-6 justify-center">
-                  {data?.images?.map(item => ( 
-                    <img
-                    src={item?.imageLink}
-                    alt="Product Image"
-                    className="w-fit h-20 object-cover justify-center mx-2 border-2 border-blue_cart"
-                  />
-                  ))}
-
-                  <img
-                    src={data?.images[1]?.imageLink}
-                    alt="Product Image"
-                    className="w-fit h-20 object-cover justify-center mx-2 border-2 border-blue_cart"
-
-                  />
-                  <img
-                    src={data?.images[2]?.imageLink}
-                    alt="Product Image"
-                    className="w-fit h-20 object-cover justify-center mx-2"
-
-                  />
-                  <img
-                    src={data?.images[3]?.imageLink}
-                    alt="Product Image"
-                    className="w-fit h-20 object-cover justify-center mx-2"
-
-                  />
-                  <img
-                    src={data?.images[4]?.imageLink}
-                    alt="Product Image"
-                    className="w-fit h-20 object-cover justify-center mx-2"
-
-                  />
-                </div> */}
               </div>
               <div className="w-full md:w-1/2 xl:w-2/3 p-4 justify-end">
                 <div className="bg-blue_bg_d0f8ff rounded-full px-6 py-1 w-fit">
@@ -120,53 +86,6 @@ function ProductDetail() {
                   
                   <p className="text-lg mb-4">{materialItem?.material?.name}: {materialItem?.detail}</p>
                 )}
-                
-                {/* <p className="text-lg mb-4">Thương Hiệu: {data?.brandName}</p>
-                <p className="text-lg mb-4">Xuất xứ: {data?.country}</p>
-                <p className="text-lg mb-4">Thành phần xem thành phần của sản phẩm này tại đây</p>
-                <p className="text-lg">Phân loại hàng:</p> */}
-                {/* <div className="flex mb-4 w-full flex-wrap">
-                  <div className="flex items-center bg-blue_classi p-2 rounded-2xl border-2 border-blue_cart mr-6 mt-3">
-                    <img
-                      src={productImage}
-                      alt="Product Image"
-                      className="h-8 object-cover justify-center mx-2 rounded-sm"
-                    />
-                    <h6 className="text-sm text-blue_073d4d font-sans font-semibold mx-4">Vanilla</h6>
-                  </div>
-                  <div className="flex items-center bg-blue_classi p-2 rounded-2xl border-2 border-blue_cart mr-6 mt-3">
-                    <img
-                      src={productImage}
-                      alt="Product Image"
-                      className="h-8 object-cover justify-center mx-2 rounded-sm"
-                    />
-                    <h6 className="text-sm text-blue_073d4d font-sans font-semibold mx-4">Ít ngọt</h6>
-                  </div>
-                  <div className="flex items-center bg-blue_classi p-2 rounded-2xl border-2 border-blue_cart mr-6 mt-3">
-                    <img
-                      src={productImage}
-                      alt="Product Image"
-                      className="h-8 object-cover justify-center mx-2 rounded-sm"
-                    />
-                    <h6 className="text-sm text-blue_073d4d font-sans font-semibold mx-4">Hạnh nhân</h6>
-                  </div>
-                  <div className="flex items-center bg-blue_classi p-2 rounded-2xl border-2 border-blue_cart mr-6 mt-3">
-                    <img
-                      src={productImage}
-                      alt="Product Image"
-                      className="h-8 object-cover justify-center mx-2 rounded-sm"
-                    />
-                    <h6 className="text-sm text-blue_073d4d font-sans font-semibold mx-4">Cà phê</h6>
-                  </div>
-                  <div className="flex items-center bg-blue_classi p-2 rounded-2xl border-2 border-blue_cart mr-6 mt-3">
-                    <img
-                      src={productImage}
-                      alt="Product Image"
-                      className="h-8 object-cover justify-center mx-2 rounded-sm"
-                    />
-                    <h6 className="text-sm text-blue_073d4d font-sans font-semibold mx-4">Lúa mạch</h6>
-                  </div>
-                </div> */}
                 <div className="flex flex-row">
                   <p className="text-lg mb-4">Số lượng: </p>
                   <div className=" pl-7 flex">

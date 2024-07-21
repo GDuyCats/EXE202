@@ -16,6 +16,10 @@ import ProductDetail from './pages/ProductDetail';
 import Cart from './pages/Cart';
 import Discount from './pages/Discount/Discount';
 import AuthProvider from './context/AuthContext';
+import DiscountOption from './pages/DiscountOption';
+import ShippingOption from './pages/ShippingOption';
+import PaymentSuccess from './pages/PaymentSuccessPage'; 
+import PaymentFailed from './pages/PaymentFailPage';
 import "react-image-gallery/styles/css/image-gallery.css";
 
 
@@ -33,6 +37,10 @@ function App() {
             <Route path="/cart" element={<Cart />} />
             <Route path="/forum" element={<ForumPage />} />
             <Route path='/discount' element={<Discount />} />
+            <Route path='/discountoption' element={<DiscountOption />} />
+            <Route path='/shippingoption' element={<ShippingOption />} />
+            <Route path='/paymentsuccess' element={<PaymentSuccess />} />
+            <Route path='/paymentfailed' element={<PaymentFailed />} />
           </Route>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
