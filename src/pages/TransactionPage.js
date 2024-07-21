@@ -2,14 +2,25 @@ import React, { useState } from 'react'
 import productImage from '../assets/ensure-gold.jpg'
 import voucherImage from '../assets/voucher.jpg'
 import { useGetAddressToShipById } from '../hooks/useGetAddressToShipById'
+import CartItem from '../components/CartItem'
+import { useItemStore } from '../utils/cart'
+import PayOutItemProduct from '../components/PayOutItemProduct'
+import { useLocation } from 'react-router-dom'
 
 function Transaction() {
     const {data} = useGetAddressToShipById(1)
+    const { data } = useGetAddressToShipById(1)
+    console.log(data)
     const [selectedMethod, setSelectedMethod] = useState(null);
-
+    const cartStore = useItemStore()
     const handleMethodSelect = (method) => {
         setSelectedMethod(method);
     };
+    const location = useLocation();
+    const { state } = location;
+    const { selectedItems = [] } = state || {};
+  
+    console.log('Received selected items:', selectedItems);
     return (
         <>
             <div className="w-full" style={{
@@ -34,7 +45,7 @@ function Transaction() {
                             <div className="bg-white container mx-10 my-7 p-10">
                                 <h1 className='text-4xl text-blue_177f9f'>{data?.customerName}</h1>
                                 <div className="flex items-start">
-                                    <p className="text-4xl mt-5 inline-flex">ĐỊA CHỈ NHẬN HÀNG: {data?.detailAddress +","+ data?.ward +","+ data?.district +","+ data?.province}</p>
+                                    <p className="text-4xl mt-5 inline-flex">ĐỊA CHỈ NHẬN HÀNG: {data?.detailAddress + ", " + data?.ward + ", " + data?.district + ", " + data?.province}</p>
                                     {/* <div className="flex justify-center w-fit h-fit bg-white text-blue_6bccde text-2xl font-extralight items-center border-2 border-blue_6bccde mt-4 ml-3">
                                         MẶC ĐỊNH
                                     </div> */}
@@ -45,7 +56,7 @@ function Transaction() {
                                         MẶC ĐỊNH
                                     </div> */}
                                 </div>
-                                <button className="bg-blue_6bccde text-white flex items-center justify-center px-2 py-2 text-2xl font-normal mt-5">THAY ĐỔI</button>
+                                {/* <button className="bg-blue_6bccde text-white flex items-center justify-center px-2 py-2 text-2xl font-normal mt-5">THAY ĐỔI</button> */}
                             </div>
 
                         </div>
@@ -63,8 +74,8 @@ function Transaction() {
                             </div>
                         </div>
                         <div className="container w-full">
-                            <div className="flex items-center justify-center w-full">
-                                <div className="bg-white container mx-10 my-7 p-10 border-2 border-black flex">
+                            <div className="items-center justify-center w-full">
+                                {/* <div className="bg-white container mx-10 my-7 p-10 border-2 border-black flex">
                                     <img
                                         src={productImage}
                                         alt="Product Image"
@@ -98,13 +109,16 @@ function Transaction() {
                                             <h1 className="text-4xl font-semibold text-sky-800 ml-10 justify-center pl-7">750.000 VND</h1>
                                         </div>
                                     </div>
-                                </div>
+                                </div> */}
+                                {selectedItems.map(item => (
+                                    <CartItem key={item.id} item={item} isReadOnly={true} />
+                                ))}
                             </div>
-                            <p className="text-lg mx-10">Lời nhắn cho người bán:</p>
+                            {/* <p className="text-lg mx-10">Lời nhắn cho người bán:</p>
                             <div className="my-3 mx-10">
                                 <textarea className="border border-gray-300 p-2 w-full h-32 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none text-blue_177f9f">
                                 </textarea>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>
@@ -118,7 +132,7 @@ function Transaction() {
                                 <h4 className="text-white text-xl font-light">VẬN CHUYỂN</h4>
                             </div>
                         </div>
-                        <div className="container w-full">
+                        <div className="container w-full my-8">
                             <div className="flex w-full items-center mt-4">
                                 <p className="text-lg mx-10 w-1/5">Đơn vị vận chuyển:</p>
                                 <div className="flex w-4/5 border-2 border-black bg-white p-2 mx-10">
@@ -131,12 +145,12 @@ function Transaction() {
                             <div className="flex justify-end items-center">
                                 <button className="bg-blue_6bccde text-white flex items-center justify-center px-2 py-2 text-2xl font-normal mt-5 mr-10">THAY ĐỔI</button>
                             </div>
-                            <p className="text-lg mx-10">Lời nhắn cho bên vận chuyển:</p>
+                            {/* <p className="text-lg mx-10">Lời nhắn cho bên vận chuyển:</p>
                             <div className="my-3 mx-10">
                                 <textarea className="border border-gray-300 p-2 w-full h-32 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none text-blue_177f9f">
                                     Khi giao hàng hãy để trước cửa nhà
                                 </textarea>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>
@@ -201,9 +215,9 @@ function Transaction() {
                                     Thẻ tín dụng/Ghi nợ
                                 </button>
                             </div>
-                            <p className="mx-10 my-3 text-black">
+                            {/* <p className="mx-10 my-3 text-black">
                                 Phí thu hộ: 0 VND. Ưu đãi về phí vặn chuyển (nếu có) áp dụng với cả phí thu hộ
-                            </p>
+                            </p> */}
                             <div className="mx-3 flex">
                                 <div className="bg-white container mx-10 my-7 p-5">
                                     <div className="flex w-full justify-between my-8">

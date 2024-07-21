@@ -19,6 +19,7 @@ import AuthProvider from './context/AuthContext';
 import DashBoard from './pages/Admin/DashBoard';
 import UserProfile from './components/UserProfile/UserProfile';
 import Shipcompany from './pages/ShipCompany/Shipcompany';
+import "react-image-gallery/styles/css/image-gallery.css";
 function App() {
   return (
     <AuthProvider>
@@ -27,7 +28,7 @@ function App() {
           <Route path='/' element={<MainLayout />}>
             <Route path="/" element={<HomePage />} />
             <Route path="/aboutus" element={<AboutUs />} />
-            <Route path="/productdetail" element={<ProductDetail />} />
+            <Route path="/productdetail/:id" element={<ProductDetail />} />
             <Route path="/shop" element={<ShopPage />} />
             <Route path="/transaction" element={<Transaction />} />
             <Route path="/cart" element={<Cart />} />
