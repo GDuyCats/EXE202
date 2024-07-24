@@ -8,11 +8,11 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 
 const LineChart = () => {
   const data = {
-    labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
     datasets: [
       {
         label: 'Dataset',
-        data: [100,130,90,150,240,190,100],
+        data: [100, 130, 90, 150, 240, 190, 100],
         fill: false,
         borderColor: 'rgba(75,192,192,1)',
         backgroundColor: 'rgba(255, 255, 255, 0.8)',
@@ -34,7 +34,15 @@ const LineChart = () => {
     },
   };
 
-  return <Line data={data} options={options} />;
+  return (
+    <div className="w-full max-w-3xl mx-auto p-4">
+      <div className="bg-white p-4 shadow-md rounded-md">
+        <div className="relative h-96">
+          <Line data={data} options={options} />
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default LineChart;

@@ -8,7 +8,7 @@ function PostModal({ closeModal, setRefreshForumPage}) {
   const { token } = useContext(AuthContext);
   const [error, setError] = useState(false)
   const [createPostSuccess, setCreatePostSuccess] = useState(false)
-  const accessToken = token.accessToken
+  const accessToken = token?.accessToken
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,8 +46,8 @@ function PostModal({ closeModal, setRefreshForumPage}) {
       <div className='border-b border-gray_b0b3b8'></div>
       <form onSubmit={handleSubmit} className='p-5'>
         <div className='flex'>
-          <img src={token?.user.avatar} className='w-[50px] rounded-full' alt='avatar'/>
-          <p className='text-white ml-2 font-bold'>{token?.user.lastName} {token?.user.firstName}</p>
+          <img src={token?.user?.avatar} className='w-[50px] rounded-full' alt='avatar'/>
+          <p className='text-white ml-2 font-bold'>{token?.user?.lastName} {token?.user?.firstName}</p>
         </div>
         <div className='mt-2'> 
           <input
