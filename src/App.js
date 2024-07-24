@@ -23,6 +23,9 @@ import PaymentFailed from './pages/PaymentFailPage';
 import DashBoard from './pages/Admin/DashBoard';
 import UserProfile from './components/UserProfile/UserProfile';
 import Shipcompany from './pages/ShipCompany/Shipcompany';
+import AdminLayout from './MainLayout/AdminLayout'
+import Product from './pages/ProductManagement/Product';
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import "react-image-gallery/styles/css/image-gallery.css";
 function App() {
   return (
@@ -38,6 +41,7 @@ function App() {
             <Route path="/cart" element={<Cart />} />
             <Route path="/forum" element={<ForumPage />} />
             <Route path='/discount' element={<Discount />} />
+            <Route path='/profile' element={<UserProfile />} />
             <Route path='/discountoption' element={<DiscountOption />} />
             <Route path='/shippingoption' element={<ShippingOption />} />
             <Route path='/paymentsuccess' element={<PaymentSuccess />} />
@@ -45,9 +49,15 @@ function App() {
             <Route path="/forum" element={<ForumPage />}/>
             <Route path='/discount' element={<Discount />}/>
             <Route path='/profile' element={<UserProfile/>}/>
+
           </Route>
-          <Route path='/dashboard/Shipcompany' element={<Shipcompany/>}/>
-          <Route path='/dashboard' element={<DashBoard/>}/>
+          
+          <Route path='/' element={<AdminLayout />}>
+            <Route path='/admin' element={<ProtectedRoute element={DashBoard} />} />
+            <Route path='/admin/ProductManagement' element={<ProtectedRoute element={Product} />} />
+            <Route path='/admin/Shipcompany' element={<ProtectedRoute element={Shipcompany} />} />
+          </Route>
+
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/policy" element={<PolicyPage />} />
