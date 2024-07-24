@@ -1,15 +1,86 @@
 import React, { useState } from 'react'
-import productImage from '../assets/ensure-gold.jpg'
 import voucherImage from '../assets/voucher.jpg'
 import { useGetAddressToShipById } from '../hooks/useGetAddressToShipById'
+import CartItem from '../components/CartItem'
+import { useItemStore } from '../utils/cart'
+import { useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { Description, Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
+import { useGetAllShipCompany } from '../hooks/useGetAllShipCompany'
+import { useGetAllVouchers } from '../hooks/useGetAllVouchers'
+import { useGetAllPayments } from '../hooks/useGetAllPayments'
+
 
 function Transaction() {
-    const {data} = useGetAddressToShipById(1)
+    const navigate = useNavigate();
+    const { data } = useGetAddressToShipById(1)
+    console.log(data)
     const [selectedMethod, setSelectedMethod] = useState(null);
-
-    const handleMethodSelect = (method) => {
-        setSelectedMethod(method);
+    const cartStore = useItemStore()
+    const handleMethodSelect = (id) => {
+        setSelectedMethod(id);
     };
+    const location = useLocation();
+    const { state } = location;
+    const { selectedItems = [] } = state || {};
+
+    const handleChangeDiscount = () => {
+        // const selectedItems = cartStore.items.filter(item => cartStore.selectedItems.includes(item.id));
+        navigate('/discountoption');
+    }
+
+    const handleChangeShipping = () => {
+        // const selectedItems = cartStore.items.filter(item => cartStore.selectedItems.includes(item.id));
+        navigate('/shippingoption');
+    }
+
+    let [isOpen, setIsOpen] = useState(false)
+
+    const [isActive, setIsActive] = useState(0);
+
+    const [isActiveVoucher, setIsActiveVoucher] = useState(0);
+
+    const handleShippingClick = (id) => {
+        setIsActive(id);
+    };
+    const { data: shipData } = useGetAllShipCompany();
+
+    const handleVoucherClick = (id) => {
+        setIsActiveVoucher(id);
+    };
+    const { data: voucherData } = useGetAllVouchers();
+    const sortedvoucherData = voucherData?.sort((a, b) => b.discount - a.discount);
+
+    const [freightCost, setFreightCost] = useState(30000);
+
+    const currentDate = new Date();
+    const startDate = new Date(currentDate.getTime() + 5 * 24 * 60 * 60 * 1000); // add 5 days
+    const endDate = new Date(currentDate.getTime() + 7 * 24 * 60 * 60 * 1000); // add 7 days
+
+    const startDateString = `${startDate.getDate()}/${startDate.getMonth() + 1}`;
+    const endDateString = `${endDate.getDate()}/${endDate.getMonth() + 1}`;
+
+    const handlePlaceOrder = () => {
+        if (!isActiveVoucher || !isActive) {
+            alert("Please select a voucher and shipping method.");
+            return;
+        }
+        // Proceed with placing the order
+        console.log("Order placed successfully!");
+
+
+        if (selectedMethod === 1) {
+            navigate('/paymentfailed');
+        } else if (selectedMethod === 2) {
+            navigate('/paymentsuccess');
+        } else {
+            console.log("Invalid payment method selected.");
+        }
+    };
+
+
+    const { data: paymentData } = useGetAllPayments();
+
     return (
         <>
             <div className="w-full" style={{
@@ -34,7 +105,7 @@ function Transaction() {
                             <div className="bg-white container mx-10 my-7 p-10">
                                 <h1 className='text-4xl text-blue_177f9f'>{data?.customerName}</h1>
                                 <div className="flex items-start">
-                                    <p className="text-4xl mt-5 inline-flex">ĐỊA CHỈ NHẬN HÀNG: {data?.detailAddress +","+ data?.ward +","+ data?.district +","+ data?.province}</p>
+                                    <p className="text-4xl mt-5 inline-flex">ĐỊA CHỈ NHẬN HÀNG: {data?.detailAddress + ", " + data?.ward + ", " + data?.district + ", " + data?.province}</p>
                                     {/* <div className="flex justify-center w-fit h-fit bg-white text-blue_6bccde text-2xl font-extralight items-center border-2 border-blue_6bccde mt-4 ml-3">
                                         MẶC ĐỊNH
                                     </div> */}
@@ -45,7 +116,7 @@ function Transaction() {
                                         MẶC ĐỊNH
                                     </div> */}
                                 </div>
-                                <button className="bg-blue_6bccde text-white flex items-center justify-center px-2 py-2 text-2xl font-normal mt-5">THAY ĐỔI</button>
+                                {/* <button className="bg-blue_6bccde text-white flex items-center justify-center px-2 py-2 text-2xl font-normal mt-5">THAY ĐỔI</button> */}
                             </div>
 
                         </div>
@@ -63,8 +134,8 @@ function Transaction() {
                             </div>
                         </div>
                         <div className="container w-full">
-                            <div className="flex items-center justify-center w-full">
-                                <div className="bg-white container mx-10 my-7 p-10 border-2 border-black flex">
+                            <div className="items-center justify-center w-full">
+                                {/* <div className="bg-white container mx-10 my-7 p-10 border-2 border-black flex">
                                     <img
                                         src={productImage}
                                         alt="Product Image"
@@ -98,13 +169,16 @@ function Transaction() {
                                             <h1 className="text-4xl font-semibold text-sky-800 ml-10 justify-center pl-7">750.000 VND</h1>
                                         </div>
                                     </div>
-                                </div>
+                                </div> */}
+                                {selectedItems.map(item => (
+                                    <CartItem key={item.id} item={item} isReadOnly={true} />
+                                ))}
                             </div>
-                            <p className="text-lg mx-10">Lời nhắn cho người bán:</p>
+                            {/* <p className="text-lg mx-10">Lời nhắn cho người bán:</p>
                             <div className="my-3 mx-10">
                                 <textarea className="border border-gray-300 p-2 w-full h-32 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none text-blue_177f9f">
                                 </textarea>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>
@@ -118,8 +192,8 @@ function Transaction() {
                                 <h4 className="text-white text-xl font-light">VẬN CHUYỂN</h4>
                             </div>
                         </div>
-                        <div className="container w-full">
-                            <div className="flex w-full items-center mt-4">
+                        <div className="container w-full my-8">
+                            {/* <div className="flex w-full items-center mt-4">
                                 <p className="text-lg mx-10 w-1/5">Đơn vị vận chuyển:</p>
                                 <div className="flex w-4/5 border-2 border-black bg-white p-2 mx-10">
                                     <h1 className="text-blue_cart font-normal text-xl w-1/5 ml-5">HỎA TỐC</h1>
@@ -127,16 +201,37 @@ function Transaction() {
                                     <h3 className="text-blue_0e4759 text-xl line-through w-1/5 mx-5">20.000 VND</h3>
                                     <h1 className="text-red_ff0000 font-normal text-xl w-1/5 -mr-10">MIỄN PHÍ</h1>
                                 </div>
-                            </div>
-                            <div className="flex justify-end items-center">
-                                <button className="bg-blue_6bccde text-white flex items-center justify-center px-2 py-2 text-2xl font-normal mt-5 mr-10">THAY ĐỔI</button>
-                            </div>
-                            <p className="text-lg mx-10">Lời nhắn cho bên vận chuyển:</p>
+                            </div> */}
+                            {/* <p className="text-lg mx-10">Lời nhắn cho bên vận chuyển:</p>
                             <div className="my-3 mx-10">
                                 <textarea className="border border-gray-300 p-2 w-full h-32 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none text-blue_177f9f">
                                     Khi giao hàng hãy để trước cửa nhà
                                 </textarea>
-                            </div>
+                            </div> */}
+                        </div>
+                        <div className="h-fit py-5">
+                            {shipData?.map(item => (
+                                <div className="p-3">
+                                    <div className={`flex  ${item.id === isActive ? 'border-blue_cart border-4' : ''}`}
+                                        onClick={() => handleShippingClick(item.id)}
+                                    >
+                                        <div className="bg-blue_177f9f w-2">
+                                        </div>
+                                        <div className="bg-white w-full ">
+                                            <div className="flex pt-2">
+                                                <h1 className="text-blue_cart font-normal text-3xl ml-5">{item?.name}</h1>
+                                                {/* <h3 className="text-blue_0e4759 text-3xl line-through mx-10">20.000 VND</h3> */}
+                                                <h3 className="text-blue_0e4759 text-3xl mx-10">{freightCost.toLocaleString().replace(',', '.')} VND</h3>
+                                                {/* <h1 className="text-red_ff0000 font-normal text-3xl">MIỄN PHÍ</h1> */}
+                                            </div>
+                                            <div className="flex ml-5 py-5">
+                                                <h3 className="text-blue_0e4759 text-xl">Nhận hàng vào</h3>
+                                                <h3 className="text-blue_0e4759 text-xl">: {startDateString} - {endDateString}</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>
@@ -151,7 +246,7 @@ function Transaction() {
                             </div>
                         </div>
                         <div className="container w-full">
-                            <div className="flex items-center justify-center w-full">
+                            {/* <div className="flex items-center justify-center w-full">
                                 <div className="bg-white container mx-10 my-7 p-5 border-2 border-black flex">
                                     <img
                                         src={voucherImage}
@@ -167,7 +262,29 @@ function Transaction() {
                                 </div>
                             </div>
                             <div className="flex justify-end items-center">
-                                <button className="bg-blue_6bccde text-white flex items-center justify-center px-2 py-2 text-2xl font-normal mb-5 mr-10">THAY ĐỔI</button>
+                                <button onClick={handleChangeDiscount} className="bg-blue_6bccde text-white flex items-center justify-center px-2 py-2 text-2xl font-normal mb-5 mr-10">THAY ĐỔI</button>
+                            </div> */}
+                            <div className="p-3">
+                                <h3 className="text-2   xl text-blue_177f9f py-3 px-3">Hãy chọn một mã khuyến mãi</h3>
+                                {sortedvoucherData?.map(itemVoucher => (
+                                    <div className="flex items-center justify-center w-full">
+                                        <div className={`bg-white container mx-10 my-7 p-5 border-2 border-black flex ${itemVoucher.id === isActiveVoucher ? 'border-blue_cart border-4' : ''}`}
+                                            onClick={() => handleVoucherClick(itemVoucher.id)}
+                                        >
+                                            <img
+                                                src={voucherImage}
+                                                alt="voucher Image"
+                                                className="w-32 h-32 object-cover justify-center border-2 border-blue_cart"
+                                            />
+                                            <div className="w-full ml-4 justify-end">
+                                                <div className="flex justify-start">
+                                                    <h1 className="text-2xl mb-2 pt-2 text-blue_177f9f font-sans font-semibold">GIẢM GIÁ {itemVoucher.discount * 100}% PHÍ VẬN CHUYỂN VỚI ĐƠN HÀNG TỪ 500.000VND TRỞ LÊN</h1>
+                                                </div>
+                                                <div className="flex text-lg"><h2>HẠN SỬ DỤNG</h2><h2>: {new Date(itemVoucher.endTime).toLocaleDateString()}</h2></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     </div>
@@ -184,26 +301,39 @@ function Transaction() {
                         </div>
                         <div className="container w-full">
                             <div className="flex mx-10 mt-5">
-                                <button
+                                {/* <div
                                     className={`px-6 py-3 mr-3 border border-gray-400 font-font-normal text-lg ${selectedMethod === 'cash'
                                         ? 'bg-blue_buy text-white border-none'
                                         : 'bg-white text-black'
                                         }`}
-                                    onClick={() => handleMethodSelect('cash')}
+                                    // onClick={() => handleMethodSelect('cash')}
                                 >
                                     Thanh toán khi nhận hàng
-                                </button>
-                                <button
-                                    className={`px-6 py-3 border border-gray-400 ml-3 font-normal text-lg ${selectedMethod === 'card' ? 'bg-blue_buy text-white border-none' : 'bg-white text-black'
+                                </div>
+                                <div
+                                    className={`px-6 py-3 border border-gray-400 ml-3 font-normal text-lg ${selectedMethod === 'card' 
+                                        ? 'bg-blue_buy text-white border-none' 
+                                        : 'bg-white text-black'
                                         }`}
-                                    onClick={() => handleMethodSelect('card')}
+                                    // onClick={() => handleMethodSelect('card')}
                                 >
                                     Thẻ tín dụng/Ghi nợ
-                                </button>
+                                </div> */}
+                                {paymentData?.map(itemPayment => (
+                                    <div
+                                        className={`cursor-pointer px-6 py-3 mr-3 border border-gray-400 font-font-normal text-lg ${itemPayment.id === selectedMethod
+                                            ? 'bg-blue_buy text-white border-none'
+                                            : 'bg-white text-black'
+                                            }`}
+                                        onClick={() => handleMethodSelect(itemPayment.id)}
+                                    >
+                                        {itemPayment.method}
+                                    </div>
+                                ))}
                             </div>
-                            <p className="mx-10 my-3 text-black">
+                            {/* <p className="mx-10 my-3 text-black">
                                 Phí thu hộ: 0 VND. Ưu đãi về phí vặn chuyển (nếu có) áp dụng với cả phí thu hộ
-                            </p>
+                            </p> */}
                             <div className="mx-3 flex">
                                 <div className="bg-white container mx-10 my-7 p-5">
                                     <div className="flex w-full justify-between my-8">
@@ -211,23 +341,36 @@ function Transaction() {
                                             Tổng tiền hàng:
                                         </h3>
                                         <h3 className="font-normal text-2xl text-black">
-                                            750.000 VND
+                                            {cartStore.total} VND
                                         </h3>
                                     </div>
                                     <div className="flex w-full justify-between my-8">
                                         <h3 className="font-normal text-2xl text-black">
                                             Phí thu hộ:
                                         </h3>
-                                        <h3 className="font-normal text-2xl text-black">
-                                            0 VND
-                                        </h3>
+                                        {isActiveVoucher ? (
+                                            <h3 className="font-normal text-2xl text-black">
+                                                {(freightCost - (freightCost * sortedvoucherData.find(v => v.id === isActiveVoucher).discount)).toLocaleString().replace(',', '.')} VND
+                                            </h3>
+                                        ) : (
+                                            <h3 className="font-normal text-2xl text-black">
+                                                {freightCost.toLocaleString().replace(',', '.')} VND
+                                            </h3>
+                                        )}
                                     </div>
                                     <div className="flex w-full justify-between my-8">
                                         <h3 className="font-normal text-2xl text-black">
                                             Tổng thanh toán:
                                         </h3>
+                                        {/* <h3 className="font-normal text-4xl text-blue_cart">
+                                            {cartStore.total}.000 VND
+                                        </h3> */}
                                         <h3 className="font-normal text-4xl text-blue_cart">
-                                            750.000 VND
+                                            {isActiveVoucher ? (
+                                                (cartStore.total + (freightCost - (freightCost * sortedvoucherData.find(v => v.id === isActiveVoucher).discount))).toLocaleString().replace(',', '.')
+                                            ) : (
+                                                (cartStore.total + freightCost).toLocaleString().replace(',', '.')
+                                            )} VND
                                         </h3>
                                     </div>
                                 </div>
@@ -237,7 +380,7 @@ function Transaction() {
                                     height: 85,
                                     background: 'linear-gradient(to right, #24b7cf, #18335c)'
                                 }}>
-                                    <button className="text-4xl text-white px-40 -inset-y-px">
+                                    <button className="text-4xl text-white px-40 -inset-y-px" onClick={() => handlePlaceOrder()}>
                                         ĐẶT HÀNG
                                     </button>
                                 </div>
