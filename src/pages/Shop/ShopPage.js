@@ -12,7 +12,7 @@ function Discount() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get(`https://localhost:5001/api/Products/ViewAllProduct?pageIndex=${pageIndex}&pageSize=${pageSize}`);
+        const response = await axios.get(`https://ohecaa.azurewebsites.net/api/Products/ViewAllProduct?pageIndex=${pageIndex}&pageSize=${pageSize}`);
         const { data, message } = response.data;
         if (Array.isArray(data)) {
           setProducts(data);

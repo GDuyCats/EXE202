@@ -28,6 +28,11 @@ function Header() {
             navigate('/admin');
         }
     }, [token, navigate]);
+    
+    const handleNaviCart = () => {
+        navigate('/cart');
+    }
+            
 
     return (
         <>
@@ -56,7 +61,7 @@ function Header() {
                                 </div>
                                 <div className='flex m-5'>
                                     <div className='bg-gray-700 rounded-full p-1'><FaShoppingCart size={30} className='text-white' /></div>
-                                    <p className='cursor-pointer ml-5 text-xl text-white font-medium mt-1'><Link to='/orders'>Đơn Hàng</Link></p>
+                                    <p onClick={handleNaviCart} className='cursor-pointer ml-5 text-xl text-white font-medium mt-1'>Đơn Hàng</p>
                                 </div>
                             </div>
                         )}

@@ -23,6 +23,8 @@ import PaymentFailed from './pages/PaymentFailPage';
 import DashBoard from './pages/Admin/DashBoard';
 import UserProfile from './components/UserProfile/UserProfile';
 import Shipcompany from './pages/ShipCompany/Shipcompany';
+import Feedback from './pages/FeedBack';
+import ThanksForRating from './pages/ThanksForRating';
 import AdminLayout from './MainLayout/AdminLayout'
 import Product from './pages/ProductManagement/Product';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
@@ -49,6 +51,8 @@ function App() {
             <Route path="/forum" element={<ForumPage />}/>
             <Route path='/discount' element={<Discount />}/>
             <Route path='/profile' element={<UserProfile/>}/>
+            <Route path='/feedback' element={<Feedback/>}/>
+            <Route path='/feedbacksuccess' element={<ThanksForRating/>}/>
 
           </Route>
           

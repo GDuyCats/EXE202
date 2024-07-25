@@ -4,6 +4,7 @@ import { persist, createJSONStorage } from 'zustand/middleware'
 export const useItemStore = create(
   persist(
     (set, get) => ({
+      userID: null,
       items: [],
       selectedItems: [],
       total: 0,
@@ -25,6 +26,9 @@ export const useItemStore = create(
       },
       setSelectedItems: (selectedItems) => {
         set({ selectedItems });
+      },
+      addUserID: (userID) => {
+        set({ userID });
       }
     }),
     {
@@ -33,4 +37,3 @@ export const useItemStore = create(
     },
   ),
 )
-// _____________________________________________________________________________________________________________________________________________
