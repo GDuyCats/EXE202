@@ -25,7 +25,7 @@ export default function Form() {
       formData.append("Email", email);
       formData.append("Password", password);
 
-      const response = await axios.post('https://localhost:5001/api/Authentication/Login', formData);
+      const response = await axios.post('https://ohecaa.azurewebsites.net/api/Authentication/Login', formData);
       
       if (response.data.success) {
         cartStore.addUserID(response.data?.token?.user?.id)
