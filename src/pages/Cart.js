@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
@@ -6,8 +6,10 @@ import 'swiper/css/scrollbar'
 import CartItem from '../components/CartItem'
 import { useItemStore } from '../utils/cart'
 import { useNavigate } from 'react-router-dom'
+import { AuthContext } from '../context/AuthContext'
 
 function Cart() {
+    const { user } = useContext(AuthContext);
     const navigate = useNavigate();
     const cartStore = useItemStore()
 
@@ -16,6 +18,20 @@ function Cart() {
         navigate('/transaction', { state: { selectedItems: [...selectedItems] } });
     }
 
+    useEffect(() => {
+        if (user) {
+          cartStore.setUserId(user.id);
+        }
+      }, [user]);
+
+      const handleAddItem = (item) => {
+        if (cartStore.userId) {
+          cartStore.addItem(item);
+        } else {
+          alert('Please log in to add items to cart');
+        }
+      };
+      console.log(cartStore.items)
     const isEmptyCart = cartStore.items.length === 0;
     return (
         <>

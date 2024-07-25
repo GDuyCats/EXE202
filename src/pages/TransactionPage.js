@@ -9,12 +9,14 @@ import { Description, Dialog, DialogPanel, DialogTitle } from '@headlessui/react
 import { useGetAllShipCompany } from '../hooks/useGetAllShipCompany'
 import { useGetAllVouchers } from '../hooks/useGetAllVouchers'
 import { useGetAllPayments } from '../hooks/useGetAllPayments'
+import { useCreateOrder } from '../hooks/useCreateOrder'
+import { useCreatePayOS } from '../hooks/useCreatePayOS'
+import { useCreateOrderDetail } from '../hooks/useCreateOrderDetail'
 
 
 function Transaction() {
     const navigate = useNavigate();
     const { data } = useGetAddressToShipById(1)
-    console.log(data)
     const [selectedMethod, setSelectedMethod] = useState(null);
     const cartStore = useItemStore()
     const handleMethodSelect = (id) => {
@@ -23,16 +25,6 @@ function Transaction() {
     const location = useLocation();
     const { state } = location;
     const { selectedItems = [] } = state || {};
-
-    const handleChangeDiscount = () => {
-        // const selectedItems = cartStore.items.filter(item => cartStore.selectedItems.includes(item.id));
-        navigate('/discountoption');
-    }
-
-    const handleChangeShipping = () => {
-        // const selectedItems = cartStore.items.filter(item => cartStore.selectedItems.includes(item.id));
-        navigate('/shippingoption');
-    }
 
     let [isOpen, setIsOpen] = useState(false)
 
@@ -61,25 +53,58 @@ function Transaction() {
     const endDateString = `${endDate.getDate()}/${endDate.getMonth() + 1}`;
 
     const handlePlaceOrder = () => {
-        if (!isActiveVoucher || !isActive) {
+        if ( !isActive) {
             alert("Please select a voucher and shipping method.");
             return;
         }
         // Proceed with placing the order
         console.log("Order placed successfully!");
-
-
-        if (selectedMethod === 1) {
-            navigate('/paymentfailed');
-        } else if (selectedMethod === 2) {
-            navigate('/paymentsuccess');
-        } else {
-            console.log("Invalid payment method selected.");
-        }
+        createOrder({  
+            userId: cartStore.userID,
+            shipperId: 1,
+            orderDate: "2024-07-23T14:25:05.169Z",
+            shipDate: "2024-07-23T14:25:05.169Z",
+            receiveDate: "2024-07-23T14:25:05.169Z",
+            freightCost: freightCost,
+            isConfirm: 0,
+            status: 0,
+            paymentId: selectedMethod,
+            statusOfPayment: 0,
+            addressToShipId: 1,
+            totalPrice: isActiveVoucher
+            ? cartStore.total + (freightCost - (freightCost * sortedvoucherData.find(v => v.id === isActiveVoucher).discount))
+            : cartStore.total + freightCost},
+        {
+            onSuccess(res){
+                if (selectedMethod == 1){
+                    createPayOS({
+                        userID: cartStore.userID,
+                        orderId: res?.data?.id
+                    },
+                    {
+                        onSuccess(data){
+                            window.open(data.url);
+                        },
+                        onError(){
+                            navigate('/paymentfailed');
+                        }
+                    })
+                }
+                else {
+                    navigate('/paymentsuccess');
+                }
+            },
+            onError(){
+                navigate('/paymentfailed');
+            }
+        })
     };
 
-
+    // !isActiveVoucher ||
     const { data: paymentData } = useGetAllPayments();
+
+    const { mutate: createOrder, isLoading: iscreateOrderLoading } = useCreateOrder();
+    const { mutate: createPayOS, isLoading: iscreatePayOSLoading } = useCreatePayOS();
 
     return (
         <>
@@ -174,11 +199,6 @@ function Transaction() {
                                     <CartItem key={item.id} item={item} isReadOnly={true} />
                                 ))}
                             </div>
-                            {/* <p className="text-lg mx-10">Lời nhắn cho người bán:</p>
-                            <div className="my-3 mx-10">
-                                <textarea className="border border-gray-300 p-2 w-full h-32 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none text-blue_177f9f">
-                                </textarea>
-                            </div> */}
                         </div>
                     </div>
                 </div>

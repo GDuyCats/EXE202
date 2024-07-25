@@ -20,10 +20,14 @@ function Header() {
         removeToken();
     };
     useEffect(() => {
-        if (token?.user.roleId === 2) {
+        if (token?.user?.roleId === 2) {
             navigate('/dashboard')
         }
     }, [token])
+    
+    const handleNaviCart = () => {
+        navigate('/cart');
+    }
     return (
         <>
             <nav className="p-4 grid grid-cols-4 items-center z-50 bg-white sticky top-0 left-0 right-0 justify-between border-b-2 border-blue_177f9f">
@@ -34,7 +38,7 @@ function Header() {
                         <div className='cursor-pointer mr-5 ml-auto relative hover:brightness-110'
                             onClick={toggleClicked}>
                             <IoIosArrowDropdownCircle className='mr-0 ml-auto absolute right-1 bottom-1' size={20} />
-                            <img src={token?.user.avatar} alt='' className='w-[60px] h-[60px] rounded-full' />
+                            <img src={token?.user?.avatar} alt='' className='w-[60px] h-[60px] rounded-full' />
                         </div>
                         {clicked && (
                             <div className='absolute right-5 top-16 bg-gray-800 p-2 rounded-2xl shadow w-[300px]'>
@@ -52,7 +56,7 @@ function Header() {
                                 </div>
                                 <div className='flex m-5'>
                                     <div className='bg-gray-700 rounded-full p-1'><FaShoppingCart size={30} className='text-white' /></div>
-                                    <p onClick={handleLogout} className='cursor-pointer ml-5 text-xl text-white font-medium mt-1'>Đơn Hàng</p>
+                                    <p onClick={handleNaviCart} className='cursor-pointer ml-5 text-xl text-white font-medium mt-1'>Đơn Hàng</p>
                                 </div>
                             </div>
                         )}

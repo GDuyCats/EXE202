@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from "../../context/AuthContext";
 import axios from 'axios';
+import { useItemStore } from "../../utils/cart";
 
 export default function Form() {
   const [Email, setEmail] = useState('');
@@ -9,6 +10,7 @@ export default function Form() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const { saveToken } = useContext(AuthContext);
+  const cartStore = useItemStore()
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isValidate(Email)) {
@@ -18,8 +20,9 @@ export default function Form() {
       const formDataToSend = new FormData();
       formDataToSend.append("Email", Email);
       formDataToSend.append("Password", Password);
-      const response = await axios.post('https://localhost:5001/api/Authentication/Login', formDataToSend);
+      const response = await axios.post('https://ohecaa.azurewebsites.net/api/Authentication/Login', formDataToSend);
       if (response.data.success) {
+        cartStore.addUserID(response.data?.token?.user?.id)
         saveToken(response.data.token)
         navigate('/');
       } else {
