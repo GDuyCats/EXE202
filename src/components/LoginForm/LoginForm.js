@@ -5,44 +5,43 @@ import axios from 'axios';
 import { useItemStore } from "../../utils/cart";
 
 export default function Form() {
-  const [Email, setEmail] = useState('');
-  const [Password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const { saveToken } = useContext(AuthContext);
   const cartStore = useItemStore()
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!isValidate(Email)) {
+    setError('');
+    
+    if (!isValidEmail(email)) {
+      setError("Invalid Email!");
       return;
     }
+    
     try {
-      const formDataToSend = new FormData();
-      formDataToSend.append("Email", Email);
-      formDataToSend.append("Password", Password);
-      const response = await axios.post('https://ohecaa.azurewebsites.net/api/Authentication/Login', formDataToSend);
+      const formData = new FormData();
+      formData.append("Email", email);
+      formData.append("Password", password);
+
+      const response = await axios.post('https://localhost:5001/api/Authentication/Login', formData);
+      
       if (response.data.success) {
         cartStore.addUserID(response.data?.token?.user?.id)
-        saveToken(response.data.token)
+        saveToken(response.data.token);
         navigate('/');
       } else {
         setError('Đăng nhập thất bại. Vui lòng thử lại.');
       }
-
     } catch (err) {
-      setError(err);
+      setError('An error occurred during login. Please try again later.');
     }
   };
 
- 
-  const isValidate = (Email) => {
-    const checkEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (checkEmail.test(String(Email).toLowerCase())) {
-      return true;
-    } else {
-      alert("Invalid Email !");
-      return false;
-    }
+  const isValidEmail = (email) => {
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailPattern.test(String(email).toLowerCase());
   };
 
   return (
@@ -56,7 +55,7 @@ export default function Form() {
           <input
             className="bg-blue_d5f8ff placeholder-blue_177f9f w-full rounded-sm pl-5 py-2"
             placeholder="Email"
-            value={Email}
+            value={email}
             onChange={(e) => setEmail(e.target.value)}
             type="text"
           />
@@ -65,9 +64,9 @@ export default function Form() {
           <input
             className="bg-blue_d5f8ff placeholder-blue_177f9f w-full rounded-sm pl-5 py-2 mb-5"
             placeholder="Password"
-            value={Password}
+            value={password}
             onChange={(e) => setPassword(e.target.value)}
-            type="Password"
+            type="password"
           />
         </div>
         <div>
@@ -88,64 +87,6 @@ export default function Form() {
           </button>
         </div>
       </form>
-
     </div>
   );
 }
-
-// import React, { useState } from 'react';
-// import axios from 'axios';
-
-// const Login = () => {
-//   const [Email, setEmail] = useState('');
-//   const [Password, setPassword] = useState('');
-//   const [error, setError] = useState('');
-
-//   const handleLogin = async (e) => {
-//     e.preventDefault();
-//     try {
-//       const response = await axios.post('https://localhost:5001/api/Authentication/Login', {
-//         Email: Email,
-//         Password: Password,
-//       });
-//       if (response.data.success) {
-//         // Handle successful login, e.g., redirect to another page
-//       } else {
-//         setError(response.data.message);
-//       }
-//     } catch (err) {
-//       setError('An error occurred. Please try again.');
-//     }
-//   };
-
-//   return (
-//     <div className="login-container">
-//       <h2>Login</h2>
-//       <form onSubmit={handleLogin}>
-//         <div>
-//           <label>Email:</label>
-//           <input
-//             type="Email"
-//             value={Email}
-//             onChange={(e) => setEmail(e.target.value)}
-//             required
-//           />
-//         </div>
-//         <div>
-//           <label>Password:</label>
-//           <input
-//             type="Password"
-//             value={Password}
-//             onChange={(e) => setPassword(e.target.value)}
-//             required
-//           />
-//         </div>
-//         {error && <p className="error">{error}</p>}
-//         <button type="submit">Login</button>
-//       </form>
-//     </div>
-//   );
-// };
-
-// export default Login;
-

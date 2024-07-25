@@ -1,8 +1,11 @@
 import React from 'react'
-
+import { CiSearch } from "react-icons/ci";
+import { MdOutlineMessage } from "react-icons/md";
+import { FaPlus } from "react-icons/fa";
+import { FaRegBell } from "react-icons/fa";
 function DashboardHeader() {
     return (
-        <div className='bg-blue_177f9f flex p-5'>
+        <div className='bg-blue_177f9f flex py-5 z-10 fixed w-5/6 right-0'>
             <div className='relative'>
                 <CiSearch className='absolute left-6 top-2' size={30} />
                 <input className='w-[200px] h-[50px] rounded-full ml-5' />
