@@ -11,10 +11,10 @@ import { useGetAllVouchers } from '../hooks/useGetAllVouchers'
 import { useGetAllPayments } from '../hooks/useGetAllPayments'
 import { useCreateOrder } from '../hooks/useCreateOrder'
 import { useCreatePayOS } from '../hooks/useCreatePayOS'
-import { useCreateOrderDetail } from '../hooks/useCreateOrderDetail'
+import { useCreateCheckOut } from '../hooks/useCreateCheckOut'
 
 
-function Transaction() {
+function Transaction({ item }) {
     const navigate = useNavigate();
     const { data } = useGetAddressToShipById(1)
     const [selectedMethod, setSelectedMethod] = useState(null);
@@ -53,13 +53,13 @@ function Transaction() {
     const endDateString = `${endDate.getDate()}/${endDate.getMonth() + 1}`;
 
     const handlePlaceOrder = () => {
-        if ( !isActive) {
+        if (!isActive) {
             alert("Please select a voucher and shipping method.");
             return;
         }
         // Proceed with placing the order
         console.log("Order placed successfully!");
-        createOrder({  
+        createOrder({
             userId: cartStore.userID,
             shipperId: 1,
             orderDate: "2024-07-23T14:25:05.169Z",
@@ -72,32 +72,48 @@ function Transaction() {
             statusOfPayment: 0,
             addressToShipId: 1,
             totalPrice: isActiveVoucher
-            ? cartStore.total + (freightCost - (freightCost * sortedvoucherData.find(v => v.id === isActiveVoucher).discount))
-            : cartStore.total + freightCost},
-        {
-            onSuccess(res){
-                if (selectedMethod == 1){
-                    createPayOS({
-                        userID: cartStore.userID,
-                        orderId: res?.data?.id
-                    },
-                    {
-                        onSuccess(data){
-                            window.open(data.url);
-                        },
-                        onError(){
-                            navigate('/paymentfailed');
-                        }
-                    })
-                }
-                else {
-                    navigate('/paymentsuccess');
-                }
+                ? cartStore.total + (freightCost - (freightCost * sortedvoucherData.find(v => v.id === isActiveVoucher).discount))
+                : cartStore.total + freightCost
+        },
+            createCheckOut({
+                userId: cartStore.userID,
+                freightCost: freightCost,
+                paymentId: selectedMethod,
+                addressToShipId: 1,
+                ...(cartStore.items.length > 0 && {
+                    carts: cartStore.items.map(item => ({
+                        productId: item.id,
+                        quantity: item.count,
+                    })),
+                }),
             },
-            onError(){
-                navigate('/paymentfailed');
-            }
-        })
+                {
+                    onSuccess(res) {
+                        if (selectedMethod == 1) {
+                            createPayOS({
+                                userID: cartStore.userID,
+                                orderId: res?.data?.id
+                            },
+                                {
+                                    onSuccess(data) {
+                                        window.open(data.url);
+                                    },
+                                    onError() {
+                                        navigate('/paymentfailed');
+                                    },
+                                });
+                        }
+                        else {
+                            navigate('/paymentsuccess');
+                        }
+                    },
+                    onError() {
+                        navigate('/paymentfailed');
+                    }
+                }
+            )
+        )
+
     };
 
     // !isActiveVoucher ||
@@ -105,6 +121,7 @@ function Transaction() {
 
     const { mutate: createOrder, isLoading: iscreateOrderLoading } = useCreateOrder();
     const { mutate: createPayOS, isLoading: iscreatePayOSLoading } = useCreatePayOS();
+    const { mutate: createCheckOut, isLoading: iscreateCheckOutLoading } = useCreateCheckOut();
 
     return (
         <>
