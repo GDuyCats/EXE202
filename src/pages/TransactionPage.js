@@ -11,7 +11,6 @@ import { useGetAllVouchers } from '../hooks/useGetAllVouchers'
 import { useGetAllPayments } from '../hooks/useGetAllPayments'
 import { useCreateOrder } from '../hooks/useCreateOrder'
 import { useCreatePayOS } from '../hooks/useCreatePayOS'
-import { useCreateOrderDetail } from '../hooks/useCreateOrderDetail'
 
 
 function Transaction() {
