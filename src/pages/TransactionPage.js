@@ -75,6 +75,30 @@ function Transaction({ item }) {
                 ? cartStore.total + (freightCost - (freightCost * sortedvoucherData.find(v => v.id === isActiveVoucher).discount))
                 : cartStore.total + freightCost
         },
+            {
+                onSuccess(res) {
+                    if (selectedMethod == 1) {
+                        createPayOS({
+                            userID: cartStore.userID,
+                            orderId: res?.data?.id
+                        },
+                            {
+                                onSuccess(data) {
+                                    window.open(data.url);
+                                },
+                                onError() {
+                                    navigate('/paymentfailed');
+                                },
+                            });
+                    }
+                    else {
+                        navigate('/paymentsuccess');
+                    }
+                },
+                onError() {
+                    navigate('/paymentfailed');
+                }
+            },
             createCheckOut({
                 userId: cartStore.userID,
                 freightCost: freightCost,
@@ -86,31 +110,7 @@ function Transaction({ item }) {
                         quantity: item.count,
                     })),
                 }),
-            },
-                {
-                    onSuccess(res) {
-                        if (selectedMethod == 1) {
-                            createPayOS({
-                                userID: cartStore.userID,
-                                orderId: res?.data?.id
-                            },
-                                {
-                                    onSuccess(data) {
-                                        window.open(data.url);
-                                    },
-                                    onError() {
-                                        navigate('/paymentfailed');
-                                    },
-                                });
-                        }
-                        else {
-                            navigate('/paymentsuccess');
-                        }
-                    },
-                    onError() {
-                        navigate('/paymentfailed');
-                    }
-                }
+            }
             )
         )
 
