@@ -15,6 +15,7 @@ function Shop() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
+
         const totalProduct = await axios.get(`https://ohecaa.azurewebsites.net/api/Products/GetCountProduct`);
         const response = await axios.get(`https://ohecaa.azurewebsites.net/api/Products/ViewAllProduct?pageIndex=${pageIndex}&pageSize=${pageSize}`);
         const { data } = response.data;

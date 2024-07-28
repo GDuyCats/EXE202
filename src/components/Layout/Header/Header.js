@@ -34,6 +34,11 @@ function Header() {
             navigate('/admin');
         }
     }, [token, navigate]);
+    
+    const handleNaviCart = () => {
+        navigate('/cart');
+    }
+            
 
     return (
         <nav className="p-4 grid grid-cols-4 items-center z-50 bg-white sticky top-0 left-0 right-0 justify-between border-b-2 border-blue_177f9f">
