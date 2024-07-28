@@ -25,7 +25,7 @@ function PostModal({ closeModal, setRefreshForumPage}) {
         }   
       }
      
-      const response = await axios.post('https://localhost:5001/api/Posts/CreatePost', formData, config)
+      const response = await axios.post('https://ohecaa.azurewebsites.net/api/Posts/CreatePost', formData, config)
       console.log('Tạo bài viết thành công', response.data)
       setCreatePostSuccess(true) 
       setError(false)  

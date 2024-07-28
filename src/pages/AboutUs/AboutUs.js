@@ -28,7 +28,7 @@ function AboutUs() {
         <div className='pt-20'>
           <div className='w-full h-full pt-10 bg-gradient-to-r from-blue_c0foff to-blue_buy flex rounded-r-full relative'>
             <div>
-              <div className='mr-0 ml-auto translate-x-[60%] relative'>
+              <section className='mr-0 ml-auto translate-x-[10%] relative'>
                 <img src={Subtract} className='h-[120px] w-[800px] ' />
                 <div>
                   <p className='absolute top-[5%] right-[40%] font-semibold text-6xl text-blue_177f9f'>Về OHECA</p>
@@ -48,7 +48,7 @@ function AboutUs() {
                     <br />có thể chia sẻ với nhau.
                   </p>
                 </div>
-              </div>
+              </section>
             </div>
             <div className='ml-auto mr-5 -mt-5 pb-3'>
               <img src={Pic1} alt='' className='rounded-full w-[650px] h-[650px] ' />
@@ -56,17 +56,17 @@ function AboutUs() {
           </div>
         </div>
         <div className='pb-20'>
-          <div className='w-full h-full mt-20 bg-gradient-to-r from-blue_buy to-blue_c0foff flex rounded-l-full relative'>
+          <section className='w-full h-full mt-20 bg-gradient-to-r from-blue_buy to-blue_c0foff flex rounded-l-full relative'>
             <div className='mr-auto ml-5 mt-5 pb-3'>
               <img src={Pic2} alt='' className='rounded-full w-[650px] h-[650px] ' />
             </div>
-            <div className='mt-10 relative'>
-              <img src={Subtract} className='h-[120px] w-[800px] -scale-x-100 -translate-x-[60%]' />
+            <div className='mt-10 relative -translate-x-[10%]'>
+              <img src={Subtract} className='h-[120px] w-[800px] -scale-x-100 ' />
               <div>
-                <p className='absolute top-[5%] -left-[40%] font-semibold text-6xl text-blue_177f9f'>SỨ MỆNH CỦA OHECA</p>
+                <p className='absolute top-[5%] left-[100px] font-semibold text-6xl text-blue_177f9f translate-x-[10%]'>SỨ MỆNH CỦA OHECA</p>
               </div>
               <div>
-                <p className='text-center text-4xl text-blue_073d4d mt-10 -translate-x-[60%]'>
+                <p className='text-center text-4xl text-blue_073d4d mt-10 '>
                   “Uống nước nhớ nguồn” đã từ
                   <br /> lâu đã là truyền thống đáng
                   <br /> quý của người dân Việt Nam
@@ -78,7 +78,7 @@ function AboutUs() {
                 </p>
               </div>
             </div>
-          </div>
+          </section>
         </div>
         <img src={vector1} className='absolute left-5 top-20' />
         <img src={vector2} className='absolute left-16 top-10' />

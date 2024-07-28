@@ -13,7 +13,7 @@ function GetAllShipCompany({ refresh, setRefresh }) {
 
   useEffect(() => {
     axios
-      .get('https://localhost:5001/api/ShipCompanys/ViewAllShipCompanys', {
+      .get('https://ohecaa.azurewebsites.net/api/ShipCompanys/ViewAllShipCompanys', {
         headers: {
           'Authorization': `Bearer ${accessToken}`,
         },
@@ -38,7 +38,7 @@ function GetAllShipCompany({ refresh, setRefresh }) {
   const handleDelete = async (id) => {
     try {
       console.log(`Attempting to delete company with id: ${id}`);
-      const response = await axios.delete(`https://localhost:5001/api/ShipCompanys/DeleteShipCompany/${id}`, {
+      const response = await axios.delete(`https://ohecaa.azurewebsites.net/api/ShipCompanys/DeletedShipCompany/${id}`, {
         headers: {
           'Authorization': `Bearer ${accessToken}`,
         },
@@ -58,7 +58,7 @@ function GetAllShipCompany({ refresh, setRefresh }) {
   const handleUpdate = async (id) => {
     try {
       const data = { name: newName };
-      const response = await axios.put(`https://localhost:5001/api/ShipCompanys/UpdateShipCompany/${id}`, data, {
+      const response = await axios.put(`https://ohecaa.azurewebsites.net/api/ShipCompanys/UpdateShipCompany/${id}`, data, {
         headers: {
           'Authorization': `Bearer ${accessToken}`,
           'Content-Type': 'application/json',

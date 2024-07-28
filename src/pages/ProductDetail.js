@@ -3,6 +3,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import 'swiper/css/scrollbar'
+import productImage from '../assets/ensure-gold.jpg'
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
 import { useGetProductById } from '../hooks/useGetProductById'
 import { useItemStore } from '../utils/cart'
@@ -18,7 +19,6 @@ function ProductDetail() {
   const { token } = useContext(AuthContext);
   const { id } = useParams()
   const { data } = useGetProductById(id)
-  console.log(data)
   const { data: childCategories } = useGetChildCategoryById(data?.productMaterials?.[0]?.material?.childCategoryId)
   const cartStore = useItemStore()
   const [count, setCount] = useState(1)

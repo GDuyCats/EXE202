@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import SwaggerUI from 'swagger-ui-react'
 import axios from 'axios'
 import 'swagger-ui-react/swagger-ui.css'
 import ReCAPTCHA from 'react-google-recaptcha'
@@ -53,14 +52,14 @@ function SignUpForm() {
     }
 
     try {
-      const response = await axios.post('https://localhost:5001/api/Authentication/Register', formData, {
+      const response = await axios.post('https://ohecaa.azurewebsites.net/api/Authentication/Register', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
       navigate('/login');
     } catch (error) {
-      setMessage('Đăng kí thất bại');
+      setMessage('Đăng kí thất bại', error);
       setIsSubmitting(false);
     }
   };
@@ -237,7 +236,17 @@ function SignUpForm() {
                 type='submit'
                 disabled={isSubmitting}
               >
-                ĐĂNG KÝ
+                {isSubmitting ?
+                  <span className="flex text-center">
+                  <p className='pl-32 pt-1 pr-2'>ĐANG ĐĂNG KÝ</p>
+                  <svg class="animate-spin h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                    </path>
+                  </svg>
+                </span>
+                  : 'ĐĂNG KÝ'}
               </button>
             </div>
             <div>
@@ -245,12 +254,17 @@ function SignUpForm() {
                 className="bg-blue_6bccde text-white text-center w-full rounded-full py-2 mt-4 hover:brightness-110 -ml-24"
                 disabled={isSubmitting}
               >
-                <Link to="/login">QUAY VỀ ĐĂNG NHẬP</Link>     
+                <Link to="/login">QUAY VỀ ĐĂNG NHẬP</Link>
               </button>
             </div>
           </div>
         </form>
       </div>
+      {/* {isSubmitting && (
+        <div className="flex justify-center mt-4">
+          <div className="loader">Loading...</div>
+        </div>
+      )} */}
     </div>
   )
 }

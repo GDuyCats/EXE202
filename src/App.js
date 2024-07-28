@@ -61,7 +61,6 @@ function App() {
             <Route path='/admin/ProductManagement' element={<ProtectedRoute element={Product} />} />
             <Route path='/admin/Shipcompany' element={<ProtectedRoute element={Shipcompany} />} />
           </Route>
-
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/policy" element={<PolicyPage />} />
