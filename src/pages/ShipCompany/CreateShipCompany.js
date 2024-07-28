@@ -10,7 +10,7 @@ function CreateShipCompany({ onCreateSuccess }) {
             const data = {
                 name: Name
             };
-            const response = await axios.post('https://localhost:5001/api/ShipCompanys/CreateShipCompany', data, {
+            const response = await axios.post('https://ohecaa.azurewebsites.net/api/ShipCompanys/CreateShipCompany', data, {
                 headers: {
                     'Content-Type': 'application/json'
                 }

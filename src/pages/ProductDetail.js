@@ -5,19 +5,13 @@ import 'swiper/css/pagination'
 import 'swiper/css/scrollbar'
 import { Link, useParams } from 'react-router-dom'
 import productImage from '../assets/ensure-gold.jpg'
-import logoImage from '../assets/Without slogan.png'
 import { useGetProductById } from '../hooks/useGetProductById'
 import { useItemStore } from '../utils/cart'
 import { useGetChildCategoryById } from '../hooks/useGetChildCategoryById'
-import axios from 'axios'
 import ImageGallery from "react-image-gallery";
 function ProductDetail() {
-  const {data} = useGetProductById(1)
-  const cartStore = useItemStore()
-  // cartStore.addItem({id: 1, count: 10})
   const {id} = useParams()
   const { data } = useGetProductById(id)
-  console.log(data)
   const { data: childCategories } = useGetChildCategoryById(data?.productMaterials?.[0]?.material?.childCategoryId)
   const cartStore = useItemStore()
   const [count, setCount] = useState(1)

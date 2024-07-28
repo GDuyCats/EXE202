@@ -90,34 +90,33 @@ function HomePage() {
     }, [currentIndex])
 
     useEffect(() => {
-        axios.get('https://localhost:5001/api/Products/ViewProductByDiscount?pageIndex=1&pageSize=4')
+        axios.get('https://ohecaa.azurewebsites.net/api/Products/ViewProductByDiscount?pageIndex=1&pageSize=3')
             .then(response => {
                 const { data } = response.data; // Extract the data property from response.data
                 if (Array.isArray(data)) {
                 } else {
                     console.error('Expected an array but got:', data);
-                    setProducts([]);  
+                    setProducts([]);
                 }
                 setproductSingleSlide(data.map((product, index) => (
                     {
                         image: product?.imageLink,
-                        text:(
-                            <div>
-                                <span class="text-brightened_blue_00202a text-4xl font-normal">{product?.name}</span>
-                                <div className='text-blue_177f9f font-thin space-y-10 mt-10 w-[400px]'>
-                                    <p>Nhà sản xuất: {product?.brandName}</p>
-                                    <p>Chất liệu: Vải tơ gân</p>
-                                    <p>Đánh giá: </p>
-                                    <div className='w-[300px] h-[100px] bg-blue_94eeff text-center rounded-full flex flex-col font-medium'>
-                                        <div className='text-2xl line-through'>
-                                            <p>{product?.unitPrice} VND</p>
+                        text: (
+                            <section className='p-4 md:p-8'>
+                                <span className="text-brightened_blue_00202a font-normal overflow-hidden line-clamp-1 text-lg md:text-4xl block">{product?.name}</span>
+                                <div className='text-blue_177f9f font-thin space-y-4 mt-4 md:space-y-10 md:mt-10 w-full md:w-[400px]'>
+                                    <p className='text-lg md:text-4xl font-semibold'>Nhà sản xuất: {product?.brandName}</p>
+                                    <p className='hidden md:block text-lg md:text-4xl font-semibold'>Đánh giá: </p>
+                                    <div className='w-[150px] h-[50px] md:w-[300px] md:h-[100px] bg-blue_94eeff text-center rounded-full flex flex-col items-center justify-center font-medium'>
+                                        <div className='text-sm md:text-2xl line-through'>
+                                            <p className='text-sm md:text-2xl'>{product?.unitPrice} VND</p>
                                         </div>
-                                        <div className='text-4xl text-red-500 font-medium'>
-                                            <p>{product?.priceSold} VND</p>
+                                        <div className='text-lg md:text-4xl text-red-500 font-medium'>
+                                            <p className='text-lg md:text-4xl'>{product?.priceSold} VND</p>
                                         </div>
                                     </div>
                                 </div>
-                            </div>)
+                            </section>)
                     }
                 )));
                 setLoading(false);
@@ -128,7 +127,7 @@ function HomePage() {
             });
     }, []);
 
- 
+
     return (
         <>
             <div className='h-[780px] mt-40 px-4 relative group mx-auto'>
@@ -158,7 +157,7 @@ function HomePage() {
                 </div>
             </div>
             <div className='bg-gradient-to-br from-white to-blue_6bccde'>
-                <Link to="/discount" ><div style={{ backgroundImage: `url(${banner})` }} className='flex bg-cover h-full py-96 justify-center my-20 '></div></Link>
+                <Link to="/discount"><div style={{ backgroundImage: `url(${banner})` }} className='flex bg-cover h-full py-96 justify-center my-20 '></div></Link>
                 <div className='text-blue_177f9f pt-16 font-medium text-4xl text-center'>
                     <p>DANH MỤC SẢN PHẨM</p>
                 </div>
@@ -233,61 +232,61 @@ function HomePage() {
                         <BsChevronCompactRight size={30} />
                     </div>
                 </div>
-                <div className='font-medium text-4xl text-blue_177f9f text-center mt-10'>
+                <div className='font-medium text-2xl text-blue_177f9f text-center mt-10 md:text-4xl'>
                     <p>SẢN PHẨM KHUYẾN MÃI</p>
                 </div>
 
                 <div className='flex justify-center mt-10 w-[1500px] mx-auto'>
-                    {productSingleSlide.length > 0 ? 
-                    <Swiper
-                        grabCursor={true}
-                        loop={true}
-                        show
-                        slidesPerView={1}
-                        autoplay={{
-                            delay: 3000,
-                            disableOnInteraction: false,
-                        }}
-                        navigation={{
-                            nextEl: '.button-next',
-                            prevEl: '.button-prev',
-                            clickable: true,
-                        }}
-                        modules={[Navigation, Autoplay]}
-                        className='swiper_container group rounded-3xl z-10'>
-                        <SwiperSlide>
-                            <div className='bg-gradient-to-r from-blue_c0foff to-blue_6bccde  w-[1243px] h-[625px] rounded-3xl relative ml-[8%]'>
-                                <img src={productSingleSlide[Index === 0 ? productSingleSlide.length - 1 : Index - 1].image} alt='' className='w-[500px] h-[500px] rounded-3xl bg-cover top-7 left-10 m-auto duration-500 absolute' />
-                                <div className="absolute right-32 top-20 font-medium text-4xl whitespace-pre-line z-50 text-blue_177f9f text-left">
-                                    {productSingleSlide[Index === 0 ? productSingleSlide.length - 1 : Index - 1].text}
+                    {productSingleSlide.length > 0 ?
+                        <Swiper
+                            grabCursor={true}
+                            loop={true}
+                            show
+                            slidesPerView={1}
+                            autoplay={{
+                                delay: 3000,
+                                disableOnInteraction: false,
+                            }}
+                            navigation={{
+                                nextEl: '.button-next',
+                                prevEl: '.button-prev',
+                                clickable: true,
+                            }}
+                            modules={[Navigation, Autoplay]}
+                            className='swiper_container group rounded-3xl z-10'>
+                            <SwiperSlide>
+                                <div className='bg-gradient-to-r from-blue_c0foff to-blue_6bccde  w-[1243px] h-[625px] rounded-3xl relative ml-[8%]'>
+                                    <img src={productSingleSlide[Index === 0 ? productSingleSlide.length - 1 : Index - 1].image} alt='' className='w-[500px] h-[500px] rounded-3xl bg-cover top-7 left-10 m-auto duration-500 absolute' />
+                                    <div className="absolute right-32 top-20 font-medium text-4xl whitespace-pre-line z-50 text-blue_177f9f text-left">
+                                        {productSingleSlide[Index === 0 ? productSingleSlide.length - 1 : Index - 1].text}
+                                    </div>
+                                </div>
+                            </SwiperSlide>
+                            <SwiperSlide>
+                                <section className='bg-gradient-to-r from-blue_c0foff to-blue_6bccde w-[250px] h-[300px] rounded-3xl relative ml-[8%] grid grid-cols-1 md:grid-cols-2 md:w-[1243px] md:h-[625px] p-4 md:p-8'>
+                                    <img src={productSingleSlide[Index].image} alt='' className='w-[100px] h-[100px] md:w-[500px] md:h-[500px] rounded-3xl bg-cover top-7 left-10 m-auto duration-500 absolute md:static' />
+                                    <div className="font-medium text-2xl md:text-4xl whitespace-pre-line z-50 text-blue_177f9fr md:relative md:m-auto mt-4 md:mt-0">
+                                        {productSingleSlide[Index].text}
+                                    </div>
+                                </section>
+                            </SwiperSlide>
+                            <SwiperSlide>
+                                <div className='bg-gradient-to-r from-blue_c0foff to-blue_6bccde w-full h-auto rounded-3xl relative mx-4 sm:mx-8 md:mx-16 sm:w-[1243px] lg:h-[625px] lg:ml-[8%]'>
+                                    <img src={productSingleSlide[Index].image} alt='' className='w-full h-auto rounded-3xl bg-cover top-7 left-10 mx-auto duration-500 absolute lg:w-[500px] lg:h-[500px]' />
+                                    <div className="absolute right-4 top-20 font-medium text-xl sm:text-2xl md:text-3xl lg:text-4xl whitespace-pre-line z-50 text-blue_177f9f text-left lg:right-32">
+                                        {productSingleSlide[Index].text}
+                                    </div>
+                                </div>
+                            </SwiperSlide>
+                            <div className='slider-controller'>
+                                <div className="button-prev hidden group-hover:block hover:bg-gray-600 absolute top-[45%] -translate-x-[30%] translate-y-[50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer z-50">
+                                    <BsChevronCompactLeft size={30} />
+                                </div>
+                                <div className="button-next hidden group-hover:block hover:bg-gray-600 absolute top-[45%] translate-x-[30%] translate-y-[50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer z-50">
+                                    <BsChevronCompactRight size={30} />
                                 </div>
                             </div>
-                        </SwiperSlide>
-                        <SwiperSlide>
-                            <div className='bg-gradient-to-r from-blue_c0foff to-blue_6bccde w-[1243px] h-[625px] rounded-3xl relative ml-[8%]'>
-                                <img src={productSingleSlide[Index].image} alt='' className='w-[500px] h-[500px] rounded-3xl bg-cover top-7 left-10 m-auto duration-500 absolute' />
-                                <div className="absolute right-32 top-20 font-medium text-4xl whitespace-pre-line z-50 text-blue_177f9f text-left">
-                                    {productSingleSlide[Index].text}
-                                </div>
-                            </div>
-                        </SwiperSlide>
-                        <SwiperSlide>
-                            <div className='bg-gradient-to-r from-blue_c0foff to-blue_6bccde  w-[1243px] h-[625px] rounded-3xl relative ml-[8%]'>
-                                <img src={productSingleSlide[Index === productSingleSlide.length - 1 ? 0 : Index + 1].image} alt='' className='w-[500px] h-[500px] rounded-3xl bg-cover top-7 left-10 m-auto duration-500 absolute' />
-                                <div className="absolute right-32 top-20 font-medium text-4xl whitespace-pre-line z-50 text-blue_177f9f text-left">
-                                    {productSingleSlide[Index === productSingleSlide.length - 1 ? 0 : Index + 1].text}
-                                </div>
-                            </div>
-                        </SwiperSlide>
-                        <div className='slider-controller'>
-                            <div className="button-prev hidden group-hover:block hover:bg-gray-600 absolute top-[45%] -translate-x-[30%] translate-y-[50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer z-50">
-                                <BsChevronCompactLeft size={30} />
-                            </div>
-                            <div className="button-next hidden group-hover:block hover:bg-gray-600 absolute top-[45%] translate-x-[30%] translate-y-[50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer z-50">
-                                <BsChevronCompactRight size={30} />
-                            </div>
-                        </div>
-                    </Swiper> : <></>
+                        </Swiper> : <></>
                     }
                 </div>
                 <div className='mt-10 bg-gradient-to-r from-blue_00202a to-blue_6bccde w-full'>

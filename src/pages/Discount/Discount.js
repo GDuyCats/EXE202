@@ -4,13 +4,14 @@ import DiscountNavBar from './DiscountNavBar';
 
 
 function Discount() {
-  const [oageIndex, setPageIndex] = useState([])
+  const [pageIndex, setPageIndex] = useState(1)
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const [totalPages, setTotalPages] = useState();
+  const pageSize = 5;
   useEffect(() => {
-    axios.get('https://localhost:5001/api/Products/ViewProductByDiscount?pageIndex=2&pageSize=6')
+    axios.get(`https://ohecaa.azurewebsites.net/api/Products/ViewProductByDiscount?${pageIndex}&pageSize=${pageSize}`)
       .then(response => {
         const { data } = response.data; // Extract the data property from response.data
         if (Array.isArray(data)) {
@@ -27,7 +28,14 @@ function Discount() {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className='h-screen w-screen bg-blue_a2dde8 flex items-center justify-center'>
+        <p className='text-9xl font-bold '>Loading</p>
+        <span className='animate-bounce text-9xl font-bold'>.</span>
+        <span className='text-9xl font-bold animate-bounce [animation-delay:-0.15s]'>.</span>
+        <span className='[animation-delay:-0.3s] animate-bounce text-9xl font-bold'>.</span>
+      </div>
+      )
   }
 
   if (error) {
@@ -40,6 +48,31 @@ function Discount() {
 
   const formatNumber = (value) => {
     return value.toLocaleString('de-DE');
+  };
+
+  const renderPageNumbers = () => {
+    const pages = [];
+    const maxPages = 5;
+    let startPage = Math.max(pageIndex - Math.floor(maxPages / 2), 1);
+    let endPage = startPage + maxPages - 1;
+
+    if (endPage > totalPages) {
+      endPage = totalPages;
+      startPage = Math.max(endPage - maxPages + 1, 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(
+        <span
+          key={i}
+          onClick={() => setPageIndex(i)}
+          className={`self-center mx-4 text-2xl cursor-pointer px-1 font-semibold ${pageIndex === i ? ' underline text-black' : 'text-gray-600 hover:text-blue_073d4d'}`}
+        >
+          {i}
+        </span>
+      );
+    }
+    return pages;
   };
 
   return (
