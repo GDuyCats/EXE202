@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 function Discount() {
   const [pageIndex, setPageIndex] = useState(1);
   const [products, setProducts] = useState([]);
@@ -45,7 +46,6 @@ function Discount() {
   const formatNumber = (value) => {
     return value.toLocaleString('de-DE');
   };
-
   return (
     <div className='bg-blue_a2dde8 flex'>
       <div className='mr-5 ml-auto'>
@@ -56,7 +56,9 @@ function Discount() {
                 <p className='pt-5'>{convertToPercentage(product?.discountPercent)} OFF</p>
               </div>
               <img src={product?.imageLink} alt={product?.name} className='w-[200px] h-[250px] rounded-3xl mx-auto my-10' />
-              <p className='bg-blue_baf4ff rounded-3xl font-bold text-center text-xl text-blue_073d4d w-[300px] h-[70px] mx-auto justify-center'>{product?.name}</p>
+              <Link to={`/productdetail/${product.id}`}>
+                <p className='bg-blue_baf4ff rounded-3xl font-bold text-center text-xl text-blue_073d4d w-[300px] h-[70px] mx-auto justify-center'>{product?.name}</p>
+              </Link>
               <p className='font-bold text-center text-3xl line-through text-blue_177f9f mt-5'>{formatNumber(product?.unitPrice)} VND</p>
               <p className='font-bold text-center text-4xl mt-2 text-red-600'>{formatNumber(product?.priceSold)} VND</p>
             </li>

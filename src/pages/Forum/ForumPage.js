@@ -45,7 +45,6 @@ function ForumPage() {
       setRefresh(false);
     }
   }, [refresh, token, accessToken]);
-
   return (
     <>
       {token ? (
