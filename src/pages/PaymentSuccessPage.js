@@ -1,12 +1,29 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 
 function PaymentSuccess() {
     const navigate = useNavigate();
+    const location = useLocation();
+    const orderId = new URLSearchParams(location.search).get('orderId');
 
     const handleBack = () => {
-        // const selectedItems = cartStore.items.filter(item => cartStore.selectedItems.includes(item.id));
         navigate('/');
+    }
+    const { token } = useContext(AuthContext);
+    console.log(token)
+    useEffect(() => {
+        if (!token) {
+            navigate('/login');
+        }
+    }, [token, navigate]);
+
+    const handleOrderTracking = () => {
+        if (orderId) {
+            navigate(`/ordertracking/${orderId}`); // pass orderID to OrderTracking
+        } else {
+            console.error("Order ID is missing");
+        }
     }
     return (
         <>
@@ -37,7 +54,7 @@ function PaymentSuccess() {
                             </button>
                         </div>
                         <div className="justify-center items-center flex">
-                            <button className="bg-blue_177f9f hover:bg-sky-700 text-white px-4 m-3" style={{ width: 280, height: 62 }}>
+                            <button onClick={handleOrderTracking} className="bg-blue_177f9f hover:bg-sky-700 text-white px-4 m-3" style={{ width: 280, height: 62 }}>
                                 XEM TÌNH TRẠNG ĐƠN HÀNG
                             </button>
                         </div>

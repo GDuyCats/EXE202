@@ -1,14 +1,49 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useGetProductById } from '../hooks/useGetProductById'
 import { useItemStore } from '../utils/cart'
 import { FaStar } from 'react-icons/fa'
+import { AuthContext } from '../context/AuthContext';
+import { useNavigate, useParams } from 'react-router-dom';
 
-function Feedback({ item }) {
-    const { data } = useGetProductById(1)
-    const cartStore = useItemStore()
-
+function Feedback() {
+    const navigate = useNavigate();
+    const { productId } = useParams();
     const [rating, setRating] = useState(null);
+    const [content, setContent] = useState('');
+    const [userId, setUserId] = useState(null);
     const [hover, setHover] = useState(null);
+    const { data } = useGetProductById(productId);
+    const { token } = useContext(AuthContext);
+    useEffect(() => {
+        // Lấy thông tin người dùng từ AuthContext
+        setUserId(token?.user?.id);
+      }, []);
+
+      const handleFeedback = async () => {
+        try {
+          const response = await fetch('https://ohecaa.azurewebsites.net/api/Feedbacks/CreateFeedBack', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              userId,
+              content,
+              rate: rating,
+              productId,
+            }),
+          });
+    
+          if (response.ok) {
+            // alert('Đánh giá thành công!');
+            navigate('/feedbacksuccess')
+          } else {
+            alert('Đánh giá thất bại!');
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      };
 
     return (
         <>
@@ -39,11 +74,11 @@ function Feedback({ item }) {
                     <div className="px-10 py-5 text-center text-blue_cart">
                         <h1 className="text-5xl">ĐÁNH GIÁ</h1>
                     </div>
-                    <div className="bg-white container mx-10 my-7 p-10 border-2 border-black flex">
+                    <div className="bg-white container mx-10 my-7 p-10 border-2 border-black flex w-auto">
                         <img
                             src={data?.images[0]?.imageLink}
                             alt="Product Image"
-                            className="w-fit my-auto h-52 object-fill justify-center border-2 border-blue_cart"
+                            className="w-fit my-auto h-72 object-fill justify-center"
                         />
                         <div className="w-full ml-4 justify-end">
                             <div className="bg-blue_bg_d0f8ff px-6 py-1 flex justify-center w-full">
@@ -52,14 +87,8 @@ function Feedback({ item }) {
                             <div className="w-full md:w-1/2 xl:w-2/3 p-4 justify-end">
                                 <div className="w-full items-center p-2 rounded-2xl border-2 border-blue_cart ml-6 mt-3">
                                     {data?.productMaterials?.map((materialItem) =>
-                                        <p key={materialItem?.material?.id} className="text-lg mb-4">{materialItem?.material?.name}: {materialItem?.detail}</p>
+                                        <p key={materialItem?.material?.id} className="text-base mb-4">{materialItem?.material?.name}: {materialItem?.detail}</p>
                                     )}
-                                </div>
-                            </div>
-                            <div className="flex flex-row mt-3">
-                                <p className="text-lg mb-4">Số lượng: </p>
-                                <div className="pl-7 flex">
-                                    <span className="bg-blue_c0foff font-normal px-8 justify-center items-center flex" style={{ width: 30, height: 30 }}>{item?.count}</span>
                                 </div>
                             </div>
                         </div>
@@ -97,14 +126,16 @@ function Feedback({ item }) {
                         <h1 className="text-3xl">Nhận xét</h1>
                     </div>
                     <div className="my-3 mx-10">
-                        <textarea className="border border-gray-300 p-2 w-full h-32 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none text-blue_177f9f" />
+                        <textarea className="border border-gray-300 p-2 w-full h-32 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none text-blue_177f9f" 
+                         value={content}
+                         onChange={(e) => setContent(e.target.value)}/>
                     </div>
                     <div className="p-3 flex items-center justify-center">
                         <div className="w-fit flex justify-center items-center" style={{
                             height: 85,
                             background: 'linear-gradient(to right, #24b7cf, #18335c)'
                         }}>
-                            <button className="text-4xl text-white px-40 -inset-y-px">
+                            <button className="text-4xl text-white px-40 -inset-y-px" onClick={handleFeedback}>
                                 GỬI ĐÁNH GIÁ
                             </button>
                         </div>

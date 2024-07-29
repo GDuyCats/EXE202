@@ -34,11 +34,14 @@ function Header() {
             navigate('/admin');
         }
     }, [token, navigate]);
-    
+
     const handleNaviCart = () => {
         navigate('/cart');
     }
-            
+    const handleNaviOrders = () => {
+        navigate('/orders');
+    }
+
 
     return (
         <nav className="p-4 grid grid-cols-4 items-center z-50 bg-white sticky top-0 left-0 right-0 justify-between border-b-2 border-blue_177f9f">
@@ -52,7 +55,7 @@ function Header() {
                             <img src={token.user.avatar} alt='avatar' className='w-[60px] h-[60px] rounded-full object-cover' />
                         ) : (
                             <div className='w-[60px] h-[60px] rounded-full'>
-                                <img src={DefaultProfilePicture}/>
+                                <img src={DefaultProfilePicture} />
                             </div>
                         )}
                     </div>
@@ -72,7 +75,11 @@ function Header() {
                             </div>
                             <div className='flex m-5'>
                                 <div className='bg-gray-700 rounded-full p-1'><FaShoppingCart size={30} className='text-white' /></div>
-                                <p className='cursor-pointer ml-5 text-xl text-white font-medium mt-1'><Link to='/orders'>Đơn Hàng</Link></p>
+                                <p onClick={handleNaviCart} className='cursor-pointer ml-5 text-xl text-white font-medium mt-1'>Giỏ Hàng</p>
+                            </div>
+                            <div className='flex m-5'>
+                                <div className='bg-gray-700 rounded-full p-1'><FaShoppingCart size={30} className='text-white' /></div>
+                                <p onClick={handleNaviOrders} className='cursor-pointer ml-5 text-xl text-white font-medium mt-1'>Đơn Mua</p>
                             </div>
                         </div>
                     )}

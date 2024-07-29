@@ -15,7 +15,9 @@ function Cart() {
 
     const handleCheckout = () => {
         const selectedItems = cartStore.items.filter(item => cartStore.selectedItems.includes(item.id));
-        navigate('/transaction', { state: { selectedItems: [...selectedItems] } });
+        const totalPrice = selectedItems.reduce((acc, item) => acc + item.priceSold * item.count, 0); ///
+        // navigate('/transaction', { state: { selectedItems: [...selectedItems] } });
+        navigate('/transaction', { state: { selectedItems, totalPrice } });
     }
 
     useEffect(() => {

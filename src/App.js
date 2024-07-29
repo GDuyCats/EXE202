@@ -28,6 +28,9 @@ import ThanksForRating from './pages/ThanksForRating';
 import AdminLayout from './MainLayout/AdminLayout'
 import Product from './pages/ProductManagement/Product';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
+import OrderTracking from './pages/OrderTracking';
+import Orders from './pages/Orders';
+import OrderDelivered from './pages/OrderDeliveried';
 import "react-image-gallery/styles/css/image-gallery.css";
 function App() {
   return (
@@ -51,8 +54,11 @@ function App() {
             <Route path="/forum" element={<ForumPage />}/>
             <Route path='/discount' element={<Discount />}/>
             <Route path='/profile' element={<UserProfile/>}/>
-            <Route path='/feedback' element={<Feedback/>}/>
+            <Route path='/feedback/:productId' element={<Feedback/>}/>
             <Route path='/feedbacksuccess' element={<ThanksForRating/>}/>
+            <Route path='/ordertracking/:orderId' element={<OrderTracking/>}/>
+            <Route path='/orderdelivered/:orderId' element={<OrderDelivered/>}/>
+            <Route path='/orders' element={<Orders />}/>
 
           </Route>
           
