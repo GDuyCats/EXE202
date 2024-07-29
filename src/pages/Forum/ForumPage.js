@@ -25,7 +25,7 @@ function ForumPage() {
 
   useEffect(() => {
     if (token) {
-      axios.get('https://localhost:5001/api/Posts/GetPostList', {
+      axios.get('https://ohecaa.azurewebsites.net/api/Posts/GetPostList', {
         headers: {
           'Authorization': `Bearer ${accessToken}`
         }

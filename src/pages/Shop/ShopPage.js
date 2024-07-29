@@ -1,23 +1,28 @@
 import React, { useState, useEffect } from 'react';
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-function Discount() {
+import DiscountNavBar from '../Discount/DiscountNavBar';
+
+function Shop() {
   const [pageIndex, setPageIndex] = useState(1);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [totalPages, setTotalPages] = useState(5);
+  const [totalPages, setTotalPages] = useState();
 
-  const pageSize = 2;
+  const pageSize = 5;
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
+
+        const totalProduct = await axios.get(`https://ohecaa.azurewebsites.net/api/Products/GetCountProduct`);
         const response = await axios.get(`https://ohecaa.azurewebsites.net/api/Products/ViewAllProduct?pageIndex=${pageIndex}&pageSize=${pageSize}`);
-        const { data, message } = response.data;
+        const { data } = response.data;
         if (Array.isArray(data)) {
           setProducts(data);
-          // setTotalPages(Math.ceil(parseInt(message.match(/\d+/)) / pageSize));
+          setTotalPages(Math.ceil(totalProduct.data / pageSize));
         } else {
           console.error('Expected an array but got:', data);
           setProducts([]);
@@ -32,7 +37,14 @@ function Discount() {
   }, [pageIndex]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+    <div className='h-screen w-screen bg-blue_a2dde8 flex items-center justify-center'>
+      <p className='text-9xl font-bold '>Loading</p>
+      <span className='animate-bounce text-9xl font-bold'>.</span>
+      <span className='text-9xl font-bold animate-bounce [animation-delay:-0.15s]'>.</span>
+      <span className='[animation-delay:-0.3s] animate-bounce text-9xl font-bold'>.</span>
+    </div>
+    )
   }
 
   if (error) {
@@ -46,8 +58,35 @@ function Discount() {
   const formatNumber = (value) => {
     return value.toLocaleString('de-DE');
   };
+
+  const renderPageNumbers = () => {
+    const pages = [];
+    const maxPages = 5;
+    let startPage = Math.max(pageIndex - Math.floor(maxPages / 2), 1);
+    let endPage = startPage + maxPages - 1;
+
+    if (endPage > totalPages) {
+      endPage = totalPages;
+      startPage = Math.max(endPage - maxPages + 1, 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(
+        <span
+          key={i}
+          onClick={() => setPageIndex(i)}
+          className={`self-center mx-4 text-2xl cursor-pointer px-1 font-semibold ${pageIndex === i ? ' underline text-black' : 'text-gray-600 hover:text-blue_073d4d'}`}
+        >
+          {i}
+        </span>
+      );
+    }
+    return pages;
+  };
+
   return (
     <div className='bg-blue_a2dde8 flex'>
+      <DiscountNavBar />
       <div className='mr-5 ml-auto'>
         <ul className='grid grid-cols-3 gap-10'>
           {products.map((product, index) => (
@@ -65,18 +104,16 @@ function Discount() {
           ))}
         </ul>
 
-        {/* Phân trang */}
-        <div className="flex justify-center mt-4">
+        {/* Pagination */}
+        <div className="flex justify-center my-4">
           <button
             onClick={() => setPageIndex(prev => Math.max(prev - 1, 1))}
             disabled={pageIndex === 1}
-            className="bg-blue-500 text-white p-2 rounded disabled:opacity-50"
+            className="text-black p-2 rounded-full disabled:opacity-50 bg-slate-200"
           >
-            Previous
+            <FaArrowLeft />
           </button>
-          <span className="self-center mx-2">{pageIndex <= (totalPages - 2) ? pageIndex : (totalPages - 2)}</span>
-          <span className="self-center mx-2">{(pageIndex + 1) <= (totalPages - 1) ? (pageIndex + 1) : (totalPages - 1)}</span>
-          <span className="self-center mx-2">{(pageIndex + 2) <= (totalPages) ? (pageIndex + 2) : (totalPages)}</span>
+          {renderPageNumbers()}
           <button
             onClick={() => {
               if (pageIndex < totalPages) {
@@ -84,15 +121,14 @@ function Discount() {
               }
             }}
             disabled={pageIndex >= totalPages}
-            className="bg-blue-500 text-white p-2 rounded disabled:opacity-50"
+            className="text-black p-2 rounded-full disabled:opacity-50 bg-slate-200"
           >
-            Next
+            <FaArrowRight />
           </button>
         </div>
-
       </div>
     </div>
   );
 }
 
-export default Discount;
+export default Shop;

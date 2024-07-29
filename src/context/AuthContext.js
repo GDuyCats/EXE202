@@ -1,11 +1,13 @@
 import React, { createContext, useState, useEffect } from 'react';
 export const AuthContext = createContext();
 
-const AuthProvider = ({ children }) => { 
+const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
+
   const saveToken = (userToken) => {
+    const tokenString = JSON.stringify(userToken);
     setToken(userToken);
-    localStorage.setItem('token', userToken);
+    localStorage.setItem('token', tokenString);
   };
 
   const removeToken = () => {
@@ -16,7 +18,12 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     const savedToken = localStorage.getItem('token');
     if (savedToken) {
-      setToken(savedToken);
+      try {
+        setToken(JSON.parse(savedToken));
+      } catch (e) {
+        console.error("Invalid token format:", e);
+        setToken(null);
+      }
     }
   }, []);
 
