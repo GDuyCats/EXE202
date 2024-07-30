@@ -3,7 +3,6 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import 'swiper/css/scrollbar'
-import productImage from '../assets/ensure-gold.jpg'
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
 import { useGetProductById } from '../hooks/useGetProductById'
 import { useItemStore } from '../utils/cart'
@@ -15,6 +14,7 @@ import Modal from 'react-modal';
 function ProductDetail() {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenCart, setIsOpenCart] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
   const navigate = useNavigate()
   const { token } = useContext(AuthContext);
   const { id } = useParams()
@@ -155,7 +155,7 @@ function ProductDetail() {
         }}
       >
         <div className="bg-blue_cart hover:bg-sky-700 text-white text-center h-14 w-3/4 rounded-full py-2 mt-4">
-            <h1 className="text-3xl font-normal">THÊM VÀO GIỎ HÀNG THÀNH CÔNG</h1>
+          <h1 className="text-3xl font-normal">THÊM VÀO GIỎ HÀNG THÀNH CÔNG</h1>
         </div>
       </Modal>
       <div className="w-full " style={{
@@ -190,7 +190,7 @@ function ProductDetail() {
                 <div className="flex flex-row">
                   <p className="text-lg mb-4">Số lượng: </p>
                   <div className=" pl-7 flex">
-                    <button onClick={() => { setCount(count - 1) }} className="bg-blue_btn_qlt text-white text-2xl font-bold justify-center items-center flex" style={{ width: 30, height: 30 }}>-</button>
+                    <button onClick={() => { setCount(Math.max(count - 1, 1)) }} className="bg-blue_btn_qlt text-white text-2xl font-bold justify-center items-center flex" style={{ width: 30, height: 30 }}>-</button>
                     <spam className="bg-blue_c0foff font-bold px-8 justify-center items-center flex" style={{ width: 30, height: 30 }}>{count}</spam>
                     <button onClick={() => { setCount(count + 1) }} className="bg-blue_btn_qlt text-white text-2xl font-bold justify-center items-center flex" style={{ width: 30, height: 30 }}>+</button>
                   </div>
@@ -225,23 +225,23 @@ function ProductDetail() {
                   <h1 className="text-white text-lg font-semibold">REVIEW SẢN PHẨM</h1>
                 </div>
               </div>
-              <div className="flex">
+              <div className="flex flex-wrap justify-between">
                 {data?.feeback?.length > 0 ? (
-                  data?.feeback?.map((feedback) => (
-                    <div className="w-5/12 border-black border-2 m-4 flex" style={{ height: 200 }}>
-                      <div className="h-2/3 w-1/4 m-3 justify-center flex">
+                  data?.feeback?.slice(0, 2).map((feedback, index) => (
+                    <div key={index} className="w-5/12 border-black border-2 mx-8 my-4 flex" style={{ height: 200 }}>
+                      <div className="h-2/3 w-1/4 m-3 flex justify-center">
                         <img
                           src={feedback?.avatar}
-                          alt="Product Image"
-                          className=" object-contain justify-center"
+                          alt="User Avatar"
+                          className="object-contain"
                         />
                       </div>
-                      <div className="w-4/6 p-4 justify-end">
+                      <div className="w-4/6 p-4">
                         <h2 className="text-xl mb-4 pt-3 text-blue_username font-sans font-semibold">{feedback?.userName}</h2>
                         <div className="flex">
-                          {Array(feedback.rate).fill(0).map((_, index) => (
-                            <svg key={index} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-                              <path className="text-blue_cart" fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clip-rule="evenodd" />
+                          {Array(feedback.rate).fill(0).map((_, i) => (
+                            <svg key={i} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-blue_cart">
+                              <path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clipRule="evenodd" />
                             </svg>
                           ))}
                         </div>
@@ -250,11 +250,65 @@ function ProductDetail() {
                     </div>
                   ))
                 ) : (
-                  <div className="w-full justify-center items-center m-4 flex" style={{ height: 200 }}>
+                  <div className="w-full flex justify-center items-center m-4" style={{ height: 200 }}>
                     <p className="text-2xl text-blue_073d4d font-semibold">Sản phẩm này chưa có đánh giá nào</p>
                   </div>
                 )}
               </div>
+
+              {data?.feeback?.length > 0 && (
+                <button
+                  className="bg-blue_6bccde text-white flex items-center justify-center px-2 py-2 text-2xl font-normal mt-5"
+                  onClick={() => setShowPopup(true)}
+                >
+                  XEM THÊM
+                </button>
+              )}
+
+              {showPopup && (
+                <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
+                  <div className="bg-white p-5 rounded-lg shadow-lg w-2/4 overflow-y-auto" style={{ maxHeight: '80vh' }}>
+                    <div className="justify-between">
+                      {data?.feeback?.length > 0 ? (
+                        data?.feeback?.map((feedback, index) => (
+                          <div key={index} className="w-auto border-black border-2 m-4 flex" style={{ height: 200 }}>
+                            <div className="h-2/3 w-1/4 m-3 flex justify-center">
+                              <img
+                                src={feedback?.avatar}
+                                alt="User Avatar"
+                                className="object-contain"
+                              />
+                            </div>
+                            <div className="w-4/6 p-4">
+                              <h2 className="text-xl mb-4 pt-3 text-blue_username font-sans font-semibold">{feedback?.userName}</h2>
+                              <div className="flex">
+                                {Array(feedback.rate).fill(0).map((_, i) => (
+                                  <svg key={i} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-blue_cart">
+                                    <path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clipRule="evenodd" />
+                                  </svg>
+                                ))}
+                              </div>
+                              <p>{feedback?.content}</p>
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="w-full flex justify-center items-center m-4" style={{ height: 200 }}>
+                          <p className="text-2xl text-blue_073d4d font-semibold">Sản phẩm này chưa có đánh giá nào</p>
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex w-full items-center justify-center mt-4">
+                      <button
+                        className="bg-red-500 text-white px-4 py-2 rounded"
+                        onClick={() => setShowPopup(false)}
+                      >
+                        Đóng
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

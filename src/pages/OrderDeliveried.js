@@ -56,6 +56,14 @@ function OrderDelivered() {
     const handleFeedback = (productId) => {
         navigate(`/feedback/${productId}`);
     };
+    if (loading) return (
+        <div className='h-screen w-screen bg-blue_a2dde8 flex items-center justify-center'>
+            <p className='text-9xl font-bold '>Loading</p>
+            <span className='animate-bounce text-9xl font-bold'>.</span>
+            <span className='text-9xl font-bold animate-bounce [animation-delay:-0.15s]'>.</span>
+            <span className='[animation-delay:-0.3s] animate-bounce text-9xl font-bold'>.</span>
+        </div>
+    );
 
     return (
         <>
@@ -93,7 +101,7 @@ function OrderDelivered() {
                         </div>
                         {orderDetails.map((item) => (
                             <div key={item.productId}>
-                                <div className="bg-white container mx-10 my-7 p-10 border-2 border-black flex w-auto">
+                                <div className="bg-white container mx-10 my-7 p-10 border-2 border-black flex w-auto relative">
                                     <img
                                         src={item?.images[0]?.imageLink}
                                         alt="Product Image"
@@ -109,12 +117,12 @@ function OrderDelivered() {
                                                 <span className="bg-blue_c0foff font-normal px-8 justify-center items-center flex" style={{ width: 30, height: 30 }}>{item?.quantity}</span>
                                             </div>
                                         </div>
-                                        <div className="justify-end flex items-center">
+                                        <div className="absolute bottom-16 right-4 flex items-center">
                                             <p className="text-lg">Thành tiền:</p>
                                             <h1 className="text-4xl font-semibold text-sky-800 ml-10 justify-center pl-7">{item.price}</h1>
                                         </div>
                                         <button
-                                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                            className="absolute bottom-4 right-4 bg-blue_177f9f hover:bg-blue_24b3cc text-white font-bold py-2 px-4 rounded"
                                             onClick={() => handleFeedback(item.productId)}
                                         >
                                             Đánh Giá

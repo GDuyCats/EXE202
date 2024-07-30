@@ -47,7 +47,7 @@ function CartItem({ item, isReadOnly = false }) {
                         <div className="pl-7 flex">
                             {!isReadOnly && (
                                 <>
-                                    <button onClick={() => { cartStore.addItem({ id: item.id, count: -1, priceSold: item.priceSold }) }} className="bg-blue_btn_qlt text-white text-2xl font-bold justify-center items-center flex" style={{ width: 30, height: 30 }}>-</button>
+                                    <button onClick={() => { cartStore.addItem({ id: item.id, count: item.count > 1 ? -1 : 0, priceSold: item.priceSold }) }} className="bg-blue_btn_qlt text-white text-2xl font-bold justify-center items-center flex" style={{ width: 30, height: 30 }}>-</button>
                                     <span className="bg-blue_c0foff font-normal px-8 justify-center items-center flex" style={{ width: 30, height: 30 }}>{item.count}</span>
                                     <button onClick={() => { cartStore.addItem({ id: item.id, count: 1, priceSold: item.priceSold  }) }} className="bg-blue_btn_qlt text-white text-2xl font-bold justify-center items-center flex" style={{ width: 30, height: 30 }}>+</button>
                                 </>
