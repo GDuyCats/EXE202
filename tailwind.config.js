@@ -37,6 +37,7 @@ module.exports = {
         'blue_0e4759': 'rgb(14, 71, 89)',
         'red_ff0000': 'rgb(255, 0, 0)',
         'blue_027a9f': 'rgb(2, 122, 159)',
+        'blue_24b3cc': 'rgb(36, 179, 204)',
       },
       scale: {
         '110': '1.1',

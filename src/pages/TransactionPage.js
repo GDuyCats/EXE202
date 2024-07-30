@@ -33,8 +33,8 @@ function Transaction() {
     };
     const location = useLocation();
     const { state } = location;
-    // const { selectedItems = [] } = state || {};
-    const { selectedItems, totalPrice } = state;
+    const { selectedItems = [] } = state || {};
+    const { totalPrice } = state || {};
     const [isActive, setIsActive] = useState(0);
     const [isActiveVoucher, setIsActiveVoucher] = useState(0);
     const handleShippingClick = (id) => {
@@ -57,7 +57,7 @@ function Transaction() {
         if (!isActive) {
             alert("Xin hãy chọn đơn vị vận chuyển.");
             return;
-        } 
+        }
         if (!selectedMethod) {
             alert("Xin hãy chọn phương thức thanh toán.");
             return;
@@ -74,8 +74,8 @@ function Transaction() {
             totalPrice: isActiveVoucher
                 ? totalPrice + (freightCost - (freightCost * sortedvoucherData.find(v => v.id === isActiveVoucher).discount))
                 : totalPrice + freightCost,
-            ...(cartStore.items.length > 0 && {
-                carts: cartStore.items.map(item => ({
+            ...(selectedItems.length > 0 && {
+                carts: selectedItems.map(item => ({
                     productId: item.id,
                     quantity: item.count,
                 })),
@@ -84,6 +84,7 @@ function Transaction() {
 
         createCheckOut(checkOutData, {
             onSuccess(res) {
+                updateProductQuantity(selectedItems);
                 if (selectedMethod == 1) {
                     createPayOS({
                         userID: cartStore.userID,
@@ -106,11 +107,56 @@ function Transaction() {
             }
         });
     };
+    const updateProductQuantity = async (selectedItems) => {
+        try {
+            for (const item of selectedItems) {
+                const response = await axios.get(`https://ohecaa.azurewebsites.net/api/Products/ViewProductByID/${item.id}`);
+                if (response.data.success) {
+                    const product = response.data.data;
+                    if (product.quantity < item.count) {
+                        console.error(`Không đủ số lượng sản phẩm ${product.name} để trừ.`);
+                        return;
+                    }
+                    const newQuantity = product.quantity - item.count;
+                    if (product.images && product.images.length > 0 && product.productMaterials && product.productMaterials.length > 0) {
+                        await axios.put(`https://ohecaa.azurewebsites.net/api/Products/UpdateProduct`, {
+                            id: item.id,
+                            Quantity: newQuantity,
+                            Images: product?.images?.map(image => ({
+                                file: image?.imageLink,
+                                thumbnail: image?.thumbnail
+                            })),
+                            quantitySold: item.count,
+                            ProductMaterials: product?.productMaterials?.map(material => ({
+                                id: material?.id,
+                                detail: material?.detail,
+                                materialId: material?.materialId,
+                                material: {
+                                    childCategoryId: material?.material?.childCategoryId,
+                                    childCategory: {
+                                        parentCategoryId: material?.material?.childCategory?.parentCategoryId
+                                    }
+                                }
+                            })),
+                        });
+                    } else {
+                        console.error('Error: Empty images or product materials array');
+                    }
+                } else {
+                    console.error(response.data.message);
+                }
+            }
+        } catch (error) {
+            console.error('Error updating product quantity:', error);
+        }
+    };
+
 
     const { data: paymentData } = useGetAllPayments();
 
     const { mutate: createPayOS, isLoading: iscreatePayOSLoading } = useCreatePayOS();
     const { mutate: createCheckOut, isLoading: iscreateCheckOutLoading } = useCreateCheckOut();
+
     const [selectedAddressId, setSelectedAddressId] = useState(null);
     const [addressData, setAddressData] = useState([]);
     const [selectedAddress, setSelectedAddress] = useState(null);
@@ -374,7 +420,7 @@ function Transaction() {
                                         <div className="bg-white w-full ">
                                             <div className="flex pt-2">
                                                 <h1 className="text-blue_cart font-normal text-3xl ml-5">{item?.name}</h1>
-                                                <h3 className="text-blue_0e4759 text-3xl mx-10">{freightCost.toLocaleString().replace(',', '.')} VND</h3>
+                                                <h3 className="text-blue_0e4759 text-3xl mx-10">{freightCost?.toLocaleString().replace(',', '.')} VND</h3>
                                             </div>
                                             <div className="flex ml-5 py-5">
                                                 <h3 className="text-blue_0e4759 text-xl">Nhận hàng vào</h3>
@@ -455,7 +501,7 @@ function Transaction() {
                                         </h3>
                                         <h3 className="font-normal text-2xl text-black">
                                             {/* {cartStore.total} VND */}
-                                            {totalPrice.toLocaleString().replace(',', '.')} VND
+                                            {totalPrice?.toLocaleString().replace(',', '.')} VND
                                         </h3>
                                     </div>
                                     <div className="flex w-full justify-between my-8">
@@ -464,11 +510,11 @@ function Transaction() {
                                         </h3>
                                         {isActiveVoucher ? (
                                             <h3 className="font-normal text-2xl text-black">
-                                                {(freightCost - (freightCost * sortedvoucherData.find(v => v.id === isActiveVoucher).discount)).toLocaleString().replace(',', '.')} VND
+                                                {(freightCost - (freightCost * sortedvoucherData.find(v => v.id === isActiveVoucher).discount))?.toLocaleString().replace(',', '.')} VND
                                             </h3>
                                         ) : (
                                             <h3 className="font-normal text-2xl text-black">
-                                                {freightCost.toLocaleString().replace(',', '.')} VND
+                                                {freightCost?.toLocaleString().replace(',', '.')} VND
                                             </h3>
                                         )}
                                     </div>
@@ -476,18 +522,11 @@ function Transaction() {
                                         <h3 className="font-normal text-2xl text-black">
                                             Tổng thanh toán:
                                         </h3>
-                                        {/* <h3 className="font-normal text-4xl text-blue_cart">
-                                            {isActiveVoucher ? (
-                                                (cartStore.total + (freightCost - (freightCost * sortedvoucherData.find(v => v.id === isActiveVoucher).discount))).toLocaleString().replace(',', '.')
-                                            ) : (
-                                                (cartStore.total + freightCost).toLocaleString().replace(',', '.')
-                                            )} VND
-                                        </h3> */}
                                         <h3 className="font-normal text-4xl text-blue_cart">
                                             {isActiveVoucher ? (
-                                                (totalPrice + (freightCost - (freightCost * sortedvoucherData.find(v => v.id === isActiveVoucher).discount))).toLocaleString().replace(',', '.')
+                                                (totalPrice + (freightCost - (freightCost * sortedvoucherData.find(v => v.id === isActiveVoucher).discount)))?.toLocaleString().replace(',', '.')
                                             ) : (
-                                                (totalPrice + freightCost).toLocaleString().replace(',', '.')
+                                                (totalPrice + freightCost)?.toLocaleString().replace(',', '.')
                                             )} VND
                                         </h3>
                                     </div>

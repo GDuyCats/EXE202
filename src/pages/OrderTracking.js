@@ -16,10 +16,12 @@ function OrderTracking() {
         'Đang giao hàng',
     ];
 
-    const currentSteps = steps.slice(0, orderStatus + 1);
+    // const currentSteps = steps.slice(0, orderStatus + 1);
+    const currentSteps = orderStatus === 2
+        ? ['Đơn hàng đã được hủy']
+        : steps.slice(0, orderStatus + 1);
 
     useEffect(() => {
-
         const fetchOrderDetails = async () => {
             try {
                 const response = await fetch(`https://ohecaa.azurewebsites.net/api/OrderDetails/ViewAllOrderDetailByOrderID/${orderId}`);
@@ -72,7 +74,14 @@ function OrderTracking() {
     };
 
 
-    if (loading) return <p>Loading...</p>;
+    if (loading) return (
+        <div className='h-screen w-screen bg-blue_a2dde8 flex items-center justify-center'>
+            <p className='text-9xl font-bold '>Loading</p>
+            <span className='animate-bounce text-9xl font-bold'>.</span>
+            <span className='text-9xl font-bold animate-bounce [animation-delay:-0.15s]'>.</span>
+            <span className='[animation-delay:-0.3s] animate-bounce text-9xl font-bold'>.</span>
+        </div>
+    );
     if (error) return <p>Error: {error}</p>;
 
     return (
@@ -94,7 +103,7 @@ function OrderTracking() {
                         </div>
                         {orderDetails.map((item) => (
                             <div key={item.productId}>
-                                <div className="bg-white container mx-10 my-7 p-10 border-2 border-black flex w-auto">
+                                <div className="bg-white container mx-10 my-7 p-10 border-2 border-black flex w-auto relative">
                                     <img
                                         src={item?.images[0]?.imageLink}
                                         alt="Product Image"
@@ -110,7 +119,7 @@ function OrderTracking() {
                                                 <span className="bg-blue_c0foff font-normal px-8 justify-center items-center flex" style={{ width: 30, height: 30 }}>{item?.quantity}</span>
                                             </div>
                                         </div>
-                                        <div className="justify-end flex items-center">
+                                        <div className="absolute bottom-4 right-4 flex items-center">
                                             <p className="text-lg">Thành tiền:</p>
                                             <h1 className="text-4xl font-semibold text-sky-800 ml-10 justify-center pl-7">{item.price}</h1>
                                         </div>
@@ -122,23 +131,23 @@ function OrderTracking() {
                 </div>
                 <div className="bg-blue_bg_pd justify-center flex items-center mx-8">
                     <div className="w-full">
-                        <div className="w-full bg-blue_177f9f" style={{
-                            height: 60
-                        }}>
+                        <div className="w-full bg-blue_177f9f" style={{ height: 60 }}>
                             <div className="pt-4 ml-2 flex items-center">
                                 <h4 className="text-white text-xl font-light">TÌNH TRẠNG ĐƠN HÀNG</h4>
                             </div>
                         </div>
-                        <div className="p-4 bg-blue-50 rounded-md mt-4">
+                        <div className="p-4 bg-white rounded-md mx-4 my-4">
                             {currentSteps.map((step, index) => (
                                 <div key={index} className="flex items-start mb-4 last:mb-0">
-                                    <div className="flex flex-col items-center mr-4">
-                                        <div className="w-4 h-4 bg-blue-500 rounded-full"></div>
-                                        {index < currentSteps.length - 1 && <div className="w-px h-20 bg-blue-500 border-dotted"></div>}
-                                    </div>
-                                    <div className="text-lg">
-                                        {step === 'Đơn hàng đã được hủy' && orderStatus === 2 ? (
-                                            <span style={{ color: 'red' }}>{step}</span>
+                                    {orderStatus !== 2 && (
+                                        <div className="flex flex-col items-center mr-4">
+                                            <div className="w-4 h-4 bg-blue-500 rounded-full"></div>
+                                            {index < currentSteps.length - 1 && <div className="w-px h-20 bg-blue-500 border-dotted"></div>}
+                                        </div>
+                                    )}
+                                    <div className="text-lg w-full items-center justify-center flex">
+                                        {step === 'Đơn hàng đã được hủy' ? (
+                                            <span style={{ color: 'red' }} className="text-2xl font-semibold">{step}</span>
                                         ) : (
                                             step
                                         )}

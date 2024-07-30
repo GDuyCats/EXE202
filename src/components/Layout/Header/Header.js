@@ -4,7 +4,7 @@ import SignInAndSignUpButton from './SignInAndSignUpButton';
 import { AuthContext } from '../../../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaShoppingCart } from 'react-icons/fa';
-import { MdFeedback } from 'react-icons/md';
+import { MdFeedback, MdPlaylistAddCheckCircle  } from 'react-icons/md';
 import { IoLogOut } from 'react-icons/io5';
 import { CgProfile } from "react-icons/cg";
 import NavBarItems from './NavBarItems';
@@ -70,15 +70,11 @@ function Header() {
                                 <p onClick={handleLogout} className='cursor-pointer ml-5 text-xl text-white font-medium mt-1'>Đăng xuất</p>
                             </div>
                             <div className='flex m-5'>
-                                <div className='bg-gray-700 rounded-full p-1'><MdFeedback size={30} className='text-white' /></div>
-                                <p className='cursor-pointer ml-5 text-xl text-white font-medium mt-1'>Phản hồi</p>
-                            </div>
-                            <div className='flex m-5'>
                                 <div className='bg-gray-700 rounded-full p-1'><FaShoppingCart size={30} className='text-white' /></div>
                                 <p onClick={handleNaviCart} className='cursor-pointer ml-5 text-xl text-white font-medium mt-1'>Giỏ Hàng</p>
                             </div>
                             <div className='flex m-5'>
-                                <div className='bg-gray-700 rounded-full p-1'><FaShoppingCart size={30} className='text-white' /></div>
+                                <div className='bg-gray-700 rounded-full p-1'><MdPlaylistAddCheckCircle size={30} className='text-white' /></div>
                                 <p onClick={handleNaviOrders} className='cursor-pointer ml-5 text-xl text-white font-medium mt-1'>Đơn Mua</p>
                             </div>
                         </div>
