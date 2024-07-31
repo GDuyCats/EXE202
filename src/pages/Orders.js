@@ -46,6 +46,15 @@ function Orders() {
     }
   };
 
+  const handleConfirmOrder = async (orderId) => {
+    try {
+      await axios.put(`https://ohecaa.azurewebsites.net/api/Orders/ConfirmOrder/${orderId}`);
+      setOrders(orders.map(order => order.id === orderId ? { ...order, isConfirm: 1 } : order));
+    } catch (error) {
+      console.error('Error confirming order:', error);
+    }
+  };
+
   const filterOrders = (status) => {
     return orders.filter(order => order.status === status);
   };
@@ -89,7 +98,7 @@ function Orders() {
                   <div key={order.id} className="border p-4 mx-3 my-4 cursor-pointer" onClick={() => handleOrderClick(order)}>
                     <div className="flex items-center">
                       <div className="flex-1">
-                        <h3 className="text-xl font-bold">Ngày đặt hàng: 29/07/2024</h3>
+                        <h3 className="text-xl font-bold">Ngày đặt hàng: {new Date(order?.creationDate).toLocaleDateString()}</h3>
                       </div>
                       <div className="flex-1 text-center">
                         <div className="flex">
@@ -98,7 +107,19 @@ function Orders() {
                         </div>
                       </div>
                       <div className="flex-1 text-right">
-                        <button className="bg-blue_24b3cc text-white px-4 py-2">CHI TIẾT ĐƠN HÀNG</button>
+                        {selectedTab === 2 && order.isConfirm === 0 ? (
+                          <button
+                            className="bg-white border-2 border-blue_24b3cc text-blue_24b3cc px-4 py-2 hover:bg-blue_24b3cc hover:border-white hover:text-white"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleConfirmOrder(order.id);
+                            }}
+                          >
+                            Đã nhận được hàng / Xác nhận
+                          </button>
+                        ) : (
+                          <button className="bg-blue_24b3cc text-white px-4 py-2">CHI TIẾT ĐƠN HÀNG</button>
+                        )}
                       </div>
                     </div>
                   </div>
