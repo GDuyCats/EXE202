@@ -20,6 +20,7 @@ const AuthProvider = ({ children }) => {
     if (savedToken) {
       try {
         setToken(JSON.parse(savedToken));
+        console.log(savedToken)
       } catch (e) {
         console.error("Invalid token format:", e);
         setToken(null);

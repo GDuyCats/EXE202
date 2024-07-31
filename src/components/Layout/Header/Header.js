@@ -33,7 +33,7 @@ function Header() {
         if (token && token.user && token.user.roleId === 2) {
             navigate('/admin');
         }
-    }, [token, navigate]);
+    }, [token,navigate]);
 
     const handleNaviCart = () => {
         navigate('/cart');

@@ -32,6 +32,7 @@ import OrderTracking from './pages/OrderTracking';
 import Orders from './pages/Orders';
 import OrderDelivered from './pages/OrderDeliveried';
 import "react-image-gallery/styles/css/image-gallery.css";
+import Moderator from './pages/Admin/Moderator';
 function App() {
   return (
     <AuthProvider>
@@ -59,15 +60,16 @@ function App() {
             <Route path='/ordertracking/:orderId' element={<OrderTracking/>}/>
             <Route path='/orderdelivered/:orderId' element={<OrderDelivered/>}/>
             <Route path='/orders' element={<Orders />}/>
-
           </Route>
           
           <Route path='/' element={<AdminLayout />}>
+            <Route path='/mod' element={<ProtectedRoute element={Moderator} />}/>
             <Route path='/admin' element={<ProtectedRoute element={DashBoard} />} />
             <Route path='/admin/ProductManagement' element={<ProtectedRoute element={Product} />} />
             <Route path='/admin/Shipcompany' element={<ProtectedRoute element={Shipcompany} />} />
           </Route>
-          <Route path="/login" element={<LoginPage />} />
+          
+          <Route path="/login" element={<LoginPage/>} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/policy" element={<PolicyPage />} />
           <Route path="/useragreement" element={<UserAgreementPage />} />

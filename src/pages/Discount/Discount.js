@@ -30,7 +30,7 @@ function Discount() {
   if (loading) {
     return (
       <div className='h-screen w-screen bg-blue_a2dde8 flex items-center justify-center'>
-        <p className='text-9xl font-bold '>Loading</p>
+        <p className='text-9xl font-bold '>Vui lòng chờ</p>
         <span className='animate-bounce text-9xl font-bold'>.</span>
         <span className='text-9xl font-bold animate-bounce [animation-delay:-0.15s]'>.</span>
         <span className='[animation-delay:-0.3s] animate-bounce text-9xl font-bold'>.</span>

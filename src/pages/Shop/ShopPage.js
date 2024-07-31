@@ -9,20 +9,25 @@ function Shop() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [totalPages, setTotalPages] = useState();
-
-  const pageSize = 5;
+  const [totalPages, setTotalPages] = useState(3);
 
   useEffect(() => {
     const fetchProducts = async () => {
-      try {
+      setLoading(true);
+      setError(null);
 
+      try {
+        let pageSize = 5;
+        if (pageIndex === 3) {
+          pageSize = 1;
+        }
         const totalProduct = await axios.get(`https://ohecaa.azurewebsites.net/api/Products/GetCountProduct`);
         const response = await axios.get(`https://ohecaa.azurewebsites.net/api/Products/ViewAllProduct?pageIndex=${pageIndex}&pageSize=${pageSize}`);
         const { data } = response.data;
+        console.log(`Fetched Products for page ${pageIndex}:`, data); // Log fetched products for the current page
+
         if (Array.isArray(data)) {
           setProducts(data);
-          setTotalPages(Math.ceil(totalProduct.data / pageSize));
         } else {
           console.error('Expected an array but got:', data);
           setProducts([]);
@@ -33,18 +38,19 @@ function Shop() {
         setLoading(false);
       }
     };
+
     fetchProducts();
   }, [pageIndex]);
 
   if (loading) {
     return (
-    <div className='h-screen w-screen bg-blue_a2dde8 flex items-center justify-center'>
-      <p className='text-9xl font-bold '>Loading</p>
-      <span className='animate-bounce text-9xl font-bold'>.</span>
-      <span className='text-9xl font-bold animate-bounce [animation-delay:-0.15s]'>.</span>
-      <span className='[animation-delay:-0.3s] animate-bounce text-9xl font-bold'>.</span>
-    </div>
-    )
+      <div className='h-screen w-screen bg-blue_a2dde8 flex items-center justify-center'>
+        <p className='text-9xl font-bold'>Loading</p>
+        <span className='animate-bounce text-9xl font-bold'>.</span>
+        <span className='text-9xl font-bold animate-bounce [animation-delay:-0.15s]'>.</span>
+        <span className='[animation-delay:-0.3s] animate-bounce text-9xl font-bold'>.</span>
+      </div>
+    );
   }
 
   if (error) {
@@ -103,7 +109,6 @@ function Shop() {
             </li>
           ))}
         </ul>
-
         {/* Pagination */}
         <div className="flex justify-center my-4">
           <button
