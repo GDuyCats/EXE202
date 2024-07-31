@@ -4,6 +4,7 @@ import { persist, createJSONStorage } from 'zustand/middleware'
 export const useItemStore = create(
   persist(
     (set, get) => ({
+      userID: null,
       items: [],
       selectedItems: [],
       total: 0,
@@ -25,7 +26,16 @@ export const useItemStore = create(
       },
       setSelectedItems: (selectedItems) => {
         set({ selectedItems });
-      }
+      },
+      addUserID: (userID) => {
+        set({ userID });
+      },
+      checkoutItems: () => {
+        const selectedItems = get().selectedItems;
+        const updatedItems = get().items.filter(item => !selectedItems.includes(item.id));
+        const newTotal = updatedItems.reduce((acc, item) => acc + item.priceSold * item.count, 0);
+        set({ items: updatedItems, selectedItems: [], total: newTotal });
+      },
     }),
     {
       name: 'oheca-storage', // name of the item in the storage (must be unique)
@@ -33,4 +43,3 @@ export const useItemStore = create(
     },
   ),
 )
-// _____________________________________________________________________________________________________________________________________________

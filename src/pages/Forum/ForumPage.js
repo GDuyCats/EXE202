@@ -64,7 +64,6 @@ function ForumPage() {
         console.log(error);
       });
   };
-
   const openCommentModal = (postId) => {
     setCommentModalPostId(postId);
   };
@@ -72,7 +71,9 @@ function ForumPage() {
   const closeCommentModal = () => {
     setCommentModalPostId(null);
   };
-
+      setRefresh(false);
+    }
+  }, [refresh, token, accessToken]);
   return (
     <>
       {token ? (

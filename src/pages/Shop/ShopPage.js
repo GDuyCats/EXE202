@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import DiscountNavBar from '../Discount/DiscountNavBar';
 
 function Shop() {
@@ -20,7 +21,7 @@ function Shop() {
         if (pageIndex === 3) {
           pageSize = 1;
         }
-
+        const totalProduct = await axios.get(`https://ohecaa.azurewebsites.net/api/Products/GetCountProduct`);
         const response = await axios.get(`https://ohecaa.azurewebsites.net/api/Products/ViewAllProduct?pageIndex=${pageIndex}&pageSize=${pageSize}`);
         const { data } = response.data;
         console.log(`Fetched Products for page ${pageIndex}:`, data); // Log fetched products for the current page
@@ -93,26 +94,21 @@ function Shop() {
     <div className='bg-blue_a2dde8 flex'>
       <DiscountNavBar />
       <div className='mr-5 ml-auto'>
-        {products.length === 0 ? (
-          <div className='h-screen w-screen bg-blue_a2dde8 flex items-center justify-center'>
-            <p className='text-9xl font-bold'>No Products Found</p>
-          </div>
-        ) : (
-          <ul className='grid grid-cols-3 gap-10'>
-            {products.map((product, index) => (
-              <li key={index} className='w-[400px] h-[550px] bg-blue_eefcff justify-center mb-10 mt-10 rounded-3xl relative'>
-                <div className='right-0 left-auto bg-red-600 text-center w-[80px] h-[100px] text-3xl text-white font-extrabold absolute'>
-                  <p className='pt-5'>{convertToPercentage(product?.discountPercent)} OFF</p>
-                </div>
-                <img src={product?.imageLink} alt={product?.name} className='w-[200px] h-[250px] rounded-3xl mx-auto my-10' />
+        <ul className='grid grid-cols-3 gap-10'>
+          {products.map((product, index) => (
+            <li key={index} className='w-[400px] h-[550px] bg-blue_eefcff justify-center mb-10 mt-10 rounded-3xl relative'>
+              <div className='right-0 left-auto bg-red-600 text-center w-[80px] h-[100px] text-3xl text-white font-extrabold absolute'>
+                <p className='pt-5'>{convertToPercentage(product?.discountPercent)} OFF</p>
+              </div>
+              <img src={product?.imageLink} alt={product?.name} className='w-[200px] h-[250px] rounded-3xl mx-auto my-10' />
+              <Link to={`/productdetail/${product.id}`}>
                 <p className='bg-blue_baf4ff rounded-3xl font-bold text-center text-xl text-blue_073d4d w-[300px] h-[70px] mx-auto justify-center'>{product?.name}</p>
-                <p className='font-bold text-center text-3xl line-through text-blue_177f9f mt-5'>{formatNumber(product?.unitPrice)} VND</p>
-                <p className='font-bold text-center text-4xl mt-2 text-red-600'>{formatNumber(product?.priceSold)} VND</p>
-              </li>
-            ))}
-          </ul>
-        )}
-
+              </Link>
+              <p className='font-bold text-center text-3xl line-through text-blue_177f9f mt-5'>{formatNumber(product?.unitPrice)} VND</p>
+              <p className='font-bold text-center text-4xl mt-2 text-red-600'>{formatNumber(product?.priceSold)} VND</p>
+            </li>
+          ))}
+        </ul>
         {/* Pagination */}
         <div className="flex justify-center my-4">
           <button

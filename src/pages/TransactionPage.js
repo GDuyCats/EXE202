@@ -1,20 +1,31 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import voucherImage from '../assets/voucher.jpg'
-import { useGetAddressToShipById } from '../hooks/useGetAddressToShipById'
 import CartItem from '../components/CartItem'
 import { useItemStore } from '../utils/cart'
 import { useLocation } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
-import { Description, Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
 import { useGetAllShipCompany } from '../hooks/useGetAllShipCompany'
 import { useGetAllVouchers } from '../hooks/useGetAllVouchers'
 import { useGetAllPayments } from '../hooks/useGetAllPayments'
+import { useCreatePayOS } from '../hooks/useCreatePayOS'
+import { useCreateCheckOut } from '../hooks/useCreateCheckOut'
+import axios from 'axios'
+import { AuthContext } from '../context/AuthContext'
 
+const customStyles = {
+    content: {
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)',
+    },
+};
 
 function Transaction() {
+
     const navigate = useNavigate();
-    const { data } = useGetAddressToShipById(1)
-    console.log(data)
     const [selectedMethod, setSelectedMethod] = useState(null);
     const cartStore = useItemStore()
     const handleMethodSelect = (id) => {
@@ -23,64 +34,220 @@ function Transaction() {
     const location = useLocation();
     const { state } = location;
     const { selectedItems = [] } = state || {};
-
-    const handleChangeDiscount = () => {
-        // const selectedItems = cartStore.items.filter(item => cartStore.selectedItems.includes(item.id));
-        navigate('/discountoption');
-    }
-
-    const handleChangeShipping = () => {
-        // const selectedItems = cartStore.items.filter(item => cartStore.selectedItems.includes(item.id));
-        navigate('/shippingoption');
-    }
-
-    let [isOpen, setIsOpen] = useState(false)
-
+    const { totalPrice } = state || {};
     const [isActive, setIsActive] = useState(0);
-
     const [isActiveVoucher, setIsActiveVoucher] = useState(0);
-
     const handleShippingClick = (id) => {
         setIsActive(id);
     };
     const { data: shipData } = useGetAllShipCompany();
-
     const handleVoucherClick = (id) => {
         setIsActiveVoucher(id);
     };
     const { data: voucherData } = useGetAllVouchers();
     const sortedvoucherData = voucherData?.sort((a, b) => b.discount - a.discount);
-
     const [freightCost, setFreightCost] = useState(30000);
-
     const currentDate = new Date();
     const startDate = new Date(currentDate.getTime() + 5 * 24 * 60 * 60 * 1000); // add 5 days
     const endDate = new Date(currentDate.getTime() + 7 * 24 * 60 * 60 * 1000); // add 7 days
-
     const startDateString = `${startDate.getDate()}/${startDate.getMonth() + 1}`;
     const endDateString = `${endDate.getDate()}/${endDate.getMonth() + 1}`;
 
-    const handlePlaceOrder = () => {
-        if (!isActiveVoucher || !isActive) {
-            alert("Please select a voucher and shipping method.");
+    useEffect(() => {
+        if (selectedItems.length === 0) {
+            navigate('/');
+        }
+    }, [selectedItems, navigate]);
+
+
+    const handlePlaceOrder = async () => {
+        if (!isActive) {
+            alert("Xin hãy chọn đơn vị vận chuyển.");
             return;
         }
-        // Proceed with placing the order
-        console.log("Order placed successfully!");
-
-
-        if (selectedMethod === 1) {
+        if (!selectedMethod) {
+            alert("Xin hãy chọn phương thức thanh toán.");
+            return;
+        }
+        if (!selectedAddressId) {
+            alert("Xin hãy chọn địa chỉ nhận hàng.");
+            return;
+        }
+        const insufficientProducts = [];
+        try {
+            for (const item of selectedItems) {
+                const response = await axios.get(`https://ohecaa.azurewebsites.net/api/Products/ViewProductByID/${item.id}`);
+                if (response.data.success) {
+                    const product = response.data.data;
+                    if (product.quantity < item.count) {
+                        insufficientProducts.push(product);
+                    }
+                } else {
+                    console.error(response.data.message);
+                }
+            }
+        } catch (error) {
+            console.error('Error checking product quantity:', error);
             navigate('/paymentfailed');
-        } else if (selectedMethod === 2) {
-            navigate('/paymentsuccess');
-        } else {
-            console.log("Invalid payment method selected.");
+            return;
+        }
+
+        if (insufficientProducts.length > 0) {
+            let alertMessage = 'Không đủ số lượng các sản phẩm sau để trừ:\n';
+            insufficientProducts.forEach(product => {
+                alertMessage += `- ${product.name}: Số lượng còn lại là ${product.quantity}\n`;
+            });
+            alert(alertMessage);
+            navigate('/paymentfailed');
+            return;
+        }
+
+        const checkOutData = {
+            userId: cartStore.userID,
+            freightCost: freightCost,
+            paymentId: selectedMethod,
+            addressToShipId: selectedAddressId,
+            totalPrice: isActiveVoucher
+                ? totalPrice + (freightCost - (freightCost * sortedvoucherData.find(v => v.id === isActiveVoucher).discount))
+                : totalPrice + freightCost,
+            ...(selectedItems.length > 0 && {
+                carts: selectedItems.map(item => ({
+                    productId: item.id,
+                    quantity: item.count,
+                })),
+            }),
+        };
+
+        createCheckOut(checkOutData, {
+            onSuccess(res) {
+                updateProductQuantity(selectedItems);
+                if (selectedMethod == 1) {
+                    createPayOS({
+                        userID: cartStore.userID,
+                        orderId: res?.data?.id
+                    }, {
+                        onSuccess(data) {
+                            window.open(data.url);
+                        },
+                        onError() {
+                            navigate('/paymentfailed');
+                        },
+                    });
+                } else {
+                    console.log('OrderId:', res?.data?.id);
+                    navigate(`/paymentsuccess?orderId=${res?.data?.id}`);
+                }
+            },
+            onError() {
+                navigate('/paymentfailed');
+            }
+        });
+    };
+
+    const updateProductQuantity = async (selectedItems) => {
+        try {
+            for (const item of selectedItems) {
+                const response = await axios.get(`https://ohecaa.azurewebsites.net/api/Products/ViewProductByID/${item.id}`);
+                if (response.data.success) {
+                    const product = response.data.data;
+                    // const newQuantity = product.quantity - item.count;
+                    await axios.put(`https://ohecaa.azurewebsites.net/api/Products/UpdateQuantity?id=${item.id}&quantity=${item.count}`, {
+                        id: item.id,
+                        quantity: product.quantitySold + item.count,
+                    });
+                } else {
+                    console.error(response.data.message);
+                }
+            }
+        } catch (error) {
+            console.error('Error updating product quantity:', error);
         }
     };
 
 
     const { data: paymentData } = useGetAllPayments();
 
+    const { mutate: createPayOS, isLoading: iscreatePayOSLoading } = useCreatePayOS();
+    const { mutate: createCheckOut, isLoading: iscreateCheckOutLoading } = useCreateCheckOut();
+
+    const [selectedAddressId, setSelectedAddressId] = useState(null);
+    const [addressData, setAddressData] = useState([]);
+    const [selectedAddress, setSelectedAddress] = useState(null);
+    const [showPopup, setShowPopup] = useState(false);
+    const [showAddPopup, setShowAddPopup] = useState(false);
+    const [newAddress, setNewAddress] = useState({
+        province: '',
+        district: '',
+        ward: '',
+        detailAddress: '',
+        phone: '',
+        customerName: ''
+    });
+
+    const { token, saveToken } = useContext(AuthContext);
+    console.log(token)
+    useEffect(() => {
+        if (!token) {
+            navigate('/login');
+        }
+    }, [token, navigate]);
+    // Fetch addresses by userId
+    const fetchAddresses = async () => {
+        try {
+            const response = await axios.get(`https://ohecaa.azurewebsites.net/api/AddressToShips/SearchAddressToShipByUserId/${token?.user?.id}`);
+            if (response.data.success) {
+                const addressData = response.data.data;
+                setAddressData(response.data.data);
+                setAddressData(addressData);
+                console.log(addressData);
+                const ids = response.data.data.map(address => address.id);
+                console.log('List of IDs:', ids);
+            } else {
+                console.error(response.data.message);
+            }
+        } catch (error) {
+            console.error('Error fetching addresses:', error);
+        }
+    };
+
+    // Fetch addresses when component mounts
+    useEffect(() => {
+        fetchAddresses(token?.user?.id);
+    }, [token?.user?.id]);
+
+    const handleSelectAddress = (address) => {
+        setSelectedAddress(address);
+        setSelectedAddressId(address.id);
+        setShowPopup(false);
+    };
+
+    const handleAddAddress = async (e) => {
+        e?.preventDefault(); // Prevent the default form submission behavior
+        try {
+            const response = await axios.post('https://ohecaa.azurewebsites.net/api/AddressToShips/CreateAddressToShip', newAddress, {
+                headers: {
+                    Authorization: `Bearer ${token?.accessToken}`, // Thêm token vào tiêu đề của yêu cầu
+                },
+            });
+            if (response.data.success) {
+                setNewAddress({
+                    province: '',
+                    district: '',
+                    ward: '',
+                    detailAddress: '',
+                    phone: '',
+                    customerName: '',
+                });
+                setShowAddPopup(false);
+                fetchAddresses(token?.user?.id); // Refresh addresses after creation
+                console.log(token?.accessToken);
+            } else {
+                console.error(response.data.message);
+            }
+        } catch (error) {
+            console.error('Error creating address:', error);
+        }
+    };
     return (
         <>
             <div className="w-full" style={{
@@ -103,22 +270,137 @@ function Transaction() {
                         </div>
                         <div className="flex items-center justify-center">
                             <div className="bg-white container mx-10 my-7 p-10">
-                                <h1 className='text-4xl text-blue_177f9f'>{data?.customerName}</h1>
+                                <h1 className='text-4xl text-blue_177f9f'>{selectedAddress?.customerName || 'Chưa có tên khách hàng'}</h1>
                                 <div className="flex items-start">
-                                    <p className="text-4xl mt-5 inline-flex">ĐỊA CHỈ NHẬN HÀNG: {data?.detailAddress + ", " + data?.ward + ", " + data?.district + ", " + data?.province}</p>
-                                    {/* <div className="flex justify-center w-fit h-fit bg-white text-blue_6bccde text-2xl font-extralight items-center border-2 border-blue_6bccde mt-4 ml-3">
-                                        MẶC ĐỊNH
-                                    </div> */}
+                                    <p className="text-4xl mt-5 inline-flex">
+                                        ĐỊA CHỈ NHẬN HÀNG: {selectedAddress ? `${selectedAddress.detailAddress}, ${selectedAddress.ward}, ${selectedAddress.district}, ${selectedAddress.province}` : 'Chưa có địa chỉ'}
+                                    </p>
                                 </div>
                                 <div className="flex items-start">
-                                    <p className="text-4xl mt-5 inline-flex">SỐ ĐIỆN THOẠI: {data?.phone}</p>
-                                    {/* <div className="flex justify-center w-fit h-fit bg-white text-blue_6bccde text-2xl font-extralight items-center border-2 border-blue_6bccde mt-4 ml-3">
-                                        MẶC ĐỊNH
-                                    </div> */}
+                                    <p className="text-4xl mt-5 inline-flex">SỐ ĐIỆN THOẠI: {selectedAddress?.phone || 'Chưa có số điện thoại'}</p>
                                 </div>
-                                {/* <button className="bg-blue_6bccde text-white flex items-center justify-center px-2 py-2 text-2xl font-normal mt-5">THAY ĐỔI</button> */}
-                            </div>
+                                <button
+                                    className="bg-blue_6bccde text-white flex items-center justify-center px-2 py-2 text-2xl font-normal mt-5"
+                                    onClick={() => setShowPopup(true)}
+                                >
+                                    THAY ĐỔI
+                                </button>
 
+                                {showPopup && (
+                                    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
+                                        <div className="bg-white p-5 rounded-lg shadow-lg">
+                                            <h2 className="text-2xl mb-4">Chọn địa chỉ</h2>
+                                            <ul className="list-disc pl-5">
+                                                {addressData.length > 0 ? (
+                                                    addressData.map((address) => (
+                                                        <li key={address.id} className="mb-2 cursor-pointer hover:bg-gray-200 p-2" onClick={() => handleSelectAddress(address)}>
+                                                            {address.customerName} - {address.detailAddress}, {address.ward}, {address.district}, {address.province}. Phone: {address.phone}
+                                                        </li>
+                                                    ))
+                                                ) : (
+                                                    <p>Không tìm thấy địa chỉ nào.</p>
+                                                )}
+                                            </ul>
+                                            <div className="flex w-full items-center justify-center">
+
+                                                <button
+                                                    className="bg-blue_177f9f text-white px-4 py-2 mt-4 rounded hover:bg-blue_cart"
+                                                    onClick={() => setShowAddPopup(true)}
+                                                >
+                                                    Thêm địa chỉ
+                                                </button>
+                                                <button
+                                                    className="bg-blue_buy text-white px-4 py-2 mt-4 ml-5 rounded hover:bg-blue_24b3cc"
+                                                    onClick={() => setShowPopup(false)}
+                                                >
+                                                    Đóng
+                                                </button>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {showAddPopup && (
+                                    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
+                                        <div className="bg-white p-5 rounded-lg shadow-lg w-1/2">
+                                            <h2 className="text-2xl mb-4 text-center">Thêm địa chỉ mới</h2>
+                                            <form onSubmit={(e) => { e.preventDefault(); handleAddAddress(); }}>
+                                                <div className="flex flex-col">
+                                                    <div className="mb-2">
+                                                        <input
+                                                            type="text"
+                                                            placeholder="Tỉnh"
+                                                            value={newAddress.province}
+                                                            onChange={(e) => setNewAddress({ ...newAddress, province: e.target.value })}
+                                                            className="p-2 border border-gray-300 rounded-md w-full"
+                                                        />
+                                                    </div>
+                                                    <div className="mb-2">
+                                                        <input
+                                                            type="text"
+                                                            placeholder="Quận / Huyện"
+                                                            value={newAddress.district}
+                                                            onChange={(e) => setNewAddress({ ...newAddress, district: e.target.value })}
+                                                            className="p-2 border border-gray-300 rounded-md w-full"
+                                                        />
+                                                    </div>
+                                                    <div className="mb-2">
+                                                        <input
+                                                            type="text"
+                                                            placeholder="Phường / Xã"
+                                                            value={newAddress.ward}
+                                                            onChange={(e) => setNewAddress({ ...newAddress, ward: e.target.value })}
+                                                            className="p-2 border border-gray-300 rounded-md w-full"
+                                                        />
+                                                    </div>
+                                                    <div className="mb-2">
+                                                        <input
+                                                            type="text"
+                                                            placeholder="Địa chỉ cụ thể"
+                                                            value={newAddress.detailAddress}
+                                                            onChange={(e) => setNewAddress({ ...newAddress, detailAddress: e.target.value })}
+                                                            className="p-2 border border-gray-300 rounded-md w-full"
+                                                        />
+                                                    </div>
+                                                    <div className="mb-2">
+                                                        <input
+                                                            type="text"
+                                                            placeholder="Số Điện Thoại"
+                                                            value={newAddress.phone}
+                                                            onChange={(e) => setNewAddress({ ...newAddress, phone: e.target.value })}
+                                                            className="p-2 border border-gray-300 rounded-md w-full"
+                                                        />
+                                                    </div>
+                                                    <div className="mb-2">
+                                                        <input
+                                                            type="text"
+                                                            placeholder="Tên Người Nhận"
+                                                            value={newAddress.customerName}
+                                                            onChange={(e) => setNewAddress({ ...newAddress, customerName: e.target.value })}
+                                                            className="p-2 border border-gray-300 rounded-md w-full"
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center justify-center">
+                                                    <button
+                                                        type="submit"
+                                                        className="bg-blue_177f9f text-white px-4 py-2 mt-4 rounded mx-1"
+                                                    >
+                                                        Thêm
+                                                    </button>
+                                                    <button
+                                                        className="bg-blue_cart text-white px-4 py-2 mt-4 rounded mx-1"
+                                                        onClick={() => setShowAddPopup(false)}
+                                                    >
+                                                        Hủy
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -135,50 +417,10 @@ function Transaction() {
                         </div>
                         <div className="container w-full">
                             <div className="items-center justify-center w-full">
-                                {/* <div className="bg-white container mx-10 my-7 p-10 border-2 border-black flex">
-                                    <img
-                                        src={productImage}
-                                        alt="Product Image"
-                                        className="w-fit h-52 object-fill justify-center border-2 border-blue_cart"
-                                    />
-                                    <div className="w-full ml-4 justify-end">
-                                        <div className="bg-blue_bg_d0f8ff px-6 py-1 flex justify-center">
-                                            <h2 className="text-2xl mb-2 pt-2 text-blue_073d4d font-sans font-semibold">SỮA BỘT ENSURE GOLD 850G</h2>
-                                        </div>
-                                        <div className="flex items-center">
-                                            <p className="text-lg">Phân loại hàng:</p>
-                                            <div className="w-fit flex items-center bg-blue_classi p-2 rounded-2xl border-2 border-blue_cart ml-6 mt-3">
-                                                <img
-                                                    src={productImage}
-                                                    alt="Product Image"
-                                                    className="h-8 object-cover justify-center mx-2 rounded-sm"
-                                                />
-                                                <h6 className="text-sm text-blue_073d4d font-sans font-semibold mx-4">Vanilla</h6>
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-row mt-3">
-                                            <p className="text-lg mb-4">Số lượng: </p>
-                                            <div className=" pl-7 flex">
-                                                <button className="bg-blue_btn_qlt text-white text-2xl font-bold justify-center items-center flex" style={{ width: 30, height: 30 }}>-</button>
-                                                <spam className="bg-blue_c0foff font-normal px-8 justify-center items-center flex" style={{ width: 30, height: 30 }}>1</spam>
-                                                <button className="bg-blue_btn_qlt text-white text-2xl font-bold justify-center items-center flex" style={{ width: 30, height: 30 }}>+</button>
-                                            </div>
-                                        </div>
-                                        <div className="justify-end flex items-center">
-                                            <p className="text-lg">Thành tiền:</p>
-                                            <h1 className="text-4xl font-semibold text-sky-800 ml-10 justify-center pl-7">750.000 VND</h1>
-                                        </div>
-                                    </div>
-                                </div> */}
                                 {selectedItems.map(item => (
                                     <CartItem key={item.id} item={item} isReadOnly={true} />
                                 ))}
                             </div>
-                            {/* <p className="text-lg mx-10">Lời nhắn cho người bán:</p>
-                            <div className="my-3 mx-10">
-                                <textarea className="border border-gray-300 p-2 w-full h-32 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none text-blue_177f9f">
-                                </textarea>
-                            </div> */}
                         </div>
                     </div>
                 </div>
@@ -193,23 +435,8 @@ function Transaction() {
                             </div>
                         </div>
                         <div className="container w-full my-8">
-                            {/* <div className="flex w-full items-center mt-4">
-                                <p className="text-lg mx-10 w-1/5">Đơn vị vận chuyển:</p>
-                                <div className="flex w-4/5 border-2 border-black bg-white p-2 mx-10">
-                                    <h1 className="text-blue_cart font-normal text-xl w-1/5 ml-5">HỎA TỐC</h1>
-                                    <div className="flex w-2/5 mx-10"><h3 className="text-blue_0e4759 text-xl">Nhận hàng vào</h3><h3 className="text-blue_0e4759 text-xl">: 25/07 - 27/07</h3></div>
-                                    <h3 className="text-blue_0e4759 text-xl line-through w-1/5 mx-5">20.000 VND</h3>
-                                    <h1 className="text-red_ff0000 font-normal text-xl w-1/5 -mr-10">MIỄN PHÍ</h1>
-                                </div>
-                            </div> */}
-                            {/* <p className="text-lg mx-10">Lời nhắn cho bên vận chuyển:</p>
-                            <div className="my-3 mx-10">
-                                <textarea className="border border-gray-300 p-2 w-full h-32 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none text-blue_177f9f">
-                                    Khi giao hàng hãy để trước cửa nhà
-                                </textarea>
-                            </div> */}
                         </div>
-                        <div className="h-fit py-5">
+                        <div className="flex flex-col overflow-y-auto h-96 py-5">
                             {shipData?.map(item => (
                                 <div className="p-3">
                                     <div className={`flex  ${item.id === isActive ? 'border-blue_cart border-4' : ''}`}
@@ -220,9 +447,7 @@ function Transaction() {
                                         <div className="bg-white w-full ">
                                             <div className="flex pt-2">
                                                 <h1 className="text-blue_cart font-normal text-3xl ml-5">{item?.name}</h1>
-                                                {/* <h3 className="text-blue_0e4759 text-3xl line-through mx-10">20.000 VND</h3> */}
-                                                <h3 className="text-blue_0e4759 text-3xl mx-10">{freightCost.toLocaleString().replace(',', '.')} VND</h3>
-                                                {/* <h1 className="text-red_ff0000 font-normal text-3xl">MIỄN PHÍ</h1> */}
+                                                <h3 className="text-blue_0e4759 text-3xl mx-10">{freightCost?.toLocaleString().replace(',', '.')} VND</h3>
                                             </div>
                                             <div className="flex ml-5 py-5">
                                                 <h3 className="text-blue_0e4759 text-xl">Nhận hàng vào</h3>
@@ -246,45 +471,29 @@ function Transaction() {
                             </div>
                         </div>
                         <div className="container w-full">
-                            {/* <div className="flex items-center justify-center w-full">
-                                <div className="bg-white container mx-10 my-7 p-5 border-2 border-black flex">
-                                    <img
-                                        src={voucherImage}
-                                        alt="voucher Image"
-                                        className="w-32 h-32 object-cover justify-center border-2 border-blue_cart"
-                                    />
-                                    <div className="w-full ml-4 justify-end">
-                                        <div className="flex justify-start">
-                                            <h1 className="text-2xl mb-2 pt-2 text-blue_177f9f font-sans font-semibold">MIỄN PHÍ VẬN CHUYỂN VỚI ĐƠN HÀNG TỪ 500.000VND TRỞ LÊN</h1>
-                                        </div>
-                                        <div className="flex text-lg"><h2>HẠN SỬ DỤNG</h2><h2>: 30/05/2024</h2></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="flex justify-end items-center">
-                                <button onClick={handleChangeDiscount} className="bg-blue_6bccde text-white flex items-center justify-center px-2 py-2 text-2xl font-normal mb-5 mr-10">THAY ĐỔI</button>
-                            </div> */}
                             <div className="p-3">
-                                <h3 className="text-2   xl text-blue_177f9f py-3 px-3">Hãy chọn một mã khuyến mãi</h3>
-                                {sortedvoucherData?.map(itemVoucher => (
-                                    <div className="flex items-center justify-center w-full">
-                                        <div className={`bg-white container mx-10 my-7 p-5 border-2 border-black flex ${itemVoucher.id === isActiveVoucher ? 'border-blue_cart border-4' : ''}`}
-                                            onClick={() => handleVoucherClick(itemVoucher.id)}
-                                        >
-                                            <img
-                                                src={voucherImage}
-                                                alt="voucher Image"
-                                                className="w-32 h-32 object-cover justify-center border-2 border-blue_cart"
-                                            />
-                                            <div className="w-full ml-4 justify-end">
-                                                <div className="flex justify-start">
-                                                    <h1 className="text-2xl mb-2 pt-2 text-blue_177f9f font-sans font-semibold">GIẢM GIÁ {itemVoucher.discount * 100}% PHÍ VẬN CHUYỂN VỚI ĐƠN HÀNG TỪ 500.000VND TRỞ LÊN</h1>
+                                <h3 className="text-2xl text-blue_177f9f py-3 px-3">Hãy chọn một mã khuyến mãi</h3>
+                                <div className="flex flex-col overflow-y-auto h-96">
+                                    {sortedvoucherData?.map(itemVoucher => (
+                                        <div className="flex items-center justify-center w-full">
+                                            <div className={`bg-white container mx-10 my-7 p-5 border-2 border-black flex ${itemVoucher.id === isActiveVoucher ? 'border-blue_cart border-4' : ''}`}
+                                                onClick={() => handleVoucherClick(itemVoucher.id)}
+                                            >
+                                                <img
+                                                    src={voucherImage}
+                                                    alt="voucher Image"
+                                                    className="w-32 h-32 object-cover justify-center border-2 border-blue_cart"
+                                                />
+                                                <div className="w-full ml-4 justify-end">
+                                                    <div className="flex justify-start">
+                                                        <h1 className="text-2xl mb-2 pt-2 text-blue_177f9f font-sans font-semibold">GIẢM GIÁ {itemVoucher.discount * 100}% PHÍ VẬN CHUYỂN VỚI ĐƠN HÀNG TỪ 500.000VND TRỞ LÊN</h1>
+                                                    </div>
+                                                    <div className="flex text-lg"><h2>HẠN SỬ DỤNG</h2><h2>: {new Date(itemVoucher.endTime).toLocaleDateString()}</h2></div>
                                                 </div>
-                                                <div className="flex text-lg"><h2>HẠN SỬ DỤNG</h2><h2>: {new Date(itemVoucher.endTime).toLocaleDateString()}</h2></div>
                                             </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    ))}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -301,24 +510,6 @@ function Transaction() {
                         </div>
                         <div className="container w-full">
                             <div className="flex mx-10 mt-5">
-                                {/* <div
-                                    className={`px-6 py-3 mr-3 border border-gray-400 font-font-normal text-lg ${selectedMethod === 'cash'
-                                        ? 'bg-blue_buy text-white border-none'
-                                        : 'bg-white text-black'
-                                        }`}
-                                    // onClick={() => handleMethodSelect('cash')}
-                                >
-                                    Thanh toán khi nhận hàng
-                                </div>
-                                <div
-                                    className={`px-6 py-3 border border-gray-400 ml-3 font-normal text-lg ${selectedMethod === 'card' 
-                                        ? 'bg-blue_buy text-white border-none' 
-                                        : 'bg-white text-black'
-                                        }`}
-                                    // onClick={() => handleMethodSelect('card')}
-                                >
-                                    Thẻ tín dụng/Ghi nợ
-                                </div> */}
                                 {paymentData?.map(itemPayment => (
                                     <div
                                         className={`cursor-pointer px-6 py-3 mr-3 border border-gray-400 font-font-normal text-lg ${itemPayment.id === selectedMethod
@@ -331,9 +522,6 @@ function Transaction() {
                                     </div>
                                 ))}
                             </div>
-                            {/* <p className="mx-10 my-3 text-black">
-                                Phí thu hộ: 0 VND. Ưu đãi về phí vặn chuyển (nếu có) áp dụng với cả phí thu hộ
-                            </p> */}
                             <div className="mx-3 flex">
                                 <div className="bg-white container mx-10 my-7 p-5">
                                     <div className="flex w-full justify-between my-8">
@@ -341,7 +529,8 @@ function Transaction() {
                                             Tổng tiền hàng:
                                         </h3>
                                         <h3 className="font-normal text-2xl text-black">
-                                            {cartStore.total} VND
+                                            {/* {cartStore.total} VND */}
+                                            {totalPrice?.toLocaleString().replace(',', '.')} VND
                                         </h3>
                                     </div>
                                     <div className="flex w-full justify-between my-8">
@@ -350,11 +539,11 @@ function Transaction() {
                                         </h3>
                                         {isActiveVoucher ? (
                                             <h3 className="font-normal text-2xl text-black">
-                                                {(freightCost - (freightCost * sortedvoucherData.find(v => v.id === isActiveVoucher).discount)).toLocaleString().replace(',', '.')} VND
+                                                {(freightCost - (freightCost * sortedvoucherData.find(v => v.id === isActiveVoucher).discount))?.toLocaleString().replace(',', '.')} VND
                                             </h3>
                                         ) : (
                                             <h3 className="font-normal text-2xl text-black">
-                                                {freightCost.toLocaleString().replace(',', '.')} VND
+                                                {freightCost?.toLocaleString().replace(',', '.')} VND
                                             </h3>
                                         )}
                                     </div>
@@ -362,14 +551,11 @@ function Transaction() {
                                         <h3 className="font-normal text-2xl text-black">
                                             Tổng thanh toán:
                                         </h3>
-                                        {/* <h3 className="font-normal text-4xl text-blue_cart">
-                                            {cartStore.total}.000 VND
-                                        </h3> */}
                                         <h3 className="font-normal text-4xl text-blue_cart">
                                             {isActiveVoucher ? (
-                                                (cartStore.total + (freightCost - (freightCost * sortedvoucherData.find(v => v.id === isActiveVoucher).discount))).toLocaleString().replace(',', '.')
+                                                (totalPrice + (freightCost - (freightCost * sortedvoucherData.find(v => v.id === isActiveVoucher).discount)))?.toLocaleString().replace(',', '.')
                                             ) : (
-                                                (cartStore.total + freightCost).toLocaleString().replace(',', '.')
+                                                (totalPrice + freightCost)?.toLocaleString().replace(',', '.')
                                             )} VND
                                         </h3>
                                     </div>
@@ -380,7 +566,7 @@ function Transaction() {
                                     height: 85,
                                     background: 'linear-gradient(to right, #24b7cf, #18335c)'
                                 }}>
-                                    <button className="text-4xl text-white px-40 -inset-y-px" onClick={() => handlePlaceOrder()}>
+                                    <button className="text-4xl text-white px-40 -inset-y-px" onClick={() => handlePlaceOrder()} disabled={iscreatePayOSLoading || iscreateCheckOutLoading}>
                                         ĐẶT HÀNG
                                     </button>
                                 </div>

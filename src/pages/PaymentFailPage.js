@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 
 function PaymentFailed() {
     const navigate = useNavigate();
@@ -8,6 +9,12 @@ function PaymentFailed() {
         // const selectedItems = cartStore.items.filter(item => cartStore.selectedItems.includes(item.id));
         navigate('/');
     }
+
+    const handleTryAgain = () => {
+        // const selectedItems = cartStore.items.filter(item => cartStore.selectedItems.includes(item.id));
+        navigate('/shop');
+    }
+    
     return (
         <>
             <div className="w-full" style={{
@@ -34,15 +41,15 @@ function PaymentFailed() {
                     <h1 className="text-xl text-blue_177f9f py-3 px-3">Lý do: Thanh toán không thành công</h1>
                 </div>
                 <div className="justify-center items-center flex">
-                    <button className="bg-blue_177f9f hover:bg-sky-700 text-white px-4 m-3" style={{ width: 280, height: 62 }}>
+                    <button onClick={handleTryAgain} className="bg-blue_177f9f hover:bg-sky-700 text-white px-4 m-3" style={{ width: 280, height: 62 }}>
                         THỬ LẠI
                     </button>
                 </div>
-                <div className="justify-center items-center flex">
+                {/* <div className="justify-center items-center flex">
                     <button className="bg-blue_177f9f hover:bg-sky-700 text-white px-4 m-3" style={{ width: 280, height: 62 }}>
                         LIÊN HỆ CSKH
                     </button>
-                </div>
+                </div> */}
                 <div className="justify-center items-center flex">
                     <button onClick={handleBack} className="bg-blue_177f9f hover:bg-sky-700 text-white px-4 m-3" style={{ width: 280, height: 62 }}>
                         QUAY VỀ TRANG CHỦ

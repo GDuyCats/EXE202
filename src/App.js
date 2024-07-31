@@ -23,9 +23,14 @@ import PaymentFailed from './pages/PaymentFailPage';
 import DashBoard from './pages/Admin/DashBoard';
 import UserProfile from './components/UserProfile/UserProfile';
 import Shipcompany from './pages/ShipCompany/Shipcompany';
+import Feedback from './pages/FeedBack';
+import ThanksForRating from './pages/ThanksForRating';
 import AdminLayout from './MainLayout/AdminLayout'
 import Product from './pages/ProductManagement/Product';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
+import OrderTracking from './pages/OrderTracking';
+import Orders from './pages/Orders';
+import OrderDelivered from './pages/OrderDeliveried';
 import "react-image-gallery/styles/css/image-gallery.css";
 import Moderator from './pages/Admin/Moderator';
 function App() {
@@ -50,6 +55,11 @@ function App() {
             <Route path="/forum" element={<ForumPage />}/>
             <Route path='/discount' element={<Discount />}/>
             <Route path='/profile' element={<UserProfile/>}/>
+            <Route path='/feedback/:productId' element={<Feedback/>}/>
+            <Route path='/feedbacksuccess' element={<ThanksForRating/>}/>
+            <Route path='/ordertracking/:orderId' element={<OrderTracking/>}/>
+            <Route path='/orderdelivered/:orderId' element={<OrderDelivered/>}/>
+            <Route path='/orders' element={<Orders />}/>
           </Route>
           
           <Route path='/' element={<AdminLayout />}>
