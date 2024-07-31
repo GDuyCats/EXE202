@@ -7,6 +7,7 @@ function OrderTracking() {
     const [orderDetails, setOrderDetails] = useState([]);
     const { orderId } = useParams();
     const [orderStatus, setOrderStatus] = useState(null);
+    const [showCancelPopup, setShowCancelPopup] = useState(false);
 
 
     const steps = [
@@ -16,7 +17,6 @@ function OrderTracking() {
         'Đang giao hàng',
     ];
 
-    // const currentSteps = steps.slice(0, orderStatus + 1);
     const currentSteps = orderStatus === 2
         ? ['Đơn hàng đã được hủy']
         : steps.slice(0, orderStatus + 1);
@@ -70,6 +70,27 @@ function OrderTracking() {
         } catch (error) {
             console.error(error);
             return null;
+        }
+    };
+
+    const handleCancelOrder = async () => {
+        try {
+            const response = await fetch(`https://ohecaa.azurewebsites.net/api/Orders/CancelOrder/${orderId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const data = await response.json();
+            if (data.success) {
+                setOrderStatus(2);
+            } else {
+                setError(data.message);
+            }
+        } catch (error) {
+            setError("Error cancelling order");
+        } finally {
+            setShowCancelPopup(false);
         }
     };
 
@@ -145,19 +166,52 @@ function OrderTracking() {
                                             {index < currentSteps.length - 1 && <div className="w-px h-20 bg-blue-500 border-dotted"></div>}
                                         </div>
                                     )}
-                                    <div className="text-lg w-full items-center justify-center flex">
+                                    <div className="text-lg">
                                         {step === 'Đơn hàng đã được hủy' ? (
-                                            <span style={{ color: 'red' }} className="text-2xl font-semibold">{step}</span>
+                                            <div className=" w-full items-center justify-center flex">
+                                                <span style={{ color: 'red' }} className="text-2xl font-semibold">{step}</span>
+                                            </div>
                                         ) : (
                                             step
                                         )}
                                     </div>
                                 </div>
                             ))}
+                            {(orderStatus === 0 || orderStatus === 1) && (
+                                <div className="flex justify-end mt-4">
+                                    <button
+                                        className="bg-red-500 text-white px-4 py-2 rounded-md"
+                                        onClick={() => setShowCancelPopup(true)}
+                                    >
+                                        Hủy Đơn Hàng
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
-            </div >
+            </div>
+            {showCancelPopup && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white p-4 rounded-md">
+                        <h2 className="text-lg mb-4">Bạn có chắc bạn muốn Hủy đơn Hàng này không?</h2>
+                        <div className="flex justify-end">
+                            <button
+                                className="bg-gray-500 text-white px-4 py-2 rounded-md mr-2"
+                                onClick={() => setShowCancelPopup(false)}
+                            >
+                                Hủy bỏ
+                            </button>
+                            <button
+                                className="bg-red-500 text-white px-4 py-2 rounded-md"
+                                onClick={handleCancelOrder}
+                            >
+                                Xác nhận
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     )
 }

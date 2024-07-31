@@ -21,6 +21,7 @@ function Cart() {
             setIsOpenModal(true);
         } else {
             const totalPrice = selectedItems.reduce((acc, item) => acc + item.priceSold * item.count, 0);
+            cartStore.checkoutItems();
             navigate('/transaction', { state: { selectedItems: [...selectedItems], totalPrice } });
         }
     };

@@ -53,7 +53,14 @@ function Transaction() {
     const startDateString = `${startDate.getDate()}/${startDate.getMonth() + 1}`;
     const endDateString = `${endDate.getDate()}/${endDate.getMonth() + 1}`;
 
-    const handlePlaceOrder = () => {
+    useEffect(() => {
+        if (selectedItems.length === 0) {
+            navigate('/');
+        }
+    }, [selectedItems, navigate]);
+    
+
+    const handlePlaceOrder = async () => {
         if (!isActive) {
             alert("Xin hãy chọn đơn vị vận chuyển.");
             return;
@@ -66,6 +73,35 @@ function Transaction() {
             alert("Xin hãy chọn địa chỉ nhận hàng.");
             return;
         }
+        const insufficientProducts = [];
+        try {
+            for (const item of selectedItems) {
+                const response = await axios.get(`https://ohecaa.azurewebsites.net/api/Products/ViewProductByID/${item.id}`);
+                if (response.data.success) {
+                    const product = response.data.data;
+                    if (product.quantity < item.count) {
+                        insufficientProducts.push(product);
+                    }
+                } else {
+                    console.error(response.data.message);
+                }
+            }
+        } catch (error) {
+            console.error('Error checking product quantity:', error);
+            navigate('/paymentfailed');
+            return;
+        }
+
+        if (insufficientProducts.length > 0) {
+            let alertMessage = 'Không đủ số lượng các sản phẩm sau để trừ:\n';
+            insufficientProducts.forEach(product => {
+                alertMessage += `- ${product.name}: Số lượng còn lại là ${product.quantity}\n`;
+            });
+            alert(alertMessage);
+            navigate('/paymentfailed');
+            return;
+        }
+
         const checkOutData = {
             userId: cartStore.userID,
             freightCost: freightCost,
@@ -107,41 +143,18 @@ function Transaction() {
             }
         });
     };
+
     const updateProductQuantity = async (selectedItems) => {
         try {
             for (const item of selectedItems) {
                 const response = await axios.get(`https://ohecaa.azurewebsites.net/api/Products/ViewProductByID/${item.id}`);
                 if (response.data.success) {
                     const product = response.data.data;
-                    if (product.quantity < item.count) {
-                        console.error(`Không đủ số lượng sản phẩm ${product.name} để trừ.`);
-                        return;
-                    }
-                    const newQuantity = product.quantity - item.count;
-                    if (product.images && product.images.length > 0 && product.productMaterials && product.productMaterials.length > 0) {
-                        await axios.put(`https://ohecaa.azurewebsites.net/api/Products/UpdateProduct`, {
-                            id: item.id,
-                            Quantity: newQuantity,
-                            Images: product?.images?.map(image => ({
-                                file: image?.imageLink,
-                                thumbnail: image?.thumbnail
-                            })),
-                            quantitySold: item.count,
-                            ProductMaterials: product?.productMaterials?.map(material => ({
-                                id: material?.id,
-                                detail: material?.detail,
-                                materialId: material?.materialId,
-                                material: {
-                                    childCategoryId: material?.material?.childCategoryId,
-                                    childCategory: {
-                                        parentCategoryId: material?.material?.childCategory?.parentCategoryId
-                                    }
-                                }
-                            })),
-                        });
-                    } else {
-                        console.error('Error: Empty images or product materials array');
-                    }
+                    // const newQuantity = product.quantity - item.count;
+                    await axios.put(`https://ohecaa.azurewebsites.net/api/Products/UpdateQuantity?id=${item.id}&quantity=${item.count}`, {
+                        id: item.id,
+                        quantity: product.quantitySold + item.count,
+                    });
                 } else {
                     console.error(response.data.message);
                 }
