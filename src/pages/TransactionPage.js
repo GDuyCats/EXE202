@@ -58,7 +58,7 @@ function Transaction() {
             navigate('/');
         }
     }, [selectedItems, navigate]);
-    
+
 
     const handlePlaceOrder = async () => {
         if (!isActive) {
@@ -304,15 +304,13 @@ function Transaction() {
                                             <div className="flex w-full items-center justify-center">
 
                                                 <button
-                                                    className="bg-blue_cart text-white px-4 py-2 mt-4"
+                                                    className="bg-blue_177f9f text-white px-4 py-2 mt-4 rounded hover:bg-blue_cart"
                                                     onClick={() => setShowAddPopup(true)}
                                                 >
                                                     Thêm địa chỉ
                                                 </button>
-
-
                                                 <button
-                                                    className="bg-red-500 text-white px-4 py-2 mt-4 ml-5 rounded"
+                                                    className="bg-blue_buy text-white px-4 py-2 mt-4 ml-5 rounded hover:bg-blue_24b3cc"
                                                     onClick={() => setShowPopup(false)}
                                                 >
                                                     Đóng
@@ -325,63 +323,79 @@ function Transaction() {
 
                                 {showAddPopup && (
                                     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
-                                        <div className="bg-white p-5 rounded-lg shadow-lg">
-                                            <h2 className="text-2xl mb-4">Thêm địa chỉ mới</h2>
+                                        <div className="bg-white p-5 rounded-lg shadow-lg w-1/2">
+                                            <h2 className="text-2xl mb-4 text-center">Thêm địa chỉ mới</h2>
                                             <form onSubmit={(e) => { e.preventDefault(); handleAddAddress(); }}>
-                                                <input
-                                                    type="text"
-                                                    placeholder="Province"
-                                                    value={newAddress.province}
-                                                    onChange={(e) => setNewAddress({ ...newAddress, province: e.target.value })}
-                                                    className="mb-2 p-2 border border-gray-300 rounded-md w-full"
-                                                />
-                                                <input
-                                                    type="text"
-                                                    placeholder="District"
-                                                    value={newAddress.district}
-                                                    onChange={(e) => setNewAddress({ ...newAddress, district: e.target.value })}
-                                                    className="mb-2 p-2 border border-gray-300 rounded-md w-full"
-                                                />
-                                                <input
-                                                    type="text"
-                                                    placeholder="Ward"
-                                                    value={newAddress.ward}
-                                                    onChange={(e) => setNewAddress({ ...newAddress, ward: e.target.value })}
-                                                    className="mb-2 p-2 border border-gray-300 rounded-md w-full"
-                                                />
-                                                <input
-                                                    type="text"
-                                                    placeholder="Detail Address"
-                                                    value={newAddress.detailAddress}
-                                                    onChange={(e) => setNewAddress({ ...newAddress, detailAddress: e.target.value })}
-                                                    className="mb-2 p-2 border border-gray-300 rounded-md w-full"
-                                                />
-                                                <input
-                                                    type="text"
-                                                    placeholder="Phone"
-                                                    value={newAddress.phone}
-                                                    onChange={(e) => setNewAddress({ ...newAddress, phone: e.target.value })}
-                                                    className="mb-2 p-2 border border-gray-300 rounded-md w-full"
-                                                />
-                                                <input
-                                                    type="text"
-                                                    placeholder="Customer Name"
-                                                    value={newAddress.customerName}
-                                                    onChange={(e) => setNewAddress({ ...newAddress, customerName: e.target.value })}
-                                                    className="mb-2 p-2 border border-gray-300 rounded-md w-full"
-                                                />
-                                                <button
-                                                    type="submit"
-                                                    className="bg-green-500 text-white px-4 py-2 mt-4 rounded"
-                                                >
-                                                    Thêm
-                                                </button>
-                                                <button
-                                                    className="bg-red-500 text-white px-4 py-2 mt-4 rounded"
-                                                    onClick={() => setShowAddPopup(false)}
-                                                >
-                                                    Đóng
-                                                </button>
+                                                <div className="flex flex-col">
+                                                    <div className="mb-2">
+                                                        <input
+                                                            type="text"
+                                                            placeholder="Tỉnh"
+                                                            value={newAddress.province}
+                                                            onChange={(e) => setNewAddress({ ...newAddress, province: e.target.value })}
+                                                            className="p-2 border border-gray-300 rounded-md w-full"
+                                                        />
+                                                    </div>
+                                                    <div className="mb-2">
+                                                        <input
+                                                            type="text"
+                                                            placeholder="Quận / Huyện"
+                                                            value={newAddress.district}
+                                                            onChange={(e) => setNewAddress({ ...newAddress, district: e.target.value })}
+                                                            className="p-2 border border-gray-300 rounded-md w-full"
+                                                        />
+                                                    </div>
+                                                    <div className="mb-2">
+                                                        <input
+                                                            type="text"
+                                                            placeholder="Phường / Xã"
+                                                            value={newAddress.ward}
+                                                            onChange={(e) => setNewAddress({ ...newAddress, ward: e.target.value })}
+                                                            className="p-2 border border-gray-300 rounded-md w-full"
+                                                        />
+                                                    </div>
+                                                    <div className="mb-2">
+                                                        <input
+                                                            type="text"
+                                                            placeholder="Địa chỉ cụ thể"
+                                                            value={newAddress.detailAddress}
+                                                            onChange={(e) => setNewAddress({ ...newAddress, detailAddress: e.target.value })}
+                                                            className="p-2 border border-gray-300 rounded-md w-full"
+                                                        />
+                                                    </div>
+                                                    <div className="mb-2">
+                                                        <input
+                                                            type="text"
+                                                            placeholder="Số Điện Thoại"
+                                                            value={newAddress.phone}
+                                                            onChange={(e) => setNewAddress({ ...newAddress, phone: e.target.value })}
+                                                            className="p-2 border border-gray-300 rounded-md w-full"
+                                                        />
+                                                    </div>
+                                                    <div className="mb-2">
+                                                        <input
+                                                            type="text"
+                                                            placeholder="Tên Người Nhận"
+                                                            value={newAddress.customerName}
+                                                            onChange={(e) => setNewAddress({ ...newAddress, customerName: e.target.value })}
+                                                            className="p-2 border border-gray-300 rounded-md w-full"
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center justify-center">
+                                                    <button
+                                                        type="submit"
+                                                        className="bg-blue_177f9f text-white px-4 py-2 mt-4 rounded mx-1"
+                                                    >
+                                                        Thêm
+                                                    </button>
+                                                    <button
+                                                        className="bg-blue_cart text-white px-4 py-2 mt-4 rounded mx-1"
+                                                        onClick={() => setShowAddPopup(false)}
+                                                    >
+                                                        Hủy
+                                                    </button>
+                                                </div>
                                             </form>
                                         </div>
                                     </div>
@@ -422,7 +436,7 @@ function Transaction() {
                         </div>
                         <div className="container w-full my-8">
                         </div>
-                        <div className="h-fit py-5">
+                        <div className="flex flex-col overflow-y-auto h-96 py-5">
                             {shipData?.map(item => (
                                 <div className="p-3">
                                     <div className={`flex  ${item.id === isActive ? 'border-blue_cart border-4' : ''}`}
@@ -458,26 +472,28 @@ function Transaction() {
                         </div>
                         <div className="container w-full">
                             <div className="p-3">
-                                <h3 className="text-2   xl text-blue_177f9f py-3 px-3">Hãy chọn một mã khuyến mãi</h3>
-                                {sortedvoucherData?.map(itemVoucher => (
-                                    <div className="flex items-center justify-center w-full">
-                                        <div className={`bg-white container mx-10 my-7 p-5 border-2 border-black flex ${itemVoucher.id === isActiveVoucher ? 'border-blue_cart border-4' : ''}`}
-                                            onClick={() => handleVoucherClick(itemVoucher.id)}
-                                        >
-                                            <img
-                                                src={voucherImage}
-                                                alt="voucher Image"
-                                                className="w-32 h-32 object-cover justify-center border-2 border-blue_cart"
-                                            />
-                                            <div className="w-full ml-4 justify-end">
-                                                <div className="flex justify-start">
-                                                    <h1 className="text-2xl mb-2 pt-2 text-blue_177f9f font-sans font-semibold">GIẢM GIÁ {itemVoucher.discount * 100}% PHÍ VẬN CHUYỂN VỚI ĐƠN HÀNG TỪ 500.000VND TRỞ LÊN</h1>
+                                <h3 className="text-2xl text-blue_177f9f py-3 px-3">Hãy chọn một mã khuyến mãi</h3>
+                                <div className="flex flex-col overflow-y-auto h-96">
+                                    {sortedvoucherData?.map(itemVoucher => (
+                                        <div className="flex items-center justify-center w-full">
+                                            <div className={`bg-white container mx-10 my-7 p-5 border-2 border-black flex ${itemVoucher.id === isActiveVoucher ? 'border-blue_cart border-4' : ''}`}
+                                                onClick={() => handleVoucherClick(itemVoucher.id)}
+                                            >
+                                                <img
+                                                    src={voucherImage}
+                                                    alt="voucher Image"
+                                                    className="w-32 h-32 object-cover justify-center border-2 border-blue_cart"
+                                                />
+                                                <div className="w-full ml-4 justify-end">
+                                                    <div className="flex justify-start">
+                                                        <h1 className="text-2xl mb-2 pt-2 text-blue_177f9f font-sans font-semibold">GIẢM GIÁ {itemVoucher.discount * 100}% PHÍ VẬN CHUYỂN VỚI ĐƠN HÀNG TỪ 500.000VND TRỞ LÊN</h1>
+                                                    </div>
+                                                    <div className="flex text-lg"><h2>HẠN SỬ DỤNG</h2><h2>: {new Date(itemVoucher.endTime).toLocaleDateString()}</h2></div>
                                                 </div>
-                                                <div className="flex text-lg"><h2>HẠN SỬ DỤNG</h2><h2>: {new Date(itemVoucher.endTime).toLocaleDateString()}</h2></div>
                                             </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    ))}
+                                </div>
                             </div>
                         </div>
                     </div>
