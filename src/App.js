@@ -27,6 +27,7 @@ import AdminLayout from './MainLayout/AdminLayout'
 import Product from './pages/ProductManagement/Product';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import "react-image-gallery/styles/css/image-gallery.css";
+import Moderator from './pages/Admin/Moderator';
 function App() {
   return (
     <AuthProvider>
@@ -49,15 +50,16 @@ function App() {
             <Route path="/forum" element={<ForumPage />}/>
             <Route path='/discount' element={<Discount />}/>
             <Route path='/profile' element={<UserProfile/>}/>
-
           </Route>
           
           <Route path='/' element={<AdminLayout />}>
+            <Route path='/mod' element={<ProtectedRoute element={Moderator} />}/>
             <Route path='/admin' element={<ProtectedRoute element={DashBoard} />} />
             <Route path='/admin/ProductManagement' element={<ProtectedRoute element={Product} />} />
             <Route path='/admin/Shipcompany' element={<ProtectedRoute element={Shipcompany} />} />
           </Route>
-          <Route path="/login" element={<LoginPage />} />
+          
+          <Route path="/login" element={<LoginPage/>} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/policy" element={<PolicyPage />} />
           <Route path="/useragreement" element={<UserAgreementPage />} />

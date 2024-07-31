@@ -7,19 +7,18 @@ function DashBoardNav() {
     useEffect(() => {
         setUrl(location.pathname);
     }, [location]);
-    const adminNavCss = "text-2xl p-1 mt-1 ml-16 font-semibold hover:border-b-blue_dbf9ff hover:border-b-2"
+    const adminNavCss = "text-2xl p-[1px] ml-16 font-semibold hover:border-b-blue_dbf9ff hover:border-b-2"
     return (
         <div className='text-white fixed left-0 top-0 bg-blue_073d4d w-1/6 h-full z-50 '>
-            <div className='flex pt-5'>
+            <div className='flex pt-2'>
                 <FaPenAlt size={30} className='text-blue_6bccde ml-3' />
                 <p className='text-4xl font-semibold text-blue_6bccde ml-5 mb-5'>THỐNG KÊ</p>
             </div>
             <div className=''>
                 <Link to="/admin" className={`${adminNavCss} ${url === "/admin" ? "border-b-blue_a2dde8 border-b-2" : ""}`}>DOANH THU</Link>
-
             </div>
             <div>
-                <p className='text-2xl mt-1 ml-16 font-semibold'>QUẢN TRỊ VIÊN</p>
+                <Link to="/mod" className={`${adminNavCss} ${url === "/mod" ? "border-b-blue_a2dde8 border-b-2" : ""}`}>QUẢN TRỊ VIÊN</Link>
                 <p className='text-2xl mt-1 ml-16 font-semibold'>NGƯỜI DÙNG</p>
                 <p className='text-2xl mt-1 ml-16 font-semibold mb-5'>SẢN XUẤT</p>
             </div>

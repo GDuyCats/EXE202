@@ -90,7 +90,7 @@ function HomePage() {
     }, [currentIndex])
 
     useEffect(() => {
-        axios.get('https://ohecaa.azurewebsites.net/api/Products/ViewProductByDiscount?pageIndex=1&pageSize=3')
+        axios.get('https://ohecaa.azurewebsites.net/api/Products/ViewProductByDiscount?pageIndex=1&pageSize=4')
             .then(response => {
                 const { data } = response.data; // Extract the data property from response.data
                 if (Array.isArray(data)) {
