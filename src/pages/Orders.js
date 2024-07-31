@@ -4,9 +4,9 @@ import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
 
 const Tabs = [
-  { label: 'CHỜ XÁC NHẬN', status: 0 },
-  { label: 'ĐÃ XÁC NHẬN', status: 1 },
-  { label: 'ĐÃ GIAO', status: 3 },
+  { label: 'CHỜ XÁC NHẬN', isConfirm: 0, status: 1 },
+  { label: 'ĐANG GIAO', isConfirm: 1, status: 1 },
+  { label: 'ĐÃ GIAO', isConfirm: 1, status: 3 },
   { label: 'ĐÃ HỦY', status: 2 },
 ];
 
@@ -48,16 +48,20 @@ function Orders() {
 
   const handleConfirmOrder = async (orderId) => {
     try {
-      await axios.put(`https://ohecaa.azurewebsites.net/api/Orders/ConfirmOrder/${orderId}`);
-      setOrders(orders.map(order => order.id === orderId ? { ...order, isConfirm: 1 } : order));
+      await axios.put(`https://ohecaa.azurewebsites.net/api/Orders/ReceivedOrder/${orderId}`);
+      setOrders(orders.map(order => order.id === orderId ? { ...order, status: 3 } : order));
     } catch (error) {
       console.error('Error confirming order:', error);
     }
   };
 
-  const filterOrders = (status) => {
-    return orders.filter(order => order.status === status);
+  const filterOrders = (tab) => {
+    if (tab.isConfirm !== undefined) {
+      return orders.filter(order => order.isConfirm === tab.isConfirm && order.status === tab.status);
+    }
+    return orders.filter(order => order.status === tab.status);
   };
+
   if (loading) return (
     <div className='h-screen w-screen bg-blue_a2dde8 flex items-center justify-center'>
       <p className='text-9xl font-bold '>Loading</p>
@@ -94,11 +98,18 @@ function Orders() {
               <p>Loading...</p>
             ) : (
               <div className="pb-4">
-                {filterOrders(Tabs[selectedTab].status).map(order => (
+                {filterOrders(Tabs[selectedTab]).map(order => (
                   <div key={order.id} className="border p-4 mx-3 my-4 cursor-pointer" onClick={() => handleOrderClick(order)}>
                     <div className="flex items-center">
                       <div className="flex-1">
-                        <h3 className="text-xl font-bold">Ngày đặt hàng: {new Date(order?.creationDate).toLocaleDateString()}</h3>
+                        <img
+                          src={order?.imageLink}
+                          alt="Product Image"
+                          className="w-fit my-auto h-32 object-fill justify-center border-2 border-blue_cart"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-xl font-bold">Ngày đặt hàng: {new Date(order?.creationDate).toLocaleDateString()} {order?.id}</h3>
                       </div>
                       <div className="flex-1 text-center">
                         <div className="flex">
@@ -107,7 +118,7 @@ function Orders() {
                         </div>
                       </div>
                       <div className="flex-1 text-right">
-                        {selectedTab === 2 && order.isConfirm === 0 ? (
+                        {selectedTab === 1 && order.status === 1 ? (
                           <button
                             className="bg-white border-2 border-blue_24b3cc text-blue_24b3cc px-4 py-2 hover:bg-blue_24b3cc hover:border-white hover:text-white"
                             onClick={(e) => {
