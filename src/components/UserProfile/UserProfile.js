@@ -4,34 +4,34 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Modal from 'react-modal';
 
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-  },
-};
+// const customStyles = {
+//   content: {
+//     top: '50%',
+//     left: '50%',
+//     right: 'auto',
+//     bottom: 'auto',
+//     marginRight: '-50%',
+//     transform: 'translate(-50%, -50%)',
+//   },
+// };
 
 function UserProfile() {
   const navigate = useNavigate();
-  const { token } = useContext(AuthContext); // Ensure you can set the token if needed
+  const { token, removeToken  } = useContext(AuthContext);
   const [userData, setUserData] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editedUserData, setEditedUserData] = useState({
-    id: '',
-    firstName: '',
-    lastName: '',
-    avatar: '',
-    email: '',
-    password: '',
-    phone: '',
-    gender: '',
-    roleId: '',
-    status: '',
-  });
+  // const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [editedUserData, setEditedUserData] = useState({
+  //   id: '',
+  //   firstName: '',
+  //   lastName: '',
+  //   avatar: '',
+  //   email: '',
+  //   password: '',
+  //   phone: '',
+  //   gender: '',
+  //   roleId: '',
+  //   status: '',
+  // });
 
   useEffect(() => {
     if (!token) {
@@ -50,50 +50,61 @@ function UserProfile() {
           });
           setUserData(response.data.data);
         } catch (error) {
-          console.error(error);
+          if (error.response && error.response.status === 401) {
+            console.error('Unauthorized: Token may be expired or invalid', error);
+            removeToken();
+            navigate('/login');
+          } else {
+            console.error(error);
+          }
         }
       }
     };
     fetchData();
-  }, [token?.user?.id, token?.accessToken]);
+  }, [token?.user?.id, token?.accessToken, removeToken, navigate]);
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-    setEditedUserData({
-      id: userData.id,
-      firstName: userData.firstName,
-      lastName: userData.lastName,
-      avatar: userData.avatar,
-      email: userData.email,
-      password: userData.password, // Không thay đổi password
-      phone: userData.phone,
-      gender: userData.gender,
-      roleId: userData.roleId, // Không thay đổi roleId
-      status: userData.status, // Không thay đổi status
-    });
-  };
+  // const handleOpenModal = () => {
+  //   setIsModalOpen(true);
+  //   setEditedUserData({
+  //     id: userData.id,
+  //     firstName: userData.firstName,
+  //     lastName: userData.lastName,
+  //     avatar: userData.avatar,
+  //     email: userData.email,
+  //     password: userData.password, // Không thay đổi password
+  //     phone: userData.phone,
+  //     gender: userData.gender,
+  //     roleId: userData.roleId, // Không thay đổi roleId
+  //     status: userData.status, // Không thay đổi status
+  //   });
+  // };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
+  // const handleCloseModal = () => {
+  //   setIsModalOpen(false);
+  // };
 
-  const handleUpdateUserProfile = async (e) => {
-    e.preventDefault(); // Prevent default form submission behavior
-    try {
-      const response = await axios.put(`https://ohecaa.azurewebsites.net/api/User/UpdateUser/${token?.user?.id}`, editedUserData, {
-        headers: {
-          Authorization: `Bearer ${token?.accessToken}`,
-          'Content-Type': 'application/json'
-        },
-      });
-      console.log(response);
-      setIsModalOpen(false);
-      // Cập nhật lại userData sau khi chỉnh sửa
-      setUserData(response.data.data);
-    } catch (error) {
-      console.error('Error updating user profile:', error.response ? error.response.data : error.message);
-    }
-  };
+  // const handleUpdateUserProfile = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await axios.put(`https://ohecaa.azurewebsites.net/api/User/UpdateUser/${token?.user?.id}`, editedUserData, {
+  //       headers: {
+  //         Authorization: `Bearer ${token?.accessToken}`,
+  //         'Content-Type': 'application/json'
+  //       },
+  //     });
+  //     console.log(response);
+  //     setIsModalOpen(false);
+  //     setUserData(response.data.data);
+  //   } catch (error) {
+  //     if (error.response && error.response.status === 401) {
+  //       console.error('Unauthorized: Token may be expired or invalid', error);
+  //       removeToken();
+  //       navigate('/login');
+  //     } else {
+  //       console.error('Error updating user profile:', error.response ? error.response.data : error.message);
+  //     }
+  //   }
+  // };
 
   if (!userData) {
     return <div>Loading...</div>;
@@ -137,7 +148,8 @@ function UserProfile() {
                 <p className="mt-1 p-2 border rounded w-full">{userData.gender === 'Male' ? 'Nam' : userData.gender === 'Female' ? 'Nữ' : 'Khác'}</p>
               </div>
             </div>
-            <button className="mt-4 bg-blue_177f9f text-white py-2 px-4 rounded" onClick={handleOpenModal}>Thay Đổi</button>
+            {/* <button className="mt-4 bg-blue_177f9f text-white py-2 px-4 rounded" onClick={handleOpenModal}>Thay Đổi</button> */}
+            <button className="mt-4 bg-blue_177f9f text-white py-2 px-4 rounded">Thay Đổi</button>
           </div>
 
           <div className="mt-6 md:mt-0 md:ml-6 flex-shrink-0">
@@ -148,7 +160,7 @@ function UserProfile() {
         </div>
       </div>
 
-      <Modal
+      {/* <Modal
         isOpen={isModalOpen}
         style={customStyles}
         onRequestClose={handleCloseModal}
@@ -210,7 +222,7 @@ function UserProfile() {
 
           <button type="submit" className="mt-4 bg-blue_177f9f text-white py-2 px-4 rounded">Lưu thay đổi</button>
         </form>
-      </Modal>
+      </Modal> */}
     </>
   );
 }
