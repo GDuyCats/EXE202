@@ -6,7 +6,7 @@ import LineChartWeek from './LineChartWeek';
 import Top5Product from './Top5Product';
 import { getRevenue } from './getRevenue';
 import { getAllProductSold } from './getAllproductSold';
-import { getAllOrder } from './getAllOrder';
+import { getAllOrderCount } from './getAllOrderCount';
 function DashBoard() {
   const [clicked, setClicked] = useState(false)
   const toggleClicked = () => {
@@ -51,9 +51,8 @@ function DashBoard() {
   useEffect(() => {
     const fetchAllOrder = async () => {
       try {
-        const data = await getAllOrder();
+        const data = await getAllOrderCount();
         setOrders(data);
-        console.log(data)
       } catch (err) {
         setError(err.message);
       } finally {
@@ -89,16 +88,16 @@ function DashBoard() {
           <p className='font-semibold text-2xl my-5'>SỐ LIỆU CHÍNH</p>
           <div className='flex'>
             <div className='bg-blue_177f9f text-white p-2 w-[30%] '>
-              <p className='text-3xl font-bold'>{revenueData.data} VND</p>
-              <p className='text-blue_073d4d font-semibold'>TỔNG DOANH THU</p>
+              <p className='text-3xl font-bold'>{revenueData?.data} VND</p>
+              <p className='text-white font-semibold'>TỔNG DOANH THU</p>
             </div>
             <div className='bg-blue_177f9f text-white p-2 w-[30%] ml-5'>
               <p className='text-3xl font-bold'>{orders}</p>
-              <p className='text-blue_073d4d font-semibold'>TỔNG ĐƠN HÀNG</p>
+              <p className='ext-white font-semibold'>TỔNG ĐƠN HÀNG</p>
             </div>
             <div className='bg-blue_177f9f text-white p-2 w-[30%] ml-5'>
               <p className='text-3xl font-bold'>{productSold}</p>
-              <p className='text-blue_073d4d font-semibold'>TỔNG SẢN PHẨM ĐÃ BÁN</p>
+              <p className='text-white font-semibold'>TỔNG SẢN PHẨM ĐÃ BÁN</p>
             </div>
           </div>
           <p className='font-semibold text-2xl my-5'>DOANH THU THÁNG</p>
