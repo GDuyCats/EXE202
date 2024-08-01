@@ -4,7 +4,7 @@ import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
 
 const Tabs = [
-  { label: 'CHỜ XÁC NHẬN', isConfirm: 0, status: 1 },
+  { label: 'CHỜ XÁC NHẬN', isConfirm: 0, status: 0 },
   { label: 'ĐANG GIAO', isConfirm: 1, status: 1 },
   { label: 'ĐÃ GIAO', isConfirm: 1, status: 3 },
   { label: 'ĐÃ HỦY', status: 2 },
@@ -109,7 +109,7 @@ function Orders() {
                         />
                       </div>
                       <div className="flex-1">
-                        <h3 className="text-xl font-bold">Ngày đặt hàng: {new Date(order?.creationDate).toLocaleDateString()} {order?.id}</h3>
+                        <h3 className="text-xl font-bold">Ngày đặt hàng: {new Date(order?.creationDate).toLocaleDateString()}</h3>
                       </div>
                       <div className="flex-1 text-center">
                         <div className="flex">
