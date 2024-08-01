@@ -52,7 +52,7 @@ function ForumPage() {
   }, [refresh, token, accessToken]);
 
   const handleLike = (postId) => {
-    axios.post(`https://ohecaa.azurewebsites.net/api/Posts/LikePost?postId=${postId}`, {}, {
+    axios.get(`https://ohecaa.azurewebsites.net/api/Posts/LikePost?postId=${postId}`, {}, {
       headers: {
         'Authorization': `Bearer ${accessToken}`
       }

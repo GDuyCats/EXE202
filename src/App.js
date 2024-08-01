@@ -28,6 +28,8 @@ import Product from './pages/ProductManagement/Product';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import "react-image-gallery/styles/css/image-gallery.css";
 import Moderator from './pages/Admin/Moderator';
+import GetAllOrders from './pages/Admin/GetAllOrders';
+import Account from './pages/Admin/Account';
 function App() {
   return (
     <AuthProvider>
@@ -57,6 +59,8 @@ function App() {
             <Route path='/admin' element={<ProtectedRoute element={DashBoard} />} />
             <Route path='/admin/ProductManagement' element={<ProtectedRoute element={Product} />} />
             <Route path='/admin/Shipcompany' element={<ProtectedRoute element={Shipcompany} />} />
+            <Route path='/admin/getAllOrders' element={<ProtectedRoute element={GetAllOrders}/>}/>
+            <Route path='/admin/getAllAccount' element={<ProtectedRoute element={Account}/>}/>
           </Route>
           
           <Route path="/login" element={<LoginPage/>} />

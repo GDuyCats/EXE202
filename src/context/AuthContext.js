@@ -3,6 +3,7 @@ export const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
+  const [ordersCount, setOrderscount] = useState(null)
 
   const saveToken = (userToken) => {
     const tokenString = JSON.stringify(userToken);
