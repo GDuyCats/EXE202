@@ -71,9 +71,6 @@ function ForumPage() {
   const closeCommentModal = () => {
     setCommentModalPostId(null);
   };
-      setRefresh(false);
-    }
-  }, [refresh, token, accessToken]);
   return (
     <>
       {token ? (

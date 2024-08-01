@@ -11,15 +11,14 @@ function OrderTracking() {
 
 
     const steps = [
+        'Đơn hàng chưa được xác nhận',
         'Đơn hàng đã được xác nhận',
-        'Người bán đang chuẩn bị hàng',
-        'Người bán đã giao hàng cho bên vận chuyển',
         'Đang giao hàng',
     ];
 
     const currentSteps = orderStatus === 2
         ? ['Đơn hàng đã được hủy']
-        : steps.slice(0, orderStatus + 1);
+        : steps.slice(0, orderStatus === 1 ? 3 : orderStatus + 1);
 
     useEffect(() => {
         const fetchOrderDetails = async () => {
@@ -177,7 +176,7 @@ function OrderTracking() {
                                     </div>
                                 </div>
                             ))}
-                            {(orderStatus === 0 || orderStatus === 1) && (
+                            {(orderStatus === 0) && (
                                 <div className="flex justify-end mt-4">
                                     <button
                                         className="bg-red-500 text-white px-4 py-2 rounded-md"
