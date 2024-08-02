@@ -4,11 +4,14 @@ import axios from 'axios';
 function GetAllOrders() {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadingDetails, setLoadingDetails] = useState(false);
     const [error, setError] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [pageRange, setPageRange] = useState([1, 10]);
-    const [filterStatus, setFilterStatus] = useState(''); // Initial state as an empty string
-    const [clickedOrders, setClickedOrders] = useState([]); // Track clicked orders
+    const [filterStatus, setFilterStatus] = useState('');
+    const [clickedOrders, setClickedOrders] = useState([]);
+    const [selectedOrderDetails, setSelectedOrderDetails] = useState(null);
+    const [showOverlay, setShowOverlay] = useState(false);
     const ordersPerPage = 9;
 
     useEffect(() => {
@@ -40,9 +43,9 @@ function GetAllOrders() {
         }
 
         try {
-            setClickedOrders(prevClicked => [...prevClicked, orderId]); // Disable button immediately
+            setClickedOrders(prevClicked => [...prevClicked, orderId]);
             const response = await axios.put(`https://ohecaa.azurewebsites.net/api/Orders/ConfirmOrder/${orderId}`, {
-                status: 1 // Set status to processing
+                status: 1
             });
             if (response.status === 200) {
                 setOrders(prevOrders => prevOrders.map(order =>
@@ -65,7 +68,7 @@ function GetAllOrders() {
         }
 
         try {
-            setClickedOrders(prevClicked => [...prevClicked, orderId]); // Disable button immediately
+            setClickedOrders(prevClicked => [...prevClicked, orderId]);
             const response = await axios.delete(`https://ohecaa.azurewebsites.net/api/Orders/CancelOrder/${orderId}`);
             if (response.status === 200) {
                 setOrders(prevOrders => prevOrders.map(order =>
@@ -78,6 +81,49 @@ function GetAllOrders() {
             console.error('Error canceling order:', error);
             setError(error.response?.data?.message || error.message);
         }
+    };
+
+    const fetchProductName = async (productId) => {
+        try {
+            const response = await axios.get(`https://ohecaa.azurewebsites.net/api/Products/ViewProductByID/${productId}`);
+            if (response.status === 200 && response.data && response.data.data) {
+                return response.data.data.name;
+            } else {
+                console.error('Failed to fetch product name:', response);
+                return null;
+            }
+        } catch (error) {
+            console.error('Error fetching product name:', error);
+            return null;
+        }
+    };
+
+    const handleOrderClick = async (orderId) => {
+        setLoadingDetails(true);
+        try {
+            const response = await axios.get(`https://ohecaa.azurewebsites.net/api/OrderDetails/ViewAllOrderDetailByOrderID/${orderId}`);
+            if (response.status === 200 && response.data && Array.isArray(response.data.data)) {
+                const detailsWithNames = await Promise.all(response.data.data.map(async detail => {
+                    const productName = await fetchProductName(detail.productId);
+                    console.log(`Fetched product name for productId ${detail.productId}: ${productName}`);
+                    return { ...detail, productName };
+                }));
+                setSelectedOrderDetails(detailsWithNames);
+                setShowOverlay(true);
+            } else {
+                throw new Error('Invalid order details response data');
+            }
+        } catch (error) {
+            console.error('Error fetching order details:', error);
+            setError(error.message);
+        } finally {
+            setLoadingDetails(false);
+        }
+    };
+
+    const closeOverlay = () => {
+        setShowOverlay(false);
+        setSelectedOrderDetails(null);
     };
 
     const filteredOrders = orders.filter(order => filterStatus === '' || order.status === parseInt(filterStatus));
@@ -99,7 +145,7 @@ function GetAllOrders() {
     const handleFilterChange = (e) => {
         const value = e.target.value;
         setFilterStatus(value);
-        setCurrentPage(1); // Reset to the first page when filter changes
+        setCurrentPage(1);
     };
 
     const pageNumbers = [];
@@ -141,7 +187,11 @@ function GetAllOrders() {
                         <div className='flex-grow'>
                             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
                                 {currentOrders.map(order => (
-                                    <div key={order.id} className='bg-white p-6 rounded-lg shadow-md transition-transform transform hover:scale-105'>
+                                    <div
+                                        key={order.id}
+                                        className='bg-white p-6 rounded-lg shadow-md transition-transform transform hover:scale-105 cursor-pointer'
+                                        onClick={() => handleOrderClick(order.id)}
+                                    >
                                         <div className='flex mb-4'>
                                             <img src={order.imageLink} alt={`Order ${order.id}`} className='w-24 h-24 rounded-lg object-cover mr-4' />
                                             <div className='text-black'>
@@ -152,14 +202,14 @@ function GetAllOrders() {
                                                 <p className='text-sm text-gray-600'><span className='font-bold'>Total Price:</span> ${order.totalPrice}</p>
                                                 <div className='mt-4 space-x-2'>
                                                     <button
-                                                        onClick={() => handleConfirmOrder(order.id)}
+                                                        onClick={(e) => { e.stopPropagation(); handleConfirmOrder(order.id); }}
                                                         className={`px-4 py-2 rounded ${order.isConfirm || clickedOrders.includes(order.id) ? 'bg-green-500 text-white cursor-not-allowed' : 'bg-gray-500 text-white'}`}
                                                         disabled={order.isConfirm || order.status === 2 || clickedOrders.includes(order.id)}
                                                     >
                                                         {order.isConfirm ? 'Confirmed' : 'Confirm'}
                                                     </button>
                                                     <button
-                                                        onClick={() => handleCancelOrder(order.id)}
+                                                        onClick={(e) => { e.stopPropagation(); handleCancelOrder(order.id); }}
                                                         className={`px-4 py-2 rounded ${order.status === 0 && !order.isConfirm && !clickedOrders.includes(order.id) ? 'bg-red-500 text-white' : 'bg-gray-400 text-gray-700 cursor-not-allowed'}`}
                                                         disabled={order.status !== 0 || order.isConfirm || clickedOrders.includes(order.id)}
                                                     >
@@ -202,6 +252,39 @@ function GetAllOrders() {
                     </>
                 ) : (
                     <p className='text-black text-center'>No orders found.</p>
+                )}
+                {loadingDetails && (
+                    <div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50'>
+                        <div className='text-white text-center'>
+                            <p className='text-2xl mb-4'>Đang tải chi tiết đơn hàng...</p>
+                            <svg className='animate-spin h-10 w-10 text-white mx-auto' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24'>
+                                <circle className='opacity-25' cx='12' cy='12' r='10' stroke='currentColor' strokeWidth='4'></circle>
+                                <path className='opacity-75' fill='currentColor' d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z'></path>
+                            </svg>
+                        </div>
+                    </div>
+                )}
+                {showOverlay && !loadingDetails && (
+                    <div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center'>
+                        <div className='bg-white p-6 rounded-lg shadow-lg w-96'>
+                            <h2 className='text-2xl mb-4'>Order Details</h2>
+                            {selectedOrderDetails && selectedOrderDetails.length > 0 ? (
+                                <ul>
+                                    {selectedOrderDetails.map(detail => (
+                                        <li key={detail.productId} className='mb-2 border-black border-2 p-2 rounded-2xl'>
+                                            <p><strong>Product ID:</strong> {detail.productId}</p>
+                                            <p><strong>Tên Sản Phẩm:</strong> {detail.productName || 'Loading...'}</p>
+                                            <p><strong>Số lượng:</strong> {detail.quantity}</p>
+                                            <p><strong>Giá:</strong> {detail.price} VND</p>
+                                        </li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p>No details available.</p>
+                            )}
+                            <button onClick={closeOverlay} className='mt-4 p-2 bg-blue-500 text-white rounded'>Close</button>
+                        </div>
+                    </div>
                 )}
             </div>
         </div>
