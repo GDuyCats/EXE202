@@ -119,7 +119,7 @@ function OrderDelivered() {
                                         </div>
                                         <div className="absolute bottom-16 right-4 flex items-center">
                                             <p className="text-lg">Thành tiền:</p>
-                                            <h1 className="text-4xl font-semibold text-sky-800 ml-10 justify-center pl-7">{item.price}</h1>
+                                            <h1 className="text-4xl font-semibold text-sky-800 ml-10 justify-center pl-7">{item.price?.toLocaleString().replace(',', '.')}</h1>
                                         </div>
                                         <button
                                             className="absolute bottom-4 right-4 bg-blue_177f9f hover:bg-blue_24b3cc text-white font-bold py-2 px-4 rounded"

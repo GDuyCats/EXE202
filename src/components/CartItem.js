@@ -59,7 +59,7 @@ function CartItem({ item, isReadOnly = false }) {
                     </div>
                     <div className="justify-end flex items-center">
                         <p className="text-lg">Thành tiền:</p>
-                        <h1 className="text-4xl font-semibold text-sky-800 ml-10 justify-center pl-7">{(data?.priceSold ?? 0) * item.count}.000 VND</h1>
+                        <h1 className="text-4xl font-semibold text-sky-800 ml-10 justify-center pl-7">{((data?.priceSold ?? 0) * item.count)?.toLocaleString().replace(',', '.')} VND</h1>
                     </div>
                     {!isReadOnly && (
                         <div className="justify-end flex items-center mt-4">
