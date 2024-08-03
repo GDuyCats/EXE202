@@ -27,7 +27,8 @@ function Orders() {
     const fetchOrders = async () => {
       try {
         const response = await axios.get(`https://ohecaa.azurewebsites.net/api/Orders/ViewAllOrderByUserID/${token?.user?.id}`);
-        setOrders(response.data.data);
+        const sortedOrders = response.data.data.sort((a, b) => b.id - a.id);
+        setOrders(sortedOrders);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching orders:', error);
@@ -109,7 +110,7 @@ function Orders() {
                         />
                       </div>
                       <div className="flex-1">
-                        <h3 className="text-xl font-bold">Ngày đặt hàng: {new Date(order?.creationDate).toLocaleDateString()}</h3>
+                        <h3 className="text-xl font-bold">Ngày đặt hàng: {new Date(order?.creationDate).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}</h3>
                       </div>
                       <div className="flex-1 text-center">
                         <div className="flex">

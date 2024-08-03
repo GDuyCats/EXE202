@@ -52,6 +52,7 @@ function Transaction() {
     const endDate = new Date(currentDate.getTime() + 7 * 24 * 60 * 60 * 1000); // add 7 days
     const startDateString = `${startDate.getDate()}/${startDate.getMonth() + 1}`;
     const endDateString = `${endDate.getDate()}/${endDate.getMonth() + 1}`;
+    const minOrderValue = 100000;
 
     useEffect(() => {
         if (selectedItems.length === 0) {
@@ -128,7 +129,7 @@ function Transaction() {
                         orderId: res?.data?.id
                     }, {
                         onSuccess(data) {
-                            window.open(data.url);
+                            window.location.href = data.url;
                         },
                         onError() {
                             navigate('/paymentfailed');
@@ -137,6 +138,9 @@ function Transaction() {
                 } else {
                     console.log('OrderId:', res?.data?.id);
                     navigate(`/paymentsuccess?orderId=${res?.data?.id}`);
+                }
+                if (isActiveVoucher) {
+                    updateVoucher(isActiveVoucher);
                 }
             },
             onError() {
@@ -151,7 +155,6 @@ function Transaction() {
                 const response = await axios.get(`https://ohecaa.azurewebsites.net/api/Products/ViewProductByID/${item.id}`);
                 if (response.data.success) {
                     const product = response.data.data;
-                    // const newQuantity = product.quantity - item.count;
                     await axios.put(`https://ohecaa.azurewebsites.net/api/Products/UpdateQuantity?id=${item.id}&quantity=${item.count}`, {
                         id: item.id,
                         quantity: product.quantitySold + item.count,
@@ -165,6 +168,22 @@ function Transaction() {
         }
     };
 
+    const updateVoucher = async (voucherId) => {
+        try {
+            const response = await axios.put(`https://ohecaa.azurewebsites.net/api/Vouchers/UpdateVoucher/${voucherId}`, {
+                discount: sortedvoucherData.find(v => v.id === voucherId).discount,
+                totalQuantityVoucher: sortedvoucherData.find(v => v.id === voucherId).totalQuantityVoucher - 1,
+                usedQuanity: sortedvoucherData.find(v => v.id === voucherId).usedQuanity + 1,
+            });
+            if (response.data.success) {
+                console.log('Voucher updated successfully');
+            } else {
+                console.error(response.data.message);
+            }
+        } catch (error) {
+            console.error('Error updating voucher:', error);
+        }
+    };
 
     const { data: paymentData } = useGetAllPayments();
 
@@ -475,10 +494,12 @@ function Transaction() {
                             <div className="p-3">
                                 <h3 className="text-2xl text-blue_177f9f py-3 px-3">Hãy chọn một mã khuyến mãi</h3>
                                 <div className="flex flex-col overflow-y-auto h-96">
-                                    {sortedvoucherData?.map(itemVoucher => (
+                                    {sortedvoucherData?.filter(itemVoucher => new Date(itemVoucher.endTime) >= new Date()).map(itemVoucher => (
                                         <div className="flex items-center justify-center w-full">
-                                            <div className={`bg-white container mx-10 my-7 p-5 border-2 border-black flex ${itemVoucher.id === isActiveVoucher ? 'border-blue_cart border-4' : ''}`}
-                                                onClick={() => handleVoucherClick(itemVoucher.id)}
+                                            <div
+                                                className={`bg-white container mx-10 my-7 p-5 border-2 border-black flex ${itemVoucher.id === isActiveVoucher ? 'border-blue_cart border-4' : ''}`}
+                                                onClick={() => totalPrice >= minOrderValue ? handleVoucherClick(itemVoucher.id) : null}
+                                                style={{ opacity: totalPrice < minOrderValue ? 0.5 : 1, cursor: totalPrice < minOrderValue ? 'not-allowed' : 'pointer' }}
                                             >
                                                 <img
                                                     src={voucherImage}
@@ -487,9 +508,20 @@ function Transaction() {
                                                 />
                                                 <div className="w-full ml-4 justify-end">
                                                     <div className="flex justify-start">
-                                                        <h1 className="text-2xl mb-2 pt-2 text-blue_177f9f font-sans font-semibold">GIẢM GIÁ {itemVoucher.discount * 100}% PHÍ VẬN CHUYỂN VỚI ĐƠN HÀNG TỪ 500.000VND TRỞ LÊN</h1>
+                                                        <h1
+                                                            className={`text-2xl mb-2 pt-2 ${totalPrice < minOrderValue ? 'text-gray-400' : 'text-blue_177f9f'} font-sans font-semibold`}
+                                                        >
+                                                            GIẢM GIÁ {itemVoucher.discount * 100}% PHÍ VẬN CHUYỂN VỚI ĐƠN HÀNG TỪ {minOrderValue.toLocaleString().replace(',', '.')} VND TRỞ LÊN
+                                                        </h1>
                                                     </div>
-                                                    <div className="flex text-lg"><h2>HẠN SỬ DỤNG</h2><h2>: {new Date(itemVoucher.endTime).toLocaleDateString()}</h2></div>
+                                                    <div className="flex text-lg">
+                                                        <h2>HẠN SỬ DỤNG</h2>
+                                                        <h2>: {new Date(itemVoucher.endTime).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}</h2>
+                                                    </div>
+                                                    <div className="flex text-lg mt-5">
+                                                        <h2>SỐ LƯỢNG</h2>
+                                                        <h2>: {itemVoucher.totalQuantityVoucher}</h2>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -530,7 +562,6 @@ function Transaction() {
                                             Tổng tiền hàng:
                                         </h3>
                                         <h3 className="font-normal text-2xl text-black">
-                                            {/* {cartStore.total} VND */}
                                             {totalPrice?.toLocaleString().replace(',', '.')} VND
                                         </h3>
                                     </div>

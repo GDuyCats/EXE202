@@ -8,7 +8,7 @@ function OrderTracking() {
     const { orderId } = useParams();
     const [orderStatus, setOrderStatus] = useState(null);
     const [showCancelPopup, setShowCancelPopup] = useState(false);
-
+    const [statusOfPayment, setStatusOfPayment] = useState(null);
 
     const steps = [
         'Đơn hàng chưa được xác nhận',
@@ -49,6 +49,7 @@ function OrderTracking() {
                 const data = await response.json();
                 if (data.success) {
                     setOrderStatus(data.data.status);
+                    setStatusOfPayment(data.data.statusOfPayment);
                 } else {
                     setError(data.message);
                 }
@@ -141,7 +142,7 @@ function OrderTracking() {
                                         </div>
                                         <div className="absolute bottom-4 right-4 flex items-center">
                                             <p className="text-lg">Thành tiền:</p>
-                                            <h1 className="text-4xl font-semibold text-sky-800 ml-10 justify-center pl-7">{item.price?.toLocaleString().replace(',', '.')}</h1>
+                                            <h1 className="text-4xl font-semibold text-sky-800 ml-10 justify-center pl-7">{(item?.price * item?.quantity)?.toLocaleString().replace(',', '.')} VND</h1>
                                         </div>
                                     </div>
                                 </div>
@@ -176,7 +177,7 @@ function OrderTracking() {
                                     </div>
                                 </div>
                             ))}
-                            {(orderStatus === 0) && (
+                            {(orderStatus === 0 && statusOfPayment !== 1) && (
                                 <div className="flex justify-end mt-4">
                                     <button
                                         className="bg-red-500 text-white px-4 py-2 rounded-md"

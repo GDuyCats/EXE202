@@ -35,7 +35,7 @@ function ProductDetail() {
   }, [data])
 
   const handleAddToCart = ({ userId, token }) => {
-    if (userId) {
+    if (token) {
       cartStore.addItem({ id: data?.id, count, priceSold: data?.priceSold });
       setIsOpenCart(true);
     } else {
@@ -52,7 +52,7 @@ function ProductDetail() {
   }, [isOpenCart]);
 
   const handleBuyNow = ({ userId, token }) => {
-    if (userId) {
+    if (token) {
       cartStore.addItem({ id: data?.id, count, priceSold: data?.priceSold });
       navigate('/cart');
     } else {
