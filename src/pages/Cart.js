@@ -66,7 +66,13 @@ function Cart() {
                                 <div className="flex">
                                     <div className="justify-start flex items-center mx-8 w-1/2">
                                         <p className="text-lg">Tổng Thanh Toán:</p>
-                                        <h1 className="text-4xl font-semibold text-sky-800 ml-10 justify-center pl-7 my-8">{cartStore.total?.toLocaleString().replace(',', '.')} VND</h1>
+                                        <h1 className="text-4xl font-semibold text-sky-800 ml-10 justify-center pl-7 my-8">
+                                            {cartStore.items
+                                                .filter(item => cartStore.selectedItems.includes(item.id))
+                                                .reduce((acc, item) => acc + item.priceSold * item.count, 0)
+                                                .toLocaleString()
+                                                .replace(',', '.')} VND
+                                        </h1>
                                     </div>
                                     <div className="justify-end flex items-center mx-8 w-1/2">
                                         <button onClick={handleCheckout} className="bg-blue_177f9f hover:bg-sky-700 text-white px-4 mb-8" style={{ width: 280, height: 62 }}>

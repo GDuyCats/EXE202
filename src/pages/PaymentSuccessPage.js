@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import axios from 'axios';
 
 function PaymentSuccess() {
     const navigate = useNavigate();
@@ -11,20 +12,44 @@ function PaymentSuccess() {
         navigate('/');
     }
     const { token } = useContext(AuthContext);
-    console.log(token)
-    useEffect(() => {
-        if (!token) {
-            navigate('/login');
-        }
-    }, [token, navigate]);
+    console.log('không có token:', token)
+    // useEffect(() => {
+    //     if (!token) {
+    //         navigate('/login');
+    //     }
+    // }, [token, navigate]);
 
     const handleOrderTracking = () => {
         if (orderId) {
-            navigate(`/ordertracking/${orderId}`); // pass orderID to OrderTracking
+            navigate(`/ordertracking/${orderId}`);
         } else {
             console.error("Order ID is missing");
         }
     }
+
+    useEffect(() => {
+        const updateOrderStatus = async () => {
+            try {
+                const response = await axios.get(`https://ohecaa.azurewebsites.net/api/Orders/ViewOrderByID/${orderId}`);
+                const currentOrder = response.data.data;
+
+                const updatedOrder = {
+                    ...currentOrder,
+                    statusOfPayment: 1
+                };
+
+                await axios.put(`https://ohecaa.azurewebsites.net/api/Orders/UpdateOrder/${orderId}`, updatedOrder);
+                console.log('Order updated successfully');
+            } catch (error) {
+                console.error('Error updating order:', error);
+                navigate('/paymentfailed');
+            }
+        };
+
+        if (orderId) {
+            updateOrderStatus();
+        }
+    }, [orderId, navigate]);
     return (
         <>
             <div className="w-full" style={{
