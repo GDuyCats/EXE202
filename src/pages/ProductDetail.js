@@ -195,7 +195,7 @@ function ProductDetail() {
                     <button onClick={() => { setCount(count + 1) }} className="bg-blue_btn_qlt text-white text-2xl font-bold justify-center items-center flex" style={{ width: 30, height: 30 }}>+</button>
                   </div>
                 </div>
-                <div className="flex"><p className="text-lg mb-4">Giá:</p> <h1 className="text-2xl font-semibold text-sky-800 ml-10 justify-center pl-7">{data?.priceSold}.000 VND</h1></div>
+                <div className="flex"><p className="text-lg mb-4">Giá:</p> <h1 className="text-2xl font-semibold text-sky-800 ml-10 justify-center pl-7">{data?.priceSold?.toLocaleString().replace(',', '.')} VND</h1></div>
                 <div className="flex">
                   <button onClick={() => handleAddToCart({ userId: cartStore.userID, token })} className="bg-blue_cart hover:bg-sky-700 text-white py-2 px-4 rounded-full mr-2" style={{ width: 280, height: 62 }}>
                     THÊM VÀO GIỎ HÀNG

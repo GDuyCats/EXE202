@@ -121,6 +121,7 @@ function Transaction() {
         createCheckOut(checkOutData, {
             onSuccess(res) {
                 updateProductQuantity(selectedItems);
+                cartStore.checkoutItems();
                 if (selectedMethod == 1) {
                     createPayOS({
                         userID: cartStore.userID,
@@ -535,7 +536,7 @@ function Transaction() {
                                     </div>
                                     <div className="flex w-full justify-between my-8">
                                         <h3 className="font-normal text-2xl text-black">
-                                            Phí thu hộ:
+                                            Phí vận chuyển:
                                         </h3>
                                         {isActiveVoucher ? (
                                             <h3 className="font-normal text-2xl text-black">
