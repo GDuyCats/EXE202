@@ -38,6 +38,10 @@ module.exports = {
         'red_ff0000': 'rgb(255, 0, 0)',
         'blue_027a9f': 'rgb(2, 122, 159)',
         'blue_24b3cc': 'rgb(36, 179, 204)',
+        'blue_3B5B9B': 'rgb(59, 91, 155)',
+        'green_009733': 'rgb(0, 151, 51)',
+        'red_d80000': 'rgb(216, 0, 0)',
+        'yellow_aa8e00': 'rgb(170, 142, 0)',
       },
       scale: {
         '110': '1.1',

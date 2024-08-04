@@ -5,7 +5,7 @@ function SocialLink() {
         <div className='ml-20 m-auto flex space-x-5 items-center'>
             <div className='space-x-5 mb-5'>
                 <SocialIcon url="https://www.youtube.com/channel/UCRv3kzozLdAWDexsv-3L3Fg" />
-                <SocialIcon url="https://www.facebook.com/anemoneno1" />
+                <SocialIcon url="https://www.facebook.com/profile.php?id=61559928926173" />
                 <SocialIcon url="https://www.instagram.com/gduycats" />
                 <SocialIcon url='https://x.com/gduycat' />
             </div>
