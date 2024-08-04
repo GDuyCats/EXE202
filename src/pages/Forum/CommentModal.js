@@ -11,7 +11,8 @@ function CommentModal({ postId, closeModal, refreshPosts }) {
   useEffect(() => {
     axios.get(`https://ohecaa.azurewebsites.net/api/Comment/GetCommentByPostId?postId=${postId}`, {
       headers: {
-        'Authorization': `Bearer ${accessToken}`
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
       }
     })
       .then(response => {
@@ -45,9 +46,10 @@ function CommentModal({ postId, closeModal, refreshPosts }) {
 
   const handleCommentSubmit = () => {
     console.log('Giá trị của comment:', comment);
-    axios.post(`https://ohecaa.azurewebsites.net/api/Comment/CreateCommentWithPostId?postId=${postId}`, {
-      content: comment
-    }, {
+    const data = new FormData();
+    data.append('Content', comment);
+    axios.post(`https://ohecaa.azurewebsites.net/api/Comment/CreateCommentWithPostId?postId=${postId}`, data,
+     {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json'
