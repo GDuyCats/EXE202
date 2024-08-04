@@ -14,7 +14,8 @@ function CommentModal({ postId, closeModal, refreshPosts }) {
     console.log('Fetching comments for post ID:', postId);
     axios.get(`https://ohecaa.azurewebsites.net/api/Comment/GetCommentByPostId?postId=${postId}`, {
       headers: {
-        'Authorization': `Bearer ${accessToken}`
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
       }
     })
       .then(response => {
