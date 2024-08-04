@@ -18,7 +18,7 @@ import Discount from './pages/Discount/Discount';
 import AuthProvider from './context/AuthContext';
 import DiscountOption from './pages/DiscountOption';
 import ShippingOption from './pages/ShippingOption';
-import PaymentSuccess from './pages/PaymentSuccessPage'; 
+import PaymentSuccess from './pages/PaymentSuccessPage';
 import PaymentFailed from './pages/PaymentFailPage';
 import DashBoard from './pages/Admin/DashBoard';
 import UserProfile from './components/UserProfile/UserProfile';
@@ -54,30 +54,31 @@ function App() {
             <Route path='/shippingoption' element={<ShippingOption />} />
             <Route path='/paymentsuccess' element={<PaymentSuccess />} />
             <Route path='/paymentfailed' element={<PaymentFailed />} />
-            <Route path="/forum" element={<ForumPage />}/>
-            <Route path='/discount' element={<Discount />}/>
-            <Route path='/profile' element={<UserProfile/>}/>
-            <Route path='/feedback/:productId' element={<Feedback/>}/>
-            <Route path='/feedbacksuccess' element={<ThanksForRating/>}/>
-            <Route path='/ordertracking/:orderId' element={<OrderTracking/>}/>
-            <Route path='/orderdelivered/:orderId' element={<OrderDelivered/>}/>
-            <Route path='/orders' element={<Orders />}/>
+            <Route path="/forum" element={<ForumPage />} />
+            <Route path='/discount' element={<Discount />} />
+            <Route path='/profile' element={<UserProfile />} />
+            <Route path='/feedback/:productId' element={<Feedback />} />
+            <Route path='/feedbacksuccess' element={<ThanksForRating />} />
+            <Route path='/ordertracking/:orderId' element={<OrderTracking />} />
+            <Route path='/orderdelivered/:orderId' element={<OrderDelivered />} />
+            <Route path='/orders' element={<Orders />} />
+            <Route path="/contact" element={<Contact />} />
+
           </Route>
-          
+
           <Route path='/' element={<AdminLayout />}>
-            <Route path='/mod' element={<ProtectedRoute element={Moderator} />}/>
+            <Route path='/mod' element={<ProtectedRoute element={Moderator} />} />
             <Route path='/admin' element={<ProtectedRoute element={DashBoard} />} />
             <Route path='/admin/ProductManagement' element={<ProtectedRoute element={Product} />} />
             <Route path='/admin/Shipcompany' element={<ProtectedRoute element={Shipcompany} />} />
-            <Route path='/admin/getAllOrders' element={<ProtectedRoute element={GetAllOrders}/>}/>
-            <Route path='/admin/getAllAccount' element={<ProtectedRoute element={Account}/>}/>
+            <Route path='/admin/getAllOrders' element={<ProtectedRoute element={GetAllOrders} />} />
+            <Route path='/admin/getAllAccount' element={<ProtectedRoute element={Account} />} />
           </Route>
-          
-          <Route path="/login" element={<LoginPage/>} />
+
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/policy" element={<PolicyPage />} />
           <Route path="/useragreement" element={<UserAgreementPage />} />
-          <Route path="/contact" element={<Contact />} />
           <Route path="*" element={<NoPage />} />
         </Routes>
       </Router>
