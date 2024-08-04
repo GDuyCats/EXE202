@@ -662,13 +662,19 @@ function Transaction() {
                                         <h3 className="font-normal text-2xl text-black">
                                             Phí vận chuyển:
                                         </h3>
-                                        {isActiveVoucher ? (
-                                            <h3 className="font-normal text-2xl text-black">
-                                                {(freightCost - (freightCost * sortedvoucherData.find(v => v.id === isActiveVoucher).discount))?.toLocaleString().replace(',', '.')} VND
-                                            </h3>
+                                        {isActive ? (
+                                            isActiveVoucher ? (
+                                                <h3 className="font-normal text-2xl text-black">
+                                                    {(freightCost - (freightCost * sortedvoucherData.find(v => v.id === isActiveVoucher).discount))?.toLocaleString().replace(',', '.')} VND
+                                                </h3>
+                                            ) : (
+                                                <h3 className="font-normal text-2xl text-black">
+                                                    {freightCost?.toLocaleString().replace(',', '.')} VND
+                                                </h3>
+                                            )
                                         ) : (
                                             <h3 className="font-normal text-2xl text-black">
-                                                {freightCost?.toLocaleString().replace(',', '.')} VND
+                                                0 VND
                                             </h3>
                                         )}
                                     </div>
@@ -677,10 +683,14 @@ function Transaction() {
                                             Tổng thanh toán:
                                         </h3>
                                         <h3 className="font-normal text-4xl text-blue_cart">
-                                            {isActiveVoucher ? (
-                                                (totalPrice + (freightCost - (freightCost * sortedvoucherData.find(v => v.id === isActiveVoucher).discount)))?.toLocaleString().replace(',', '.')
+                                            {isActive ? (
+                                                isActiveVoucher ? (
+                                                    (totalPrice + (freightCost - (freightCost * sortedvoucherData.find(v => v.id === isActiveVoucher).discount)))?.toLocaleString().replace(',', '.')
+                                                ) : (
+                                                    (totalPrice + freightCost)?.toLocaleString().replace(',', '.')
+                                                )
                                             ) : (
-                                                (totalPrice + freightCost)?.toLocaleString().replace(',', '.')
+                                                totalPrice?.toLocaleString().replace(',', '.')
                                             )} VND
                                         </h3>
                                     </div>
