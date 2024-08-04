@@ -1,14 +1,17 @@
 import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../../context/AuthContext';
-import DefaultProfilePicture from '../../assets/profile-default-icon-2048x2045-u3j7s5nj.png'
+import DefaultProfilePicture from '../../assets/profile-default-icon-2048x2045-u3j7s5nj.png';
+
 function CommentModal({ postId, closeModal, refreshPosts }) {
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState([]);
   const { token } = useContext(AuthContext);
   const accessToken = token?.accessToken;
 
+  console.log(accessToken);
   useEffect(() => {
+    console.log('Fetching comments for post ID:', postId);
     axios.get(`https://ohecaa.azurewebsites.net/api/Comment/GetCommentByPostId?postId=${postId}`, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -16,6 +19,7 @@ function CommentModal({ postId, closeModal, refreshPosts }) {
       }
     })
       .then(response => {
+        console.log('Comments fetched:', response.data);
         if (response.data.success) {
           const commentsData = response.data.data;
           const userPromises = commentsData.map(comment => 
@@ -32,37 +36,44 @@ function CommentModal({ postId, closeModal, refreshPosts }) {
                 ...comment,
                 user: userResponses[index].data.data
               }));
+              console.log('Comments with user data:', commentsWithUserData);
               setComments(commentsWithUserData);
             })
             .catch(error => {
-              console.log(error);
+              console.error('Error fetching user data:', error);
             });
         }
       })
       .catch(error => {
-        console.log(error);
+        console.error('Error fetching comments:', error);
       });
   }, [postId, accessToken]);
 
   const handleCommentSubmit = () => {
-    console.log('Giá trị của comment:', comment);
-    const data = new FormData();
-    data.append('Content', comment);
-    axios.post(`https://ohecaa.azurewebsites.net/api/Comment/CreateCommentWithPostId?postId=${postId}`, data,
-     {
+    console.log('Submitting comment:', comment);
+    const formData = new FormData();
+    formData.append('Content', comment);
+  
+    axios.post(`https://ohecaa.azurewebsites.net/api/Comment/CreateCommentWithPostId?postId=${postId}`, formData, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'multipart/form-data'
       }
     })
       .then(response => {
-        refreshPosts();  // Refresh the posts to update the comment count
-        closeModal();  // Close the modal after comment is submitted
+        console.log('Comment submission response:', response);
+        if (response.status === 200 || response.status === 201) {
+          refreshPosts();  // Refresh the posts to update the comment count
+          closeModal();  // Close the modal after comment is submitted
+        } else {
+          console.error('Comment submission failed:', response.data.message);
+        }
       })
       .catch(error => {
-        console.log(error);
+        console.error('Error submitting comment:', error.response ? error.response.data : error.message);
       });
   };
+  
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
