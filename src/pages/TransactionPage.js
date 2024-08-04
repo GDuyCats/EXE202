@@ -11,6 +11,7 @@ import { useCreatePayOS } from '../hooks/useCreatePayOS'
 import { useCreateCheckOut } from '../hooks/useCreateCheckOut'
 import axios from 'axios'
 import { AuthContext } from '../context/AuthContext'
+import Modal from 'react-modal'
 
 const customStyles = {
     content: {
@@ -20,6 +21,7 @@ const customStyles = {
         bottom: 'auto',
         marginRight: '-50%',
         transform: 'translate(-50%, -50%)',
+        padding: '20px',
     },
 };
 
@@ -60,18 +62,25 @@ function Transaction() {
         }
     }, [selectedItems, navigate]);
 
+    const [showErrorModal, setShowErrorModal] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+    const [showErrorQuantityModal, setShowErrorQuantityModal] = useState(false);
+    const [errorQuantityMessage, setErrorQuantityMessage] = useState('');
 
     const handlePlaceOrder = async () => {
+        if (!selectedAddressId) {
+            setErrorMessage('Xin hãy chọn địa chỉ nhận hàng.');
+            setShowErrorModal(true);
+            return;
+        }
         if (!isActive) {
-            alert("Xin hãy chọn đơn vị vận chuyển.");
+            setErrorMessage('Xin hãy chọn đơn vị vận chuyển.');
+            setShowErrorModal(true);
             return;
         }
         if (!selectedMethod) {
-            alert("Xin hãy chọn phương thức thanh toán.");
-            return;
-        }
-        if (!selectedAddressId) {
-            alert("Xin hãy chọn địa chỉ nhận hàng.");
+            setErrorMessage('Xin hãy chọn phương thức thanh toán.');
+            setShowErrorModal(true);
             return;
         }
         const insufficientProducts = [];
@@ -94,12 +103,12 @@ function Transaction() {
         }
 
         if (insufficientProducts.length > 0) {
-            let alertMessage = 'Không đủ số lượng các sản phẩm sau để trừ:\n';
+            const errorMessages = ['Không đủ số lượng các sản phẩm sau để trừ:'];
             insufficientProducts.forEach(product => {
-                alertMessage += `- ${product.name}: Số lượng còn lại là ${product.quantity}\n`;
+                errorMessages.push(`${product.name}: Số lượng còn lại là ${product.quantity}`);
             });
-            alert(alertMessage);
-            navigate('/paymentfailed');
+            setErrorQuantityMessage(errorMessages);
+            setShowErrorQuantityModal(true);
             return;
         }
 
@@ -270,6 +279,90 @@ function Transaction() {
     };
     return (
         <>
+            <Modal
+                isOpen={showErrorModal}
+                onRequestClose={() => setShowErrorModal(false)}
+                style={{
+                    overlay: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                    },
+                    content: {
+                        top: '50%',
+                        left: '50%',
+                        right: 'auto',
+                        bottom: 'auto',
+                        marginRight: '-50%',
+                        transform: 'translate(-50%, -50%)',
+                        backgroundColor: '#fff',
+                        padding: '20px',
+                        border: 'none',
+                        borderRadius: '10px',
+                        boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)',
+                    },
+                }}
+                contentLabel="Error Modal"
+            >
+                <div className="flex items-center justify-center">
+                    <div className="w-fit px-5 flex items-center justify-center rounded-full mb-5" style={{
+                        height: 30,
+                        background: 'linear-gradient(to right, #24b7cf, #18335c)'
+                    }}>
+                        <h1 className="text-2xl text-white text-center">CHÚ Ý</h1>
+                    </div>
+                </div>
+                <h2 className="font-semibold" style={{ marginBottom: '10px' }}>{errorMessage}</h2>
+                <div className="w-auto flex items-center justify-center">
+                    <button onClick={() => setShowErrorModal(false)} className="bg-blue_177f9f" style={{ padding: '10px 20px', color: '#fff', border: 'none', borderRadius: '5px' }}>
+                        Đóng
+                    </button>
+                </div>
+            </Modal>
+            <Modal
+                isOpen={showErrorQuantityModal}
+                style={{
+                    overlay: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                    },
+                    content: {
+                        top: '50%',
+                        left: '50%',
+                        right: 'auto',
+                        bottom: 'auto',
+                        marginRight: '-50%',
+                        transform: 'translate(-50%, -50%)',
+                        backgroundColor: '#fff',
+                        padding: '20px',
+                        border: 'none',
+                        borderRadius: '10px',
+                        boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)',
+                    },
+                }}
+                contentLabel="Error Quantity Modal"
+            >
+                <div className="flex items-center justify-center">
+                    <div className="w-fit px-5 flex items-center justify-center rounded-full mb-5" style={{
+                        height: 30,
+                        background: 'linear-gradient(to right, #24b7cf, #18335c)'
+                    }}>
+                        <h1 className="text-2xl text-white text-center">CHÚ Ý</h1>
+                    </div>
+                </div>
+                <div>
+                    {Array.isArray(errorQuantityMessage) && errorQuantityMessage.map((message, index) => (
+                        <p key={index} className="font-semibold" style={{ marginBottom: '10px' }}>
+                            {message}
+                        </p>
+                    ))}
+                </div>
+                <div className="w-auto flex items-center justify-center">
+                    <button onClick={() => {
+                        setShowErrorModal(false);
+                        navigate('/paymentfailed');
+                    }} className="bg-blue_177f9f" style={{ padding: '10px 20px', color: '#fff', border: 'none', borderRadius: '5px' }}>
+                        Đóng
+                    </button>
+                </div>
+            </Modal>
             <div className="w-full" style={{
                 height: 100,
                 background: 'linear-gradient(to right, #24b7cf, #18335c)'
