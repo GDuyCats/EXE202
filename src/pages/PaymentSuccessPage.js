@@ -33,13 +33,17 @@ function PaymentSuccess() {
                 const response = await axios.get(`https://ohecaa.azurewebsites.net/api/Orders/ViewOrderByID/${orderId}`);
                 const currentOrder = response.data.data;
 
-                const updatedOrder = {
-                    ...currentOrder,
-                    statusOfPayment: 1
-                };
+                if (currentOrder.paymentId === 1) {
+                    const updatedOrder = {
+                        ...currentOrder,
+                        statusOfPayment: 1
+                    };
 
-                await axios.put(`https://ohecaa.azurewebsites.net/api/Orders/UpdateOrder/${orderId}`, updatedOrder);
-                console.log('Order updated successfully');
+                    await axios.put(`https://ohecaa.azurewebsites.net/api/Orders/UpdateOrder/${orderId}`, updatedOrder);
+                    console.log('Order updated successfully');
+                } else if (currentOrder.paymentId === 2) {
+                    console.log('Không cần cập nhật trạng thái thanh toán');
+                }
             } catch (error) {
                 console.error('Error updating order:', error);
                 navigate('/paymentfailed');
