@@ -87,13 +87,13 @@ function GetAllOrders() {
         try {
             const response = await axios.get(`https://ohecaa.azurewebsites.net/api/Products/ViewProductByID/${productId}`);
             if (response.status === 200 && response.data && response.data.data) {
-                return response.data.data.name;
+                return response?.data?.data?.name;
             } else {
                 console.error('Failed to fetch product name:', response);
                 return null;
             }
         } catch (error) {
-            console.error('Error fetching product name:', error);
+            console.error('Không có đơn hàng nào bây giờ ', error);
             return null;
         }
     };
@@ -160,7 +160,7 @@ function GetAllOrders() {
     return (
         <div className='w-5/6 mr-0 ml-auto min-h-screen bg-blue_6bccde pt-10 flex flex-col'>
             <div className='container mx-auto py-8 flex-grow flex flex-col justify-between'>
-                <div className='flex justify-end mb-4'>
+                <div className='flex justify-end mb-4 pt-10'>
                     <select
                         value={filterStatus}
                         onChange={handleFilterChange}

@@ -12,7 +12,7 @@ const apiClient = axios.create({
 export const getAllProductSold = async () => {
   try {
     const response = await apiClient.get('/Dashboards/GetCountProductSold');
-    return response.data;
+    return response?.data;
   } catch (error) {
     console.error('Error fetching revenue data:', error);
     throw error;
