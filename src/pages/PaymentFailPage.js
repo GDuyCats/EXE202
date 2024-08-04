@@ -1,9 +1,35 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import axios from 'axios';
 
 function PaymentFailed() {
     const navigate = useNavigate();
+    const location = useLocation();
+    const orderId = new URLSearchParams(location.search).get('orderId');
+
+    useEffect(() => {
+        const updateOrderStatus = async () => {
+            try {
+                const response = await axios.get(`https://ohecaa.azurewebsites.net/api/Orders/ViewOrderByID/${orderId}`);
+                const currentOrder = response.data.data;
+
+                if (currentOrder.paymentId === 1 && currentOrder.statusOfPayment === 0) {
+                    await axios.delete(`https://ohecaa.azurewebsites.net/api/Orders/CancelOrder/${orderId}`);
+                    console.log('Đơn hàng đã bị hủy');
+                } else if (currentOrder.paymentId === 2) {
+                    console.log('Không cần cập nhật trạng thái thanh toán');
+                }
+            } catch (error) {
+                console.error('Error updating order:', error);
+                navigate('/paymentfailed');
+            }
+        };
+
+        if (orderId) {
+            updateOrderStatus();
+        }
+    }, [orderId, navigate]);
 
     const handleBack = () => {
         navigate('/');
