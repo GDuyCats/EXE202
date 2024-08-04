@@ -10,7 +10,7 @@ const apiClient = axios.create({
 export const getAllOrderCount = async () => {
   try {
     const response = await apiClient.get('/Orders/ViewTotalAllOfOrder');
-    return response.data.data.totalOrder;
+    return response?.data?.data?.totalOrder;
   } catch (error) {
     console.error('Error fetching revenue data:', error);
     throw error;
