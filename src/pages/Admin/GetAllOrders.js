@@ -37,8 +37,8 @@ function GetAllOrders() {
 
     const handleConfirmOrder = async (orderId) => {
         const order = orders.find(order => order.id === orderId);
-        if (order && (order.status === 2 || order.isConfirm)) {
-            setError('Cannot confirm a canceled or already confirmed order');
+        if (!order || order.status !== 0 || clickedOrders.includes(orderId)) {
+            setError('Cannot confirm this order');
             return;
         }
 
@@ -62,7 +62,7 @@ function GetAllOrders() {
 
     const handleCancelOrder = async (orderId) => {
         const order = orders.find(order => order.id === orderId);
-        if (order && (order.isConfirm || order.status !== 0)) {
+        if (order && (order.isConfirm || order.status !== 0 || clickedOrders.includes(orderId))) {
             setError('Cannot cancel a confirmed or non-pending order');
             return;
         }
@@ -199,12 +199,12 @@ function GetAllOrders() {
                                                 <p className='text-sm text-gray-600'><span className='font-bold'>Ngày tạo đơn:</span> {new Date(order.creationDate).toLocaleDateString()}</p>
                                                 <p className='text-sm text-gray-600'><span className='font-bold'>Xác nhận đơn:</span> {order.isConfirm ? 'Yes' : 'No'}</p>
                                                 <p className='text-sm text-gray-600'><span className='font-bold'>Trạng thái:</span> {order.status === 0 ? 'Chờ xác nhận' : order.status === 1 ? 'Đang vận chuyển' : order.status === 2 ? 'Đã hủy đơn' : 'Hoàn Thành'}</p>
-                                                <p className='text-sm text-gray-600'><span className='font-bold'>Total Price:</span> ${order.totalPrice}</p>
+                                                <p className='text-sm text-gray-600'><span className='font-bold'>Total Price:</span> {order.totalPrice}VND</p>
                                                 <div className='mt-4 space-x-2'>
                                                     <button
                                                         onClick={(e) => { e.stopPropagation(); handleConfirmOrder(order.id); }}
-                                                        className={`px-4 py-2 rounded ${order.isConfirm || clickedOrders.includes(order.id) ? 'bg-green-500 text-white cursor-not-allowed' : 'bg-gray-500 text-white'}`}
-                                                        disabled={order.isConfirm || order.status === 2 || clickedOrders.includes(order.id)}
+                                                        className={`px-4 py-2 rounded ${order.isConfirm || order.status !== 0 || clickedOrders.includes(order.id) ? 'bg-green-500 text-white cursor-not-allowed' : 'bg-gray-500 text-white'}`}
+                                                        disabled={order.isConfirm || order.status !== 0 || clickedOrders.includes(order.id)}
                                                     >
                                                         {order.isConfirm ? 'Confirmed' : 'Confirm'}
                                                     </button>

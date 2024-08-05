@@ -2,7 +2,7 @@ import React from 'react'
 
 function Account() {
   return (
-    <div className='w-screen h-screen bg-purple-900'>
+    <div className='w-screen h-screen bg-white'>
       ACcount
     </div>
   )
