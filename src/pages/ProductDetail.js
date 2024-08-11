@@ -356,7 +356,7 @@ function ProductDetail() {
                 </p>
               </div>
               <h6 className="text-blue_073d4d font-sans font-semibold mx-6 text-sm">{category?.country}</h6>
-              <h1 className="text-2xl font-semibold text-blue_177f9f mx-6 font-sans">{category?.priceSold}.000 VND</h1>
+              <h1 className="text-2xl font-semibold text-blue_177f9f mx-6 font-sans">{category?.priceSold?.toLocaleString().replace(',', '.')} VND</h1>
             </div>
           )}
         </div>
